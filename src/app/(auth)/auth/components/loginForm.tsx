@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useFormik } from "formik";
 import axiosInstance from "@/utils/axiosInstance";
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
 import useAuthStore from "@/stores/useAuthStore";
 import { authLoginSchema } from "@/features/login/validation/loginSchema";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import SocialButton from "./sosialButton";
 import { useFormLogin } from "@/features/login/hooks/useFormLogin";
 import SubmitButton from "@/components/button";
+import ErrorMessage from "@/components/errorMessage";
 
 const inputStyle = (hasError: boolean) => ({
   backgroundColor: "#ffffff",
@@ -38,9 +39,8 @@ const iconStyle = {
 };
 
 export default function login() {
- 
   const [showPassword, setShowPassword] = useState(true);
-  const {formik, isLoading} = useFormLogin()
+  const { formik, isLoading } = useFormLogin();
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
@@ -127,23 +127,9 @@ export default function login() {
         </div>
 
         {formik.touched.password && formik.errors.password ? (
-          <div className="flex items-center gap-1 mt-1 animate-fadeIn">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-red-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <p className="text-xs font-medium text-red-500">
-              {formik.errors.password}
-            </p>
-          </div>
+          <ErrorMessage
+          error={formik.errors.password}
+          />
         ) : null}
       </div>
 

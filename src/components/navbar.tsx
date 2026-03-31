@@ -8,7 +8,7 @@ import { BsThreeDots } from "react-icons/bs";
 import useAuthStore from "@/stores/useAuthStore";
 import { FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
 import axiosInstance from "@/utils/axiosInstance";
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
 
 export default function NavBar() {
@@ -17,12 +17,12 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
-    try{
-      await axiosInstance.post<ApiResponse<any>>('/auth/logout')
+    try {
+      await axiosInstance.post<ApiResponse<any>>("/auth/logout");
 
       setAuth({ firstName: "", email: "", role: "" });
       router.push("/auth");
-    }catch(error:any){
+    } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
@@ -32,7 +32,7 @@ export default function NavBar() {
       const res = await axiosInstance<ApiResponse<any>>("/auth/session");
       const user = res.data.data;
 
-      console.log(user)
+      console.log(user);
 
       setAuth({
         firstName: user.firstName,
@@ -45,8 +45,8 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    checkSession()
-  }, [])
+    checkSession();
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">

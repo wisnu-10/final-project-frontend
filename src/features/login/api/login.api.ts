@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import { LoginDTO } from "@/types/auth.dto";
 import axiosInstance from "@/utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -12,6 +12,6 @@ export async function loginApi(values: LoginDTO) {
 
     return res.data.data;
   } catch (error: any) {
-    throw error
+    throw error;
   }
 }

@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { ForgotPasswordSchema } from "../validation/forgotPasswordValidation";
 import axiosInstance from "@/utils/axiosInstance";
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
 import { forgotPasswordApi } from "../api/forgotPassword.api";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ export function useForgotPassword() {
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        
+
         await forgotPasswordApi(values);
 
         toast.success("Reset link sent! Check your inbox");

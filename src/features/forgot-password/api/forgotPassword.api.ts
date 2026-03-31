@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import axiosInstance from "@/utils/axiosInstance";
 
 export async function forgotPasswordApi(values: any) {
