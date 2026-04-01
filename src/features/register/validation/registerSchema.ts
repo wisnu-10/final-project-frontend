@@ -3,11 +3,19 @@ import * as Yup from "yup";
 export const authRegisterSchema = Yup.object().shape({
   firstName: Yup.string()
     .required("First name is required")
-    .matches(/^[a-zA-Z]+$/, "First name should only contain letters"),
+    .matches(/^[a-zA-Z\s]+$/, "First name should only contain letters")
+    .matches(
+      /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/,
+      "The first letter of each word must be capitalized",
+    ),
 
   lastName: Yup.string()
     .required("Last name is required")
-    .matches(/^[a-zA-Z]+$/, "Last name should only contain letters"),
+    .matches(/^[a-zA-Z\s]+$/, "Last name should only contain letters")
+    .matches(
+      /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/,
+      "The first letter of each word must be capitalized",
+    ),
 
   email: Yup.string()
     .required("Email is required")

@@ -7,7 +7,7 @@ export async function updateEmailApi(newEmail: string) {
       "/profile/update-email",
       { newEmail },
     );
-
+    
     return res.data.data;
   } catch (error) {
     throw error;
