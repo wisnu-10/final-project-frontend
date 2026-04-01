@@ -2,15 +2,23 @@ import * as Yup from "yup";
 
 export const updateProfileSchema = Yup.object().shape({
   firstName: Yup.string()
-    .nullable()
-    .matches(/^[a-zA-Z]+$/, "First name should only contain letters"),
+    .required("First name is required")
+    .matches(/^[a-zA-Z\s]+$/, "First name should only contain letters")
+    .matches(
+      /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/,
+      "The first letter of each word must be capitalized",
+    ),
 
   lastName: Yup.string()
-    .nullable()
-    .matches(/^[a-zA-Z]+$/, "Last name should only contain letters"),
+    .required("Last name is required")
+    .matches(/^[a-zA-Z\s]+$/, "Last name should only contain letters")
+    .matches(
+      /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/,
+      "The first letter of each word must be capitalized",
+    ),
 
   phoneNumber: Yup.string()
-    .nullable()
+    .required("Phone number is required")
     .matches(
       /^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/,
       "Invalid Indonesian phone number format",
