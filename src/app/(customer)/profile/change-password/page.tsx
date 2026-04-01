@@ -7,15 +7,21 @@ import Logo from "../../../../../public/logo-Photoroom.png";
 import { useForgotPassword } from "@/features/forgot-password/hooks/useForgotPassword";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
+import useVerifyPassword from "@/features/profile-customer/hooks/useVerifyPassword";
+import { useState } from "react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import PageError from "@/components/pageError";
+import ErrorMessage from "@/components/errorMessage";
 
 
 export default function ForgotPasswordPage() {
-  const {formik, isLoading} = useForgotPassword()
+  const {formik, isLoading} = useVerifyPassword()
+  const [show, setShow] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
-      <div className="absolute top-8 left-8 ">
-        <BackLink link="/auth" page="Login" />
+    <div className="mt-8 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
+      <div className="absolute top-25 left-8 ">
+        <BackLink link="/profile" page="Profile" />
       </div>
 
       {/* Card Container */}
@@ -31,48 +37,59 @@ export default function ForgotPasswordPage() {
             />
           </div>
           <h1 className="text-3xl font-bold text-[#2C2826] mb-2">
-            Forgot Password?
+            Change Passoword
           </h1>
           <p className="text-sm text-[#6B6662] max-w-xs mx-auto">
-            Enter your email and we'll send you a link to reset your password.
+            Enter your old password below. Make sure it matches your current
+            password.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={formik.handleSubmit} className="space-y-6">
-          {/* Email Input Field */}
+          {/* password Input Field */}
           <div className="space-y-1.5">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="text-sm font-medium text-[#2C2826]"
             >
-              Email Address
+              Password
             </label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#FF6B4A]">
-                <FiMail className="w-5 h-5 transition-colors" />
+                <Lock className="w-5 h-5 transition-colors" />
               </div>
               <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="yourname@email.com"
+                id="password"
+                name="password"
+                type={show ? "password" : "text"}
+                placeholder="your password"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.email}
+                value={formik.values.password}
                 className={`w-full pl-11 pr-4 py-3.5 border rounded-xl text-black text-sm transition-all focus:outline-none focus:ring-2 
                   ${
-                    formik.touched.email && formik.errors.email
+                    formik.touched.password && formik.errors.password
                       ? "border-red-400 focus:ring-red-100"
                       : "border-[#E5DDD3] focus:border-[#FF6B4A] focus:ring-[#FFF0ED]"
                   }`}
               />
+              <button
+                onClick={() => setShow(!show)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#FF6B4A]"
+              >
+                {!show ? (
+                  <Eye className="w-5 h-5" />
+                ) : (
+                  <EyeOff className="w-5 h-5" />
+                )}
+              </button>
             </div>
             {/* Error Message */}
-            {formik.touched.email && formik.errors.email && (
-              <p className="text-xs text-red-500 pt-1 pl-1">
-                {formik.errors.email}
-              </p>
+            {formik.touched.password && formik.errors.password && (
+              <ErrorMessage
+              error={formik.errors.password}
+              />
             )}
           </div>
 
@@ -81,22 +98,9 @@ export default function ForgotPasswordPage() {
             isLoading={isLoading}
             isValid={formik.isValid}
             ctaLoading="Sending Link..."
-            cta="Send Reset Link"
+            cta="Send Change Password"
           />
         </form>
-
-        {/* Footer Link */}
-        <div className="text-center mt-10 border-t border-gray-100 pt-6">
-          <p className="text-sm text-[#6B6662]">
-            Remember your password?{" "}
-            <Link
-              href="/auth/login"
-              className="font-semibold text-[#FF6B4A] hover:text-[#FF5533] hover:underline"
-            >
-              Login here
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

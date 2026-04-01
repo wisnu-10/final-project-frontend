@@ -7,15 +7,16 @@ import Logo from "../../../../../public/logo-Photoroom.png";
 import { useForgotPassword } from "@/features/forgot-password/hooks/useForgotPassword";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
+import useUpdateEmail from "@/features/profile-customer/hooks/useUpdateEmail";
 
 
 export default function ForgotPasswordPage() {
-  const {formik, isLoading} = useForgotPassword()
+  const {formik, isLoading} = useUpdateEmail()
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
-      <div className="absolute top-8 left-8 ">
-        <BackLink link="/auth" page="Login" />
+    <div className="mt-8 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
+      <div className="absolute top-25 left-8 ">
+        <BackLink link="/profile" page="Profile" />
       </div>
 
       {/* Card Container */}
@@ -31,10 +32,11 @@ export default function ForgotPasswordPage() {
             />
           </div>
           <h1 className="text-3xl font-bold text-[#2C2826] mb-2">
-            Forgot Password?
+            Change Email Address
           </h1>
           <p className="text-sm text-[#6B6662] max-w-xs mx-auto">
-            Enter your email and we'll send you a link to reset your password.
+            Enter your new email address below. We'll send a verification link
+            to confirm the change.
           </p>
         </div>
 
@@ -81,22 +83,9 @@ export default function ForgotPasswordPage() {
             isLoading={isLoading}
             isValid={formik.isValid}
             ctaLoading="Sending Link..."
-            cta="Send Reset Link"
+            cta="Send Change Email"
           />
         </form>
-
-        {/* Footer Link */}
-        <div className="text-center mt-10 border-t border-gray-100 pt-6">
-          <p className="text-sm text-[#6B6662]">
-            Remember your password?{" "}
-            <Link
-              href="/auth/login"
-              className="font-semibold text-[#FF6B4A] hover:text-[#FF5533] hover:underline"
-            >
-              Login here
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );

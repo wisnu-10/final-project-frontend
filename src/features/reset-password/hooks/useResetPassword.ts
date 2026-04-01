@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/app/types/api";
+import { ApiResponse } from "@/types/api";
 import { authActivationSchema } from "@/features/activation-account/validation/accountActivationSchema";
 import axiosInstance from "@/utils/axiosInstance";
 import { useFormik } from "formik";
@@ -10,8 +10,8 @@ import { useState } from "react";
 export function useResetPassword() {
   const router = useRouter();
   const params = useParams();
-  const slug = params.slug as string
-  const [isLoading, setIsLoading] = useState(false)
+  const slug = params.slug as string;
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -20,7 +20,7 @@ export function useResetPassword() {
     },
     validationSchema: authActivationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true)
+      setIsLoading(true);
 
       if (values.password !== values.confirmPassword) {
         toast.error("Password must match");
@@ -28,7 +28,7 @@ export function useResetPassword() {
       }
 
       try {
-        await resetPasswordApi(values, slug)
+        await resetPasswordApi(values, slug);
 
         router.push("/auth");
 
@@ -36,10 +36,10 @@ export function useResetPassword() {
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     },
   });
 
-  return {formik, isLoading}
+  return { formik, isLoading };
 }
