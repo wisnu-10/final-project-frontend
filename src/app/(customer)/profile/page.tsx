@@ -169,7 +169,7 @@ export default function CustomerProfile() {
                 </label>
                 <input
                   type="text"
-                  name="firstName"
+                  name="lastName"
                   onChange={formik.handleChange}
                   value={formik.values.lastName}
                   disabled={!isEditMode}
