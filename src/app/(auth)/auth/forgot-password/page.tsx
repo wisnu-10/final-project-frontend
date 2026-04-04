@@ -2,15 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FiMail } from "react-icons/fi"; 
-import Logo from "../../../../../public/logo-Photoroom.png"; 
-import { useForgotPassword } from "@/features/forgot-password/hooks/useForgotPassword";
+import { FiMail } from "react-icons/fi";
+import Logo from "../../../../../public/logo-Photoroom.png";
+import { useForgotPassword } from "@/features/auth-customer/forgot-password/hooks/useForgotPassword";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
 
-
 export default function ForgotPasswordPage() {
-  const {formik, isLoading} = useForgotPassword()
+  const { formik, isLoading } = useForgotPassword();
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">

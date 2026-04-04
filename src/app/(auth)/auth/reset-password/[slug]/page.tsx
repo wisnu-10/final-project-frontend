@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
-import { useResetPassword } from "@/features/reset-password/hooks/useResetPassword";
+import { useResetPassword } from "@/features/auth-customer/reset-password/hooks/useResetPassword";
 import RightPanelInformation from "../../components/rightPaneInformation";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";

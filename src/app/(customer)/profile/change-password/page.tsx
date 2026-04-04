@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FiMail } from "react-icons/fi"; 
-import Logo from "../../../../../public/logo-Photoroom.png"; 
-import { useForgotPassword } from "@/features/forgot-password/hooks/useForgotPassword";
+import { FiMail } from "react-icons/fi";
+import Logo from "../../../../../public/logo-Photoroom.png";
+import { useForgotPassword } from "@/features/auth-customer/forgot-password/hooks/useForgotPassword";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
 import useVerifyPassword from "@/features/profile-customer/hooks/useVerifyPassword";
@@ -13,10 +13,9 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import PageError from "@/components/pageError";
 import ErrorMessage from "@/components/errorMessage";
 
-
 export default function ForgotPasswordPage() {
-  const {formik, isLoading} = useVerifyPassword()
-  const [show, setShow] = useState(false)
+  const { formik, isLoading } = useVerifyPassword();
+  const [show, setShow] = useState(false);
 
   return (
     <div className="mt-8 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
@@ -87,9 +86,7 @@ export default function ForgotPasswordPage() {
             </div>
             {/* Error Message */}
             {formik.touched.password && formik.errors.password && (
-              <ErrorMessage
-              error={formik.errors.password}
-              />
+              <ErrorMessage error={formik.errors.password} />
             )}
           </div>
 

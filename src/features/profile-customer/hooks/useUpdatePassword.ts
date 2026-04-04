@@ -1,4 +1,4 @@
-import { authActivationSchema } from "@/features/activation-account/validation/accountActivationSchema";
+import { authActivationSchema } from "@/features/auth-customer/activation-account/validation/accountActivationSchema";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

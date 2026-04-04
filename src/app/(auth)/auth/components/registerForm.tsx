@@ -2,7 +2,7 @@
 
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import SocialButton from "./sosialButton";
-import { useFormRegister } from "@/features/register/hooks/useFormRegister";
+import { useFormRegister } from "@/features/auth-customer/register/hooks/useFormRegister";
 import SubmitButton from "@/components/button";
 
 const inputStyle = (hasError: boolean) => ({

@@ -16,7 +16,6 @@ export default function useUpdateEmail() {
     validationSchema: updateEmailSchema,
     onSubmit: async (values) => {
       try {
-        console.log("Submitting form with values:", values);
         setIsLoading(true);
 
         await updateEmailApi(values.email);

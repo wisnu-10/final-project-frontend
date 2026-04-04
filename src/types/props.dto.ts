@@ -9,3 +9,7 @@ export interface SubmitButtonProps {
   cta: string;
   ctaLoading: string;
 }
+
+interface FormAddressProps {
+  setShowAddForm: (value: boolean) => void;
+}
