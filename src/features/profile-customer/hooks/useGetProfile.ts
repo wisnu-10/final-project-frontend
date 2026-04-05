@@ -29,5 +29,5 @@ export const useGetProfile = () => {
     getProfile()
   }, [])
 
-  return{profile, isLoading, isError}
+  return{profile, isLoading, isError, getProfile}
 };

@@ -42,41 +42,46 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             <label className="block text-sm font-medium text-[#6B6662] mb-2">
               Address Type
             </label>
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { value: "home", label: "Home", icon: Home },
-                { value: "work", label: "Work", icon: Briefcase },
-                { value: "other", label: "Other", icon: MapPinned },
-              ].map((type) => {
-                const TypeIcon = type.icon;
-                const isActive = formik.values.label === type.value;
+            <div>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { value: "home", label: "Home", icon: Home },
+                  { value: "work", label: "Work", icon: Briefcase },
+                  { value: "other", label: "Other", icon: MapPinned },
+                ].map((type) => {
+                  const TypeIcon = type.icon;
+                  const isActive = formik.values.label === type.value;
 
-                return (
-                  <button
-                    key={type.value}
-                    type="button"
-                    onClick={() => formik.setFieldValue("label", type.value)}
-                    className={`p-3 rounded-xl border-2 transition-all ${
-                      isActive
-                        ? "border-[#4A90E2] bg-[#F0F7FF]" // Style pas aktif (biru)
-                        : "border-[#E5DDD3] hover:border-[#4A90E2] bg-white" // Style pas mati
-                    }`}
-                  >
-                    <TypeIcon
-                      className={`w-5 h-5 mx-auto mb-1 ${
-                        isActive ? "text-[#4A90E2]" : "text-[#6B6662]"
-                      }`}
-                    />
-                    <p
-                      className={`text-xs font-medium ${
-                        isActive ? "text-[#4A90E2]" : "text-black"
+                  return (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => formik.setFieldValue("label", type.value)}
+                      className={`p-3 rounded-xl border-2 transition-all ${
+                        isActive
+                          ? "border-[#4A90E2] bg-[#F0F7FF]" // Style pas aktif (biru)
+                          : "border-[#E5DDD3] hover:border-[#4A90E2] bg-white" // Style pas mati
                       }`}
                     >
-                      {type.label}
-                    </p>
-                  </button>
-                );
-              })}
+                      <TypeIcon
+                        className={`w-5 h-5 mx-auto mb-1 ${
+                          isActive ? "text-[#4A90E2]" : "text-[#6B6662]"
+                        }`}
+                      />
+                      <p
+                        className={`text-xs font-medium ${
+                          isActive ? "text-[#4A90E2]" : "text-black"
+                        }`}
+                      >
+                        {type.label}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+              {formik.touched.label && formik.errors.label ? (
+                <ErrorMessage error={formik.errors.label} />
+              ) : null}
             </div>
           </div>
 

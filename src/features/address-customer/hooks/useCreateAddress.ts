@@ -7,11 +7,20 @@ import { addressValidationSchema } from "../validation/adressCustomerSchema";
 import { useLocationAddress } from "./useLocationAddress";
 import { useRouter } from "next/navigation";
 
-export function useCreateAdress() {
-  const router = useRouter()
+interface FormAddressProps {
+  setShowAddForm: (value: boolean) => void;
+  onSuccess: () => void;
+}
+
+export function useCreateAdress({
+  setShowAddForm,
+  onSuccess,
+}: FormAddressProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const {provinces, cities, districts, fetchCities, fetchDistricts} = useLocationAddress()
+  const { provinces, cities, districts, fetchCities, fetchDistricts } =
+    useLocationAddress("", "");
 
   const formik = useFormik({
     initialValues: {
@@ -36,11 +45,13 @@ export function useCreateAdress() {
       try {
         setIsLoading(true);
 
-        await createAddressApi(values)
+        await createAddressApi(values);
 
         toast.success("Address added");
 
-        router.push("/address")
+        setShowAddForm(false);
+
+        onSuccess();
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {
@@ -49,5 +60,13 @@ export function useCreateAdress() {
     },
   });
 
-  return {formik, isLoading, provinces, cities, districts, fetchCities, fetchDistricts}
+  return {
+    formik,
+    isLoading,
+    provinces,
+    cities,
+    districts,
+    fetchCities,
+    fetchDistricts,
+  };
 }

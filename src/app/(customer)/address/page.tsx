@@ -10,23 +10,37 @@ import { AddressCustomerDTO } from "@/types/addressCustomer";
 import Link from "next/link";
 import { useDeleteAddress } from "@/features/address-customer/hooks/useDeleteAddress";
 import { FiLoader } from "react-icons/fi";
+import { useUpdateAddress } from "@/features/address-customer/hooks/useUpdateAddress";
+import { useGetIdAddress } from "@/features/address-customer/hooks/useGetIdAddress";
+import { showConfirmDelete } from "@/utils/swal.utils";
+import BackLink from "@/components/backLink";
 
 export default function CustomerAddresses() {
-  // Gw sisain state buat modal aja biar UI-nya masih bisa interaktif dikit
   const [showAddForm, setShowAddForm] = useState(false);
 
-  const { address, isLoading, isError } = useGetAddress();
+  const { address, isLoading, isError, getAddress } = useGetAddress();
 
   const { isDeleting, deleteAddress } = useDeleteAddress();
 
+  const handleDelete = (id: string) => {
+    showConfirmDelete({
+      title: "Delete Address",
+      text: "Are you sure you want to delete this address? This action cannot be undone.",
+      onConfirm: () => deleteAddress(id),
+      onSuccess: () => getAddress(),
+    });
+  };
+
   if (isLoading) {
-    <Loading />;
-    return;
+    return <Loading />;
   }
 
   if (isError) {
-    <PageError />;
-    return;
+    if (address === null || address?.length === 0) {
+      // Biarin lolos ke bawah
+    } else {
+      return <PageError />;
+    }
   }
 
   const getIcon = (type: string) => {
@@ -40,8 +54,14 @@ export default function CustomerAddresses() {
     }
   };
 
+ 
+
   return (
-    <div className="flex flex-col justify-center items-center mx-auto pt-28 pb-28 bg-[#f4e7d6]">
+    <div className=" relative flex flex-col justify-center items-center mx-auto pt-28 pb-28 bg-[#f4e7d6]">
+      <div className="w-full max-w-2xl px-4 mb-4">
+        <BackLink link="/" page="Home" />
+      </div>
+
       {/* Header */}
       <div className="w-full max-w-2xl px-4 flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-[#2C2826]">My Addresses</h2>
@@ -53,6 +73,12 @@ export default function CustomerAddresses() {
           <span className="text-sm font-medium">Add New</span>
         </button>
       </div>
+
+      {!address || address.length === 0 ? (
+        <div className="w-full max-w-2xl px-4 py-10 rounded-2xl text-center">
+          <p className="text-gray-500">No addresses found. Please add a new address.</p>
+        </div>
+      ) : null}
 
       {/* Address List */}
       <div className="space-y-4 w-full px-4 max-w-2xl">
@@ -107,7 +133,7 @@ export default function CustomerAddresses() {
                         <Edit2 className="w-4 h-4 text-[#FF6B4A]" />
                       </Link>
                       <button
-                        onClick={() => deleteAddress(item.id)}
+                        onClick={() => handleDelete(item.id)}
                         className="w-8 h-8 rounded-lg bg-[#FEF2F2] hover:bg-[#FEE2E2] flex items-center justify-center transition-all"
                       >
                         {isDeleting ? (
@@ -119,11 +145,11 @@ export default function CustomerAddresses() {
                     </div>
                   </div>
 
-                  {!item.isPrimary && (
+                  {/* {!item.isPrimary && (
                     <button className="text-sm text-[#4A90E2] hover:text-[#3A7BC8] font-medium">
                       Set as default
                     </button>
-                  )}
+                  )} */}
                 </div>
               );
             })
@@ -131,7 +157,12 @@ export default function CustomerAddresses() {
       </div>
 
       {/* Add Address Modal */}
-      {showAddForm && <FormNewAddress setShowAddForm={setShowAddForm} />}
+      {showAddForm && (
+        <FormNewAddress
+          setShowAddForm={setShowAddForm}
+          onSuccess={getAddress}
+        />
+      )}
     </div>
   );
 }

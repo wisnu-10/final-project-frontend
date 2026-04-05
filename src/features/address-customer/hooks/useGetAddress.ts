@@ -3,6 +3,7 @@
 import { AddressCustomerDTO } from "@/types/addressCustomer"
 import { ApiResponse } from "@/types/api"
 import axiosInstance from "@/utils/axiosInstance"
+import { get } from "http"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
@@ -35,5 +36,5 @@ export const useGetAddress = () => {
         getAddress()
     }, [])
 
-    return {address, isLoading, isError}
+    return {address, isLoading, isError, getAddress}
 }

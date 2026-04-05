@@ -8,7 +8,7 @@ import { updateProfileApi } from "../api/updateProfile.api";
 import { updateProfileSchema } from "../validation/updateProfileSchema.validation";
 import { ProfileUpdateDTO } from "@/types/profileCustomer.dto";
 
-export function useUpdateProfile(value: ProfileUpdateDTO) {
+export function useUpdateProfile(value: ProfileUpdateDTO, onSuccess: () => void) {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,6 +39,8 @@ export function useUpdateProfile(value: ProfileUpdateDTO) {
         toast.success("Profile updated");
 
         setIsEditMode(false)
+
+        onSuccess();
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {

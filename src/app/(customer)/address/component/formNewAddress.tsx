@@ -5,9 +5,10 @@ import { Briefcase, Home, MapPinned } from "lucide-react";
 
 interface FormAddressProps {
   setShowAddForm: (value: boolean) => void;
+  onSuccess: () => void;
 }
 
-export default function FormNewAddress({ setShowAddForm }: FormAddressProps) {
+export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddressProps) {
   const {
     formik,
     isLoading,
@@ -16,7 +17,7 @@ export default function FormNewAddress({ setShowAddForm }: FormAddressProps) {
     districts,
     fetchCities,
     fetchDistricts,
-  } = useCreateAdress();
+  } = useCreateAdress({ setShowAddForm, onSuccess});
   
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm">

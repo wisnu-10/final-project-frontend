@@ -17,10 +17,10 @@ export default function CustomerProfile() {
   const router = useRouter()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const { profile, isLoading, isError } = useGetProfile();
+  const { profile, isLoading, isError, getProfile } = useGetProfile();
 
   const { formik, isUpdating, isEditMode, setIsEditMode } =
-    useUpdateProfile(profile);
+    useUpdateProfile(profile, getProfile);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
