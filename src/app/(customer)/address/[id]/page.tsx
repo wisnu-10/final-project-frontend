@@ -19,9 +19,6 @@ import FormUpdateAddress from "../component/formUpdateAddress";
 
     const { data, isLoading: isUpdating, error } = useGetIdAddress(id);
 
-    
-    console.log("DATA ID:", id)
-
     if (isUpdating) {
       return <Loading />;
     }

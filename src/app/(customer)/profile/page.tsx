@@ -12,15 +12,18 @@ import BackLink from "@/components/backLink";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-
 export default function CustomerProfile() {
-  const router = useRouter()
+  const router = useRouter();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const { profile, isLoading, isError, getProfile } = useGetProfile();
 
-  const { formik, isUpdating, isEditMode, setIsEditMode } =
-    useUpdateProfile(profile, getProfile);
+  console.log("profile", profile);
+
+  const { formik, isUpdating, isEditMode, setIsEditMode } = useUpdateProfile(
+    profile,
+    getProfile,
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -203,34 +206,37 @@ export default function CustomerProfile() {
         </div>
 
         {/* Account Settings */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mt-4">
-          <h3 className="text-xl font-bold text-[#2C2826] mb-4">
-            Account Settings
-          </h3>
-          <div className="space-y-3">
-            <Link
-            href="/profile/change-password" 
-            className=" flex flex-col w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] text-left hover:border-[#FF6B4A] transition-all">
-              <p className="font-medium text-[#2C2826]">Change Password</p>
-              <p className="text-sm text-[#6B6662]">Update your password</p>
-            </Link>
-            <Link
-              href="/profile/change-email"
-              className="flex flex-col w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] text-left hover:border-[#FF6B4A] transition-all"
-            >
-              <p className="font-medium text-[#2C2826]">Change Email</p>
-              <p className="text-sm text-[#6B6662]">Update your email</p>
-            </Link>
-            <Link 
+        {profile?.hasPassword === true ? (
+          <div className="bg-white rounded-2xl shadow-sm p-6 mt-4">
+            <h3 className="text-xl font-bold text-[#2C2826] mb-4">
+              Account Settings
+            </h3>
+            <div className="space-y-3">
+              <Link
+                href="/profile/change-password"
+                className=" flex flex-col w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] text-left hover:border-[#FF6B4A] transition-all"
+              >
+                <p className="font-medium text-[#2C2826]">Change Password</p>
+                <p className="text-sm text-[#6B6662]">Update your password</p>
+              </Link>
+              <Link
+                href="/profile/change-email"
+                className="flex flex-col w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] text-left hover:border-[#FF6B4A] transition-all"
+              >
+                <p className="font-medium text-[#2C2826]">Change Email</p>
+                <p className="text-sm text-[#6B6662]">Update your email</p>
+              </Link>
+              {/*  <Link 
             href="/"
             className=" flex flex-col w-full px-4 py-3 rounded-xl border-2 border-red-200 text-left hover:border-red-400 transition-all">
               <p className="font-medium text-red-600">Delete Account</p>
               <p className="text-sm text-[#6B6662]">
                 Permanently delete your account
               </p>
-            </Link>
+            </Link> */}
+            </div>
           </div>
-        </div>
+        ) : null}
       </form>
     </div>
   );

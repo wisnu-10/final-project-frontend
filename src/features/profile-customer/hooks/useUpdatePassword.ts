@@ -12,6 +12,7 @@ export default function useUpdatePassword() {
 
   const formik = useFormik({
     initialValues: {
+      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
@@ -21,11 +22,11 @@ export default function useUpdatePassword() {
         setIsLoading(true);
 
         if (values.newPassword !== values.confirmPassword) {
-          toast.error("Password must match");
+          toast.error("New password and confirm new password must match");
           return;
         }
 
-        await UpdatePasswordApi(values.newPassword);
+        await UpdatePasswordApi(values.oldPassword, values.newPassword);
 
         toast.success("Password updated successfully!");
 
