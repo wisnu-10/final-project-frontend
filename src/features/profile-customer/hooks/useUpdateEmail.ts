@@ -16,7 +16,6 @@ export default function useUpdateEmail() {
     validationSchema: updateEmailSchema,
     onSubmit: async (values) => {
       try {
-        console.log("Submitting form with values:", values);
         setIsLoading(true);
 
         await updateEmailApi(values.email);
@@ -24,6 +23,8 @@ export default function useUpdateEmail() {
         toast.success("Sent link is success, check your inbox");
 
         router.push("/profile/verify-email");
+
+        router.refresh();
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {

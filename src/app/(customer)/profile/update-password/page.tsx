@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FiMail } from "react-icons/fi"; 
-import Logo from "../../../../../public/logo-Photoroom.png"; 
-import { useForgotPassword } from "@/features/forgot-password/hooks/useForgotPassword";
+import { FiMail } from "react-icons/fi";
+import Logo from "../../../../../public/logo-Photoroom.png";
+import { useForgotPassword } from "@/features/auth-customer/forgot-password/hooks/useForgotPassword";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
 import useVerifyPassword from "@/features/profile-customer/hooks/useVerifyPassword";
@@ -14,11 +14,11 @@ import PageError from "@/components/pageError";
 import ErrorMessage from "@/components/errorMessage";
 import useUpdatePassword from "@/features/profile-customer/hooks/useUpdatePassword";
 
-
 export default function ForgotPasswordPage() {
-  const {formik, isLoading} = useUpdatePassword()
-  const [show, setShow] = useState(false)
-  const [confirmShow, setConfirmShow] = useState(false)
+  const { formik, isLoading } = useUpdatePassword();
+  const [oldPasswordShow, setOldPasswordShow] = useState(false);
+  const [show, setShow] = useState(false);
+  const [confirmShow, setConfirmShow] = useState(false);
 
   return (
     <div className="pt-25 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
@@ -55,7 +55,51 @@ export default function ForgotPasswordPage() {
               htmlFor="password"
               className="text-sm font-medium text-[#2C2826]"
             >
-              Password
+              New Password
+            </label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#FF6B4A]">
+                <Lock className="w-5 h-5 transition-colors" />
+              </div>
+              <input
+                id="newPassword"
+                name="newPassword"
+                type={show ? "password" : "text"}
+                placeholder="your password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.newPassword}
+                className={`w-full pl-11 pr-4 py-3.5 border rounded-xl text-black text-sm transition-all focus:outline-none focus:ring-2 
+                  ${
+                    formik.touched.newPassword && formik.errors.newPassword
+                      ? "border-red-400 focus:ring-red-100"
+                      : "border-[#E5DDD3] focus:border-[#FF6B4A] focus:ring-[#FFF0ED]"
+                  }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShow(!show)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#FF6B4A]"
+              >
+                {!show ? (
+                  <Eye className="w-5 h-5" />
+                ) : (
+                  <EyeOff className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+            {/* Error Message */}
+            {formik.touched.newPassword && formik.errors.newPassword && (
+              <ErrorMessage error={formik.errors.newPassword} />
+            )}
+          </div>
+          
+          <div className="space-y-1.5">
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-[#2C2826]"
+            >
+              New Password
             </label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#FF6B4A]">
@@ -98,7 +142,7 @@ export default function ForgotPasswordPage() {
               htmlFor="password"
               className="text-sm font-medium text-[#2C2826]"
             >
-              Confirm Password
+              Confirm New Password
             </label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#FF6B4A]">

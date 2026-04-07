@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
-import { useAccountActivation } from "@/features/activation-account/hooks/useAccountActivation";
+import { useAccountActivation } from "@/features/auth-customer/activation-account/hooks/useAccountActivation";
 import RightPanelInformation from "../../components/rightPaneInformation";
 import SubmitButton from "@/components/button";
 import BackLink from "@/components/backLink";
@@ -32,7 +32,7 @@ const iconStyle = {
 };
 
 export default function ActivationPage() {
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
@@ -40,7 +40,7 @@ export default function ActivationPage() {
     searchParams.get("tab") === "register" ? "register" : "login";
   const [activeTab, setActiveTab] = useState<"login" | "register">(defaultTab);
 
-  const {formik, isLoading} = useAccountActivation()
+  const { formik, isLoading } = useAccountActivation();
 
   return (
     <div className="min-h-screen flex bg-[#FAF6F1]">
@@ -154,7 +154,6 @@ export default function ActivationPage() {
               ctaLoading="Creating account..."
               cta="Create Account"
             />
-
           </form>
         </div>
       </div>

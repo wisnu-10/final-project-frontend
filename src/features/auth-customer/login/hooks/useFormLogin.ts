@@ -29,6 +29,7 @@ export function useFormLogin() {
           firstName: user.firstName,
           email: user.email,
           role: user.role,
+          profilePicture: user.profilePicture,
         });
 
         router.push("/");

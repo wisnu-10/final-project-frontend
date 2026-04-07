@@ -6,24 +6,28 @@ import Logo from "../../public/logo-Photoroom.png";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import useAuthStore from "@/stores/useAuthStore";
-import { FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
+import { FiLoader, FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
 import axiosInstance from "@/utils/axiosInstance";
 import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
 
 export default function NavBar() {
   const router = useRouter();
-  const { email, firstName, setAuth } = useAuthStore(); // Tambahin setAuth buat logout
+  const { email, firstName, profilePicture, setAuth } = useAuthStore(); // Tambahin setAuth buat logout
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
     try {
+      setIsLoading(true);
       await axiosInstance.post<ApiResponse<any>>("/auth/logout");
 
-      setAuth({ firstName: "", email: "", role: "" });
+      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
       router.push("/auth");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong");
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -32,15 +36,14 @@ export default function NavBar() {
       const res = await axiosInstance<ApiResponse<any>>("/auth/session");
       const user = res.data.data;
 
-      console.log(user);
-
       setAuth({
         firstName: user.firstName,
         email: user.email,
         role: user.role,
+        profilePicture: user.profilePicture
       });
     } catch (error: any) {
-      setAuth({ firstName: "", email: "", role: "" });
+      setAuth({ firstName: "", email: "", role: "", profilePicture: ""});
     }
   };
 
@@ -67,7 +70,11 @@ export default function NavBar() {
                 onClick={handleLogout}
                 className="flex items-center gap-2 group px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-sm border-2 border-[#FF6B4A] transition-all"
               >
-                <FiLogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                {isLoading ? (
+                  <FiLoader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <FiLogOut className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                )}
                 <span>Logout</span>
               </button>
 
@@ -82,7 +89,16 @@ export default function NavBar() {
 
                   {/* Avatar Box */}
                   <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
-                    {firstName ? firstName.charAt(0).toUpperCase() : "U"}
+                    {profilePicture ? (
+                      <img
+                        src={profilePicture}
+                        alt="Profile"
+                        key={profilePicture}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      firstName.charAt(0).toUpperCase()
+                    )}
                   </div>
 
                   {/* Green Dot (Online Status) */}

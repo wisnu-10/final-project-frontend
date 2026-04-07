@@ -2,8 +2,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { verifyPasswordApi } from "../api/verifyPassword.api";
 import { useFormik } from "formik";
-import { accountActivationApi } from "@/features/activation-account/api/accountActivation.api";
-import { authActivationSchema } from "@/features/activation-account/validation/accountActivationSchema";
+import { accountActivationApi } from "@/features/auth-customer/activation-account/api/accountActivation.api";
+import { authActivationSchema } from "@/features/auth-customer/activation-account/validation/accountActivationSchema";
 import { useRouter } from "next/navigation";
 
 export default function useVerifyPassword() {
@@ -23,7 +23,7 @@ export default function useVerifyPassword() {
 
         toast.success("Password verified! Let's set your new password. 🔒");
 
-        router.push('/profile/update-password')
+        router.push("/profile/update-password");
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {

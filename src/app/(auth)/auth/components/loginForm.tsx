@@ -8,10 +8,10 @@ import axiosInstance from "@/utils/axiosInstance";
 import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
 import useAuthStore from "@/stores/useAuthStore";
-import { authLoginSchema } from "@/features/login/validation/loginSchema";
+import { authLoginSchema } from "@/features/auth-customer/login/validation/loginSchema";
 import Link from "next/link";
 import SocialButton from "./sosialButton";
-import { useFormLogin } from "@/features/login/hooks/useFormLogin";
+import { useFormLogin } from "@/features/auth-customer/login/hooks/useFormLogin";
 import SubmitButton from "@/components/button";
 import ErrorMessage from "@/components/errorMessage";
 

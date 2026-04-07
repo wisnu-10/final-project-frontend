@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/types/api";
-import { authActivationSchema } from "@/features/activation-account/validation/accountActivationSchema";
+import { authActivationSchema } from "@/features/auth-customer/activation-account/validation/accountActivationSchema";
 import axiosInstance from "@/utils/axiosInstance";
 import { useFormik } from "formik";
 import { useParams, useRouter } from "next/navigation";
