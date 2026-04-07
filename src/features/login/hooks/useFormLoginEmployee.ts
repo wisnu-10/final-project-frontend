@@ -1,7 +1,7 @@
 import useAuthStore from "@/stores/useAuthStore";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { authLoginSchema } from "../validation/loginSchema";
+import { authLoginSchema } from "../../../features/auth-customer/login/validation/loginSchema";
 import { loginEmployeeApi } from "../api/login-employee.api";
 import { LoginDTO } from "@/types/auth.dto";
 import { useState } from "react";
@@ -27,6 +27,7 @@ export function useFormLoginEmployee() {
           firstName: employee.firstName,
           email: employee.email,
           role: employee.role,
+          profilePicture: employee.profilePicture || "",
         });
 
         router.push("/dashboard");
