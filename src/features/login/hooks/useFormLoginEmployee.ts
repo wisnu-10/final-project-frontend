@@ -30,7 +30,11 @@ export function useFormLoginEmployee() {
           profilePicture: employee.profilePicture || "",
         });
 
-        router.push("/dashboard");
+        if (employee.role === "super_admin") {
+          router.push("/super-admin/dashboard");
+        } else {
+          router.push("/dashboard");
+        }
 
         toast.success("Welcome back! 🎉");
       } catch (error: any) {
