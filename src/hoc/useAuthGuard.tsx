@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 export default function withAuth<P extends object>(
   WrappedComponent: ComponentType<P>,
   allowedRoles: string[],
+  redirectPath: string = "/auth",
 ) {
   return function AuthGuardComponent(props: P) {
     const { role } = useAuthStore();
@@ -19,9 +20,14 @@ export default function withAuth<P extends object>(
     const isAuthorized = allowedRoles.includes(role);
     const authorizedRolesText = allowedRoles.join(" or ");
 
+    useEffect(() => {
+      if (!role) {
+        toast.error("Login first");
+        router.push(redirectPath);
+      }
+    }, [role, router, redirectPath]);
+
     if (!role) {
-      toast.error("Login first");
-      router.push("/auth");
       return null;
     }
 
