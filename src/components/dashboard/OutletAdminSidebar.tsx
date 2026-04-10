@@ -2,22 +2,20 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiMapPin, FiUsers, FiLogOut, FiPackage } from "react-icons/fi";
+import { FiHome, FiPackage, FiLogOut } from "react-icons/fi";
 import useAuthStore from "@/stores/useAuthStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
 import { logoutEmployeeApi } from "@/features/login/api/login-employee.api";
 
-export default function Sidebar() {
+export default function OutletAdminSidebar() {
   const pathname = usePathname();
   const { setAuth } = useAuthStore();
   const router = useRouter();
 
   const navLinks = [
-    { name: "Dashboard", href: "/super-admin/dashboard", icon: FiHome },
-    { name: "Outlets", href: "/super-admin/outlets", icon: FiMapPin },
-    { name: "Laundry Items", href: "/super-admin/laundry-items", icon: FiPackage },
-    { name: "Employees", href: "/super-admin/employees", icon: FiUsers },
+    { name: "Dashboard", href: "/outlet-admin/dashboard", icon: FiHome },
+    { name: "Laundry Items", href: "/outlet-admin/laundry-items", icon: FiPackage },
   ];
 
   const handleLogout = async () => {
@@ -40,7 +38,7 @@ export default function Sidebar() {
 
       <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
         <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-          Super Admin
+          Outlet Admin
         </p>
 
         {navLinks.map((link) => {
