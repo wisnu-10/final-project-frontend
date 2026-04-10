@@ -32,6 +32,8 @@ export function useFormLoginEmployee() {
 
         if (employee.role === "super_admin") {
           router.push("/super-admin/dashboard");
+        } else if (employee.role === "outlet_admin") {
+          router.push("/outlet-admin/dashboard");
         } else {
           router.push("/dashboard");
         }
