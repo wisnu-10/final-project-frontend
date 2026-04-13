@@ -18,8 +18,6 @@ export default function CustomerProfile() {
 
   const { profile, isLoading, isError, getProfile } = useGetProfile();
 
-  console.log("profile", profile);
-
   const { formik, isUpdating, isEditMode, setIsEditMode } = useUpdateProfile(
     profile,
     getProfile,
@@ -65,14 +63,14 @@ export default function CustomerProfile() {
                   className="w-full h-full object-cover"
                 />
               ) : profile?.profilePicture ? (
-                // Munculin ini kalau user udah punya foto di database
+                
                 <img
                   src={profile.profilePicture}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               ) : (
-                // Kalau gak ada dua-duanya, baru tampilin inisial
+                
                 <>
                   {profile?.firstName?.[0]}
                   {profile?.lastName?.[0]}

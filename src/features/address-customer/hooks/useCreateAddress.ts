@@ -26,7 +26,7 @@ export function useCreateAdress({
     initialValues: {
       recipientName: "",
       recipientPhoneNumber: "",
-      label: "", // Bisa kasih default "home"
+      label: "",
       address: "",
       provinceId: 0,
       provinceName: "",

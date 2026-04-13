@@ -6,7 +6,7 @@ import Logo from "../../public/logo-Photoroom.png";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import useAuthStore from "@/stores/useAuthStore";
-import { FiLoader, FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
+import { FiClock, FiLoader, FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
 import axiosInstance from "@/utils/axiosInstance";
 import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
@@ -122,12 +122,22 @@ export default function NavBar() {
                       >
                         <FiUser className="w-4 h-4" /> Profile
                       </button>
+
                       <button
-                        onClick={() => router.push("/pickup")}
+                        onClick={() => router.push("/dashboard-customer")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
                       >
                         <FiPackage className="w-4 h-4" /> Pickup Order
                       </button>
+
+                      {/* INI YANG BARU: ORDER HISTORY */}
+                      <button
+                        onClick={() => router.push("/order-history")}
+                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
+                      >
+                        <FiClock className="w-4 h-4" /> Order History
+                      </button>
+
                       <button
                         onClick={() => router.push("/address")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
