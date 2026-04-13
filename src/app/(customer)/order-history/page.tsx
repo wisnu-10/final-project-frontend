@@ -1,0 +1,155 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // Krusial buat navigasi
+import {
+  Package,
+  Clock,
+  CheckCircle,
+  XCircle,
+  ChevronRight,
+  Calendar,
+  CreditCard,
+  Truck,
+  Search,
+  Filter,
+  X,
+} from "lucide-react";
+import BackLink from "@/components/backLink";
+import FilterOrderHistory from "./component/filterOrderHistory";
+import OrderList from "./component/orderList";
+import { useGetAllOrder } from "@/features/order-customer/hooks/useGetAllOrder";
+import Pagination from "./component/pagination";
+import Loading from "@/components/loading";
+import PageError from "@/components/pageError";
+
+type OrderStatus =
+  | "waiting_pickup"
+  | "on_the_way_to_outlet"
+  | "arrived_outlet"
+  | "washing"
+  | "ironing"
+  | "packing"
+  | "waiting_payment"
+  | "ready_delivery"
+  | "delivering"
+  | "completed"
+  | "cancelled";
+
+type PaymentStatus = "pending" | "paid" | "failed" | "expired";
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  date: string;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  paymentMethod?: string;
+  items: number;
+  total: number;
+  pickupAddress: string;
+  deliveryAddress: string;
+  deliveredAt?: string;
+  confirmedAt?: string;
+}
+
+export default function CustomerOrderHistory() {
+  const {
+    isLoading,
+    isError,
+    order,
+    getOrder,
+    totalPage,
+    totalOrder,
+    currentPage,
+  } = useGetAllOrder();
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<
+    "credit-card" | "bank-transfer" | "e-wallet"
+  >("credit-card");
+
+   if (isLoading) return <Loading />;
+
+   if (isError) return <PageError />;
+
+  return (
+    <div className="w-full flex flex-col items-center mx-auto bg-[#FAF6F1] pt-28 pb-28">
+      <div className="max-w-2xl w-full">
+        <div className="mb-4">
+          <BackLink link="/" page="Home" />
+        </div>
+        {/* Header */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-[#2C2826] mb-2">
+            Order History
+          </h2>
+          <p className="text-sm text-[#6B6662]">
+            View all your past and current orders
+          </p>
+        </div>
+
+        <FilterOrderHistory
+          order={order?.orders}
+          getOrder={getOrder}
+          setShowPaymentModal={setShowPaymentModal}
+          setSelectedOrder={setSelectedOrder}
+          isLoading={isLoading}
+          isError={isError}
+        />
+
+        {/* Payment Modal */}
+        {showPaymentModal && selectedOrder && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-3xl max-w-md w-full p-8">
+              <div className="text-center mb-6">
+                <CreditCard className="w-12 h-12 text-[#FF6B4A] mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-[#2C2826]">
+                  Pembayaran
+                </h2>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {["credit-card", "bank-transfer", "e-wallet"].map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setPaymentMethod(m as any)}
+                    className={`w-full p-4 rounded-xl border-2 transition-all text-left ${paymentMethod === m ? "border-[#FF6B4A] bg-[#FFF5F2]" : "border-[#E5DDD3]"}`}
+                  >
+                    <p className="font-medium capitalize">
+                      {m.replace("-", " ")}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowPaymentModal(false)}
+                  className="flex-1 py-3 rounded-xl border-2 border-[#E5DDD3]"
+                >
+                  Batal
+                </button>
+                <button className="flex-1 py-3 rounded-xl bg-[#FF6B4A] text-white">
+                  Bayar Sekarang
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Pagination
+        order={order?.orders || []}
+        totalOrder={totalOrder || 1}
+        totalPage={totalPage || 0}
+        currentPage={currentPage}
+        pageSize={10}
+        onPageChange={(newPage) => {
+          getOrder({ page: newPage });
+        }}
+      />
+    </div>
+  );
+}
