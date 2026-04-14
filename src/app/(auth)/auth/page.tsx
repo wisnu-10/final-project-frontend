@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
@@ -16,7 +16,8 @@ import BackLink from "@/components/backLink";
 
 
 
-function AuthContent() {
+export default function AuthPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const defaultTab =
@@ -60,13 +61,5 @@ function AuthContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function AuthPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <AuthContent />
-    </Suspense>
   );
 }

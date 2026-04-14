@@ -10,7 +10,7 @@ import {
   History,
   CalendarCheck,
 } from "lucide-react";
-import AttendancePage from "./components/attendancePage";
+import AttendancePage from "@/components/attendance/attendancePage";
 
 const tabList = [
   { key: "tasks", label: "Available Tasks", icon: ClipboardList },
@@ -66,7 +66,7 @@ function WorkerDashboard() {
 
       {/* Tab Content */}
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {activeTab === "attendance" && <AttendancePage />}
+        {activeTab === "attendance" && <AttendancePage roleLabel="Worker" />}
         {activeTab === "tasks" && <ComingSoon label="Available Tasks" />}
         {activeTab === "history" && <ComingSoon label="Work History" />}
       </div>
@@ -86,4 +86,4 @@ function ComingSoon({ label }: { label: string }) {
   );
 }
 
-export default withAuth(WorkerDashboard, ["worker"]);
+export default withAuth(WorkerDashboard, ["worker"], "/auth/employee");

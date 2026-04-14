@@ -1,48 +1,60 @@
+// @/hoc/withAuth.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { ComponentType, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/stores/useAuthStore";
+import { FiLock, FiArrowLeft } from "react-icons/fi";
+import BackLink from "@/components/backLink";
+import toast from "react-hot-toast";
 
-const withAuth = (WrappedComponent: React.ComponentType<any>, allowedRoles: string[]) => {
-  return function ProtectedRoute(props: any) {
+export default function withAuth<P extends object>(
+  WrappedComponent: ComponentType<P>,
+  allowedRoles: string[],
+  redirectPath: string = "/auth",
+) {
+  return function AuthGuardComponent(props: P) {
+    const { role } = useAuthStore();
     const router = useRouter();
-    const { token, role } = useAuthStore();
-    const [isVerified, setIsVerified] = useState(false);
+
+    const isAuthorized = allowedRoles.includes(role);
+    const authorizedRolesText = allowedRoles.join(" or ");
 
     useEffect(() => {
-      if (!token) {
-        router.replace("/auth/auth");
-        return;
+      if (!role) {
+        toast.error("Login first");
+        router.push(redirectPath);
       }
+    }, [role, router, redirectPath]);
 
-      if (allowedRoles.length > 0 && role && !allowedRoles.includes(role)) {
-        // Redirect to unauthorized or home based on role
-        if (role === "admin") {
-          router.replace("/admin-dashboard");
-        } else if (role === "worker") {
-          router.replace("/worker-dashboard");
-        } else if (role === "driver") {
-          router.replace("/driver-dashboard");
-        } else {
-          router.replace("/");
-        }
-        return;
-      }
+    if (!role) {
+      return null;
+    }
 
-      setIsVerified(true);
-    }, [token, role, router]);
-
-    if (!isVerified) {
+    if (!isAuthorized) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF6F1]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6B4A]"></div>
+        <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 text-center bg-[#FFF8F6]">
+          <div className="w-24 h-24 bg-[#FFF0ED] rounded-full flex items-center justify-center mb-8 shadow-inner">
+            <FiLock className="w-12 h-12 text-[#FF6B4A]" />
+          </div>
+
+          <h1 className="text-2xl font-extrabold text-[#2C2826] mb-3 tracking-tight">
+            Restricted Access 🔐
+          </h1>
+
+          <p className="text-[#6B6662] mb-10 max-w-sm leading-relaxed text-sm">
+            This page can only be opened by{" "}
+            <span className="font-bold text-[#FF6B4A] uppercase bg-[#FFF0ED] px-2 py-0.5 rounded-md text-xs">
+              {authorizedRolesText}
+            </span>
+            .
+          </p>
+
+          <BackLink link="/" page="Home" />
         </div>
       );
     }
 
     return <WrappedComponent {...props} />;
   };
-};
-
-export default withAuth;
+}

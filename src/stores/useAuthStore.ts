@@ -1,49 +1,31 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-interface User {
-  id: number;
+type UseAuthStore = {
   firstName: string;
-  lastName: string;
   email: string;
   role: string;
-}
+  profilePicture: string;
+  setAuth: ({
+    firstName,
+    email,
+    role,
+    profilePicture,
+  }: {
+    firstName: string;
+    email: string;
+    role: string;
+    profilePicture: string
+  }) => void;
+};
 
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  firstName: string | null;
-  role: string | null;
-  setAuth: (user: User, token: string) => void;
-  clearAuth: () => void;
-}
-
-const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      firstName: null,
-      role: null,
-      setAuth: (user, token) =>
-        set({
-          user,
-          token,
-          firstName: user.firstName,
-          role: user.role,
-        }),
-      clearAuth: () =>
-        set({
-          user: null,
-          token: null,
-          firstName: null,
-          role: null,
-        }),
-    }),
-    {
-      name: "auth-storage",
-    }
-  )
-);
+const useAuthStore = create<UseAuthStore>((set) => ({
+  firstName: "",
+  email: "",
+  role: "",
+  profilePicture: "",
+  setAuth: ({ firstName, email, role, profilePicture }: Pick<UseAuthStore, "firstName" | "email" | "role" | "profilePicture">) => {
+    set({ firstName, email, role, profilePicture });
+  },
+}));
 
 export default useAuthStore;
