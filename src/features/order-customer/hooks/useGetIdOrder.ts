@@ -1,3 +1,5 @@
+'use client";'
+
 import { AddressCustomerDTO } from "@/types/addressCustomer";
 import { ApiResponse } from "@/types/api";
 import axiosInstance from "@/utils/axiosInstance";
