@@ -12,6 +12,7 @@ import {
 import PageError from "@/components/pageError";
 import { formatIDR } from "@/utils/formatCurrency.utils";
 import { getStatusConfig } from "@/utils/orderStatus.utils";
+import { useState } from "react";
 
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
@@ -117,22 +118,24 @@ export default function OrderList({
         </div>
       )}
 
-      {order.totalPrice > 0 && order.payments[0]?.status === "pending" && (
-        <div>
-          <button
-            onClick={() => {
-              setSelectedOrder(order);
-              setShowPaymentModal(true);
-            }}
-            className="w-full px-4 py-3 rounded-xl bg-[#FF6B4A] text-white font-semibold hover:bg-[#FF5533] transition-all shadow-lg flex items-center justify-center gap-2"
-          >
-            <CreditCard className="w-4 h-4" /> Pay Now
-          </button>
-          <p className="text-xs text-red-600 mt-2 text-center">
-            ⚠️ Laundry will be delivered once payment is completed
-          </p>
-        </div>
-      )}
+      {order.totalPrice > 0 &&
+        order.payments[0]?.status === "pending" &&
+        !["delivering", "completed"].includes(order.statusLogs[0].status) && (
+          <div>
+            <button
+              onClick={() => {
+                setSelectedOrder(order);
+                setShowPaymentModal(true);
+              }}
+              className="w-full px-4 py-3 rounded-xl bg-[#FF6B4A] text-white font-semibold hover:bg-[#FF5533] transition-all shadow-lg flex items-center justify-center gap-2"
+            >
+              <CreditCard className="w-4 h-4" /> Pay Now
+            </button>
+            <p className="text-[10px] text-red-600 mt-3 text-center italic">
+              ⚠️ Laundry will be delivered once payment is completed
+            </p>
+          </div>
+        )}
 
       {order.payments[0]?.status === "paid" &&
         !["delivering", "completed"].includes(order.statusLogs[0].status) && (
@@ -151,12 +154,26 @@ export default function OrderList({
 
       {order.statusLogs[0].status === "delivering" && (
         <div>
-          <button className="w-full px-4 py-3 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2">
+          <button className="w-full px-4 py-3 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2 hover:bg-green-700 transition-all shadow-sm">
             <CheckCircle className="w-4 h-4" /> Confirm Order Received
           </button>
-          <p className="text-xs text-red-600 mt-2 text-center">
-            ⚠️ Auto-confirmed in 3 days if no complaint
+
+          <p className="text-[10px] text-gray-500 mt-3 text-center italic">
+            Auto-confirmed in 3 days if no complaint
           </p>
+
+          <button
+            onClick={() => {}}
+            className="group w-full mt-2 px-4 py-2.5 rounded-xl text-[#FF6B4A] text-sm font-medium flex items-center justify-center gap-2 hover:bg-[#FF6B4A]/5 transition-all border border-transparent hover:border-[#FF6B4A]/20"
+          >
+            <XCircle className="w-4 h-4" />
+            <span className="flex items-center gap-1">
+              Issues with your order?
+              <span className="ml-1 px-2 py-0.5 bg-[#FF6B4A]/10 rounded-md font-bold group-hover:bg-[#FF6B4A] group-hover:text-white transition-all">
+                Get Help
+              </span>
+            </span>
+          </button>
         </div>
       )}
 
@@ -167,9 +184,15 @@ export default function OrderList({
           </div>
           <button
             onClick={() => {}}
-            className="w-full px-4 py-3 rounded-xl border-2 border-[#FF6B4A] text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 hover:bg-red-50 transition-all"
+            className="group w-full mt-2 px-4 py-2.5 rounded-xl text-[#FF6B4A] text-sm font-medium flex items-center justify-center gap-2 hover:bg-[#FF6B4A]/5 transition-all border border-transparent hover:border-[#FF6B4A]/20"
           >
-            <XCircle className="w-4 h-4" /> Report a Problem / Complain
+            <XCircle className="w-4 h-4" />
+            <span className="flex items-center gap-1">
+              Issues with your order?
+              <span className="ml-1 px-2 py-0.5 bg-[#FF6B4A]/10 rounded-md font-bold group-hover:bg-[#FF6B4A] group-hover:text-white transition-all">
+                Get Help
+              </span>
+            </span>
           </button>
         </div>
       )}

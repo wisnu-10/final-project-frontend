@@ -14,6 +14,7 @@ import {
   Search,
   Filter,
   X,
+  Plus,
 } from "lucide-react";
 import BackLink from "@/components/backLink";
 import FilterOrderHistory from "./component/filterOrderHistory";
@@ -22,6 +23,7 @@ import { useGetAllOrder } from "@/features/order-customer/hooks/useGetAllOrder";
 import Pagination from "./component/pagination";
 import Loading from "@/components/loading";
 import PageError from "@/components/pageError";
+import RequestPickupForm from "./component/requestPickupForm";
 
 type OrderStatus =
   | "waiting_pickup"
@@ -64,15 +66,16 @@ export default function CustomerOrderHistory() {
     currentPage,
   } = useGetAllOrder();
 
+  const [showRequestForm, setShowRequestForm] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<
     "credit-card" | "bank-transfer" | "e-wallet"
   >("credit-card");
 
-   if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
-   if (isError) return <PageError />;
+  if (isError) return <PageError />;
 
   return (
     <div className="w-full flex flex-col items-center mx-auto bg-[#FAF6F1] pt-28 pb-28">
@@ -81,13 +84,20 @@ export default function CustomerOrderHistory() {
           <BackLink link="/" page="Home" />
         </div>
         {/* Header */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-[#2C2826] mb-2">
-            Order History
-          </h2>
-          <p className="text-sm text-[#6B6662]">
-            View all your past and current orders
-          </p>
+        <div className="w-full max-w-2xl flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-[#2C2826]">My Orders</h2>
+            <p className="text-sm text-[#6B6662]">
+              View and track all your orders
+            </p>
+          </div>
+          <button
+            onClick={() => setShowRequestForm(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF6B4A] to-[#FF8A6E] text-white hover:bg-[#fa502a] hover:scale-110 transition-all shadow-lg"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="text-sm font-medium">Request Pickup</span>
+          </button>
         </div>
 
         <FilterOrderHistory
@@ -150,6 +160,13 @@ export default function CustomerOrderHistory() {
           getOrder({ page: newPage });
         }}
       />
+
+      {showRequestForm && (
+        <RequestPickupForm
+          setShowRequestForm={setShowRequestForm}
+          getOrder={getOrder}
+        />
+      )}
     </div>
   );
 }
