@@ -260,19 +260,13 @@ export default function FilterOrderHistory({
         </div>
       ) : (
         filteredOrders.map((order: any) => (
-          <Link
-            key={order.id}
-            href={`/order-history/${order.id}`}
-            className="space-y-4"
-          >
-            <OrderList
-              order={order}
-              setShowPaymentModal={setShowPaymentModal}
-              setSelectedOrder={setSelectedOrder}
-              isLoading={isLoading}
-              isError={isError}
-            />
-          </Link>
+          <OrderList
+            order={order}
+            setShowPaymentModal={setShowPaymentModal}
+            setSelectedOrder={setSelectedOrder}
+            isLoading={isLoading}
+            isError={isError}
+          />
         ))
       )}
     </div>
