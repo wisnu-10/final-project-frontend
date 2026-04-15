@@ -6,7 +6,14 @@ import Logo from "../../public/logo-Photoroom.png";
 import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import useAuthStore from "@/stores/useAuthStore";
-import { FiClock, FiLoader, FiLogOut, FiMapPin, FiPackage, FiUser } from "react-icons/fi";
+import {
+  FiClock,
+  FiLoader,
+  FiLogOut,
+  FiMapPin,
+  FiPackage,
+  FiUser,
+} from "react-icons/fi";
 import axiosInstance from "@/utils/axiosInstance";
 import { ApiResponse } from "@/types/api";
 import toast from "react-hot-toast";
@@ -26,7 +33,7 @@ export default function NavBar() {
       router.push("/auth");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong");
-    } finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -40,10 +47,10 @@ export default function NavBar() {
         firstName: user.firstName,
         email: user.email,
         role: user.role,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
       });
     } catch (error: any) {
-      setAuth({ firstName: "", email: "", role: "", profilePicture: ""});
+      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
     }
   };
 
@@ -55,12 +62,13 @@ export default function NavBar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
       <div className="max-w-7xl mx-auto px-8 py-2 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+
+        <a href="/" className=" flex items-center gap-2 cursor-pointer">
           <div className="rounded-lg flex items-center justify-center">
             <Image src={Logo} alt="Logo" className="w-10 h-auto" />
           </div>
           <span className="text-lg font-bold text-[#2C2826]">DILAUNDRYIN</span>
-        </div>
+        </a>
 
         {/* CTA Button Section */}
         <div className="relative flex items-center gap-8">
@@ -124,19 +132,19 @@ export default function NavBar() {
                       </button>
 
                       <button
-                        onClick={() => router.push("/dashboard-customer")}
+                        onClick={() => router.push("/order-history")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
                       >
                         <FiPackage className="w-4 h-4" /> Pickup Order
                       </button>
 
                       {/* INI YANG BARU: ORDER HISTORY */}
-                      <button
+                      {/* <button
                         onClick={() => router.push("/order-history")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
                       >
                         <FiClock className="w-4 h-4" /> Order History
-                      </button>
+                      </button> */}
 
                       <button
                         onClick={() => router.push("/address")}
