@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiPackage, FiLogOut } from "react-icons/fi";
+import { FiHome, FiPackage, FiLogOut, FiShoppingBag, FiAlertCircle } from "react-icons/fi";
 import useAuthStore from "@/stores/useAuthStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
@@ -16,6 +16,8 @@ export default function OutletAdminSidebar() {
   const navLinks = [
     { name: "Dashboard", href: "/outlet-admin/dashboard", icon: FiHome },
     { name: "Laundry Items", href: "/outlet-admin/laundry-items", icon: FiPackage },
+    { name: "Orders", href: "/outlet-admin/orders", icon: FiShoppingBag },
+    { name: "Bypass Requests", href: "/outlet-admin/bypass-requests", icon: FiAlertCircle },
   ];
 
   const handleLogout = async () => {

@@ -4,10 +4,12 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import { useParams } from "next/navigation";
 import useUpdateEmployee from "@/features/super-admin/employees/hooks/useUpdateEmployee";
+import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
 
 export default function EditEmployeePage() {
   const params = useParams();
   const { formik, isLoading, fetching } = useUpdateEmployee(params.id as string);
+  const { outlets, loading: outletsLoading } = useGetOutlets();
 
   if (fetching) return <div className="p-8 text-center text-gray-500">Loading details...</div>;
 
@@ -152,16 +154,29 @@ export default function EditEmployeePage() {
             {formik.values.role !== "super_admin" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Outlet ID
+                  Assign to Outlet
                 </label>
-                <input
-                  type="text"
+                <select
                   name="outletId"
                   value={formik.values.outletId}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143] outline-none"
-                />
+                >
+                  <option value="">Select Outlet</option>
+                  {outletsLoading ? (
+                    <option disabled>Loading outlets...</option>
+                  ) : (
+                    outlets.map((outlet: any) => (
+                      <option key={outlet.id} value={outlet.id}>
+                        {outlet.name}
+                      </option>
+                    ))
+                  )}
+                </select>
+                {formik.touched.outletId && formik.errors.outletId && (
+                  <div className="text-red-500 text-sm mt-1">{formik.errors.outletId as string}</div>
+                )}
               </div>
             )}
           </div>

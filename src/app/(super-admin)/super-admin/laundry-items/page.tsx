@@ -97,9 +97,10 @@ export default function LaundryItemsPage() {
                   </td>
                   <td className="p-4">
                     <span className="text-gray-700 font-medium">
-                      {item.pricingType === "per_item"
-                        ? `${formatPrice(item.price)} / pcs`
-                        : "—"}
+                      {formatPrice(item.price)}
+                      <span className="text-gray-400 text-xs ml-1">
+                        {item.pricingType === "kiloan" ? "/ kg" : "/ pcs"}
+                      </span>
                     </span>
                   </td>
                   <td className="p-4 flex gap-2">
