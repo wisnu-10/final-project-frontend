@@ -22,10 +22,7 @@ export default function useUpdateLaundryItem(id: string, redirectPath: string = 
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        await updateLaundryItemApi(id, {
-          ...values,
-          price: values.pricingType === "kiloan" ? 0 : values.price,
-        });
+        await updateLaundryItemApi(id, values);
         toast.success("Laundry item updated successfully");
         router.push(redirectPath);
         router.refresh();
@@ -54,7 +51,6 @@ export default function useUpdateLaundryItem(id: string, redirectPath: string = 
     } finally {
       setIsFetching(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {

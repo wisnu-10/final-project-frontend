@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import useRegisterEmployee from "@/features/super-admin/employees/hooks/useRegisterEmployee";
+import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
 
 export default function CreateEmployeePage() {
   const { formik, isLoading } = useRegisterEmployee();
+  const { outlets, loading: outletsLoading } = useGetOutlets();
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -148,17 +150,29 @@ export default function CreateEmployeePage() {
             {formik.values.role !== "super_admin" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Outlet ID
+                  Assign to Outlet
                 </label>
-                <input
-                  type="text"
+                <select
                   name="outletId"
                   value={formik.values.outletId}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143] outline-none"
-                  placeholder="Leave empty if not required"
-                />
+                >
+                  <option value="">Select Outlet</option>
+                  {outletsLoading ? (
+                    <option disabled>Loading outlets...</option>
+                  ) : (
+                    outlets.map((outlet: any) => (
+                      <option key={outlet.id} value={outlet.id}>
+                        {outlet.name}
+                      </option>
+                    ))
+                  )}
+                </select>
+                {formik.touched.outletId && formik.errors.outletId && (
+                  <div className="text-red-500 text-sm mt-1">{formik.errors.outletId as string}</div>
+                )}
               </div>
             )}
           </div>

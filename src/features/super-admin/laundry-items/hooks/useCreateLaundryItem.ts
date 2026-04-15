@@ -13,7 +13,7 @@ export default function useCreateLaundryItem(redirectPath: string = "/super-admi
     initialValues: {
       name: "",
       pricingType: "kiloan" as "kiloan" | "per_item",
-      price: 0,
+      price: 10000,
     },
     validationSchema: LaundryItemSchema,
     onSubmit: async (values) => {
@@ -21,7 +21,7 @@ export default function useCreateLaundryItem(redirectPath: string = "/super-admi
         setIsLoading(true);
         await createLaundryItemApi({
           ...values,
-          price: values.pricingType === "kiloan" ? 0 : values.price,
+          price: values.pricingType === "kiloan" ? 10000 : values.price,
         });
         toast.success("Laundry item created successfully");
         router.push(redirectPath);
