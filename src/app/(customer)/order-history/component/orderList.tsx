@@ -40,6 +40,24 @@ export default function OrderList({
   const config = getStatusConfig(statusKey);
   const StatusIcon = config.icon;
 
+  const formatScheduleDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+
+    const datePart = date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    const timePart = date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Biar muncul AM/PM biar keren kayak di form
+    });
+
+    return `${datePart} - ${timePart}`;
+  };
+
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
       <div className="flex items-start justify-between mb-4">
@@ -121,6 +139,13 @@ export default function OrderList({
       </div>
 
       {/* --- ACTION SECTION --- */}
+      {order.statusLogs[0].status === "scheduled" && (
+        <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
+          <Clock className="w-4 h-4 animate-spin-slow" /> Laundry will be pickup
+          at {formatScheduleDateTime(order.scheduleTime)}
+        </div>
+      )}
+
       {(order.statusLogs[0].status === "waiting_pickup" ||
         order.statusLogs[0].status === "on_the_way_to_outlet") && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
@@ -179,9 +204,7 @@ export default function OrderList({
             Auto-confirmed in 3 days if no complaint
           </p>
 
-          
-            <ButtonComplaint id={order.id} />
-          
+          <ButtonComplaint id={order.id} />
         </div>
       )}
 
@@ -190,9 +213,8 @@ export default function OrderList({
           <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-600 font-semibold flex items-center justify-center gap-2 border border-gray-200">
             <CheckCircle className="w-4 h-4 text-green-600" /> Order Completed
           </div>
-          
-            <ButtonComplaint id={order.id} />
-          
+
+          <ButtonComplaint id={order.id} />
         </div>
       )}
     </div>
