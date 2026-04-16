@@ -4,10 +4,17 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import useRegisterEmployee from "@/features/super-admin/employees/hooks/useRegisterEmployee";
 import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
+import SearchableSelect from "@/components/SearchableSelect";
 
 export default function CreateEmployeePage() {
   const { formik, isLoading } = useRegisterEmployee();
-  const { outlets, loading: outletsLoading } = useGetOutlets();
+  const { outlets, loading: outletsLoading } = useGetOutlets(100);
+
+  const outletOptions = outlets.map((outlet) => ({
+    id: outlet.id,
+    label: outlet.name,
+    sublabel: `${outlet.cityName}, ${outlet.districtName}`,
+  }));
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -152,24 +159,13 @@ export default function CreateEmployeePage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Assign to Outlet
                 </label>
-                <select
-                  name="outletId"
+                <SearchableSelect
+                  options={outletOptions}
                   value={formik.values.outletId}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143] outline-none"
-                >
-                  <option value="">Select Outlet</option>
-                  {outletsLoading ? (
-                    <option disabled>Loading outlets...</option>
-                  ) : (
-                    outlets.map((outlet: any) => (
-                      <option key={outlet.id} value={outlet.id}>
-                        {outlet.name}
-                      </option>
-                    ))
-                  )}
-                </select>
+                  onChange={(val) => formik.setFieldValue("outletId", val)}
+                  placeholder="Select Outlet"
+                  loading={outletsLoading}
+                />
                 {formik.touched.outletId && formik.errors.outletId && (
                   <div className="text-red-500 text-sm mt-1">{formik.errors.outletId as string}</div>
                 )}

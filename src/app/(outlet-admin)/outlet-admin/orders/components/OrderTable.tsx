@@ -16,6 +16,8 @@ const getLatestStatus = (statusLogs: any[]) => {
   return statusLogs[0]?.status || "Processing";
 };
 
+import Pagination from "@/components/Pagination";
+
 export default function OrderTable({
   orders,
   loading,
@@ -113,29 +115,13 @@ export default function OrderTable({
         </table>
       </div>
 
-      {pagination && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between p-4 border-t border-gray-100 bg-gray-50/30">
-          <p className="text-xs text-gray-500 font-medium">
-            Page {pagination.page} of {pagination.totalPages} ({pagination.total} orders)
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setPage(Math.max(1, page - 1))}
-              disabled={page <= 1}
-              className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-all shadow-sm"
-            >
-              <FiChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setPage(Math.min(pagination.totalPages, page + 1))}
-              disabled={page >= pagination.totalPages}
-              className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-all shadow-sm"
-            >
-              <FiChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        currentPage={page}
+        totalPages={pagination?.totalPages || 0}
+        totalItems={pagination?.total || 0}
+        onPageChange={setPage}
+        label="orders"
+      />
     </div>
   );
 }
