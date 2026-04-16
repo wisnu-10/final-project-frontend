@@ -1,6 +1,6 @@
 import { FieldArray } from "formik";
 import { FiPackage, FiPlus, FiTrash2 } from "react-icons/fi";
-import { formatIDR } from "@/utils/formatCurrency.utils";
+import SearchableItemSelect from "./SearchableItemSelect";
 
 interface LaundryItemsFormProps {
   values: any;
@@ -40,19 +40,12 @@ export default function LaundryItemsForm({
             {values.orderItems.map((item: any, index: number) => (
               <div key={index} className="flex flex-col gap-1 bg-gray-50/50 p-3 rounded-xl border border-gray-100">
                 <div className="flex items-center gap-3">
-                  <select
+                  <SearchableItemSelect
                     name={`orderItems.${index}.laundryItemId`}
                     value={item.laundryItemId}
+                    laundryItems={laundryItems}
                     onChange={handleChange}
-                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-[#ff7143]/20"
-                  >
-                    <option value="">Select item...</option>
-                    {laundryItems.map((li: any) => (
-                      <option key={li.id} value={li.id}>
-                        {li.name} ({li.pricingType === "kiloan" ? "Kiloan" : `${formatIDR(Number(li.price))}/pcs`})
-                      </option>
-                    ))}
-                  </select>
+                  />
                   <div className="w-20">
                     <input
                       type="number"

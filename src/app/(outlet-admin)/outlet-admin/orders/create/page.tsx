@@ -24,7 +24,7 @@ export default function CreateManualOrderPage() {
 
   const fetchLaundryItems = useCallback(async () => {
     try {
-      const res = await getLaundryItemsApi();
+      const res = await getLaundryItemsApi({ limit: 100 });
       if (res.success) {
         setLaundryItems(res.data.laundryItems || []);
       }

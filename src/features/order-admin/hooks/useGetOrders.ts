@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getOrdersApi } from "../api/getOrders.api";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function useGetOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -9,6 +10,7 @@ export default function useGetOrders() {
 
   // Filter state
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   const [outletId, setOutletId] = useState("");
   const [orderStatus, setOrderStatus] = useState("");
   const [workerId, setWorkerId] = useState("");
@@ -25,7 +27,7 @@ export default function useGetOrders() {
         limit: limit.toString(),
       };
 
-      if (search) params.search = search;
+      if (debouncedSearch) params.search = debouncedSearch;
       if (outletId) params.outletId = outletId;
       if (orderStatus) params.orderStatus = orderStatus;
       if (workerId) params.workerId = workerId;
@@ -42,7 +44,7 @@ export default function useGetOrders() {
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, outletId, orderStatus, workerId, startDate, endDate]);
+  }, [page, limit, debouncedSearch, outletId, orderStatus, workerId, startDate, endDate]);
 
   useEffect(() => {
     fetchOrders();
