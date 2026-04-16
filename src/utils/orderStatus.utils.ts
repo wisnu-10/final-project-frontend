@@ -10,6 +10,7 @@ import {
 
 // Definisikan tipe status yang valid (opsional tapi ngebantu banget)
 export type OrderStatus =
+  | "scheduled"
   | "waiting_pickup"
   | "on_the_way_to_outlet"
   | "arrived_outlet"
@@ -31,6 +32,13 @@ export interface StatusConfig {
 
 export const getStatusConfig = (status: string): StatusConfig => {
   switch (status) {
+    case "scheduled":
+      return {
+        label: "Scheduled",
+        bgColor: "bg-teal-100",
+        textColor: "text-teal-700",
+        icon: Clock,
+      };
     case "waiting_pickup":
       return {
         label: "Waiting Pickup",
