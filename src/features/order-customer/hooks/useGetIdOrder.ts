@@ -39,5 +39,5 @@ export function useGetIdOrder(id: string) {
     }
   }, [id]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, getById };
 }

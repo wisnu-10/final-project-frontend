@@ -78,7 +78,7 @@ export default function CustomerOrderHistory() {
   if (isError) return <PageError />;
 
   return (
-    <div className="w-full flex flex-col items-center mx-auto bg-[#FAF6F1] pt-28 pb-28">
+    <div className="w-full flex flex-col items-center mx-auto bg-[#FAF6F1] pt-28 pb-28 px-4">
       <div className="max-w-2xl w-full">
         <div className="mb-4">
           <BackLink link="/" page="Home" />
