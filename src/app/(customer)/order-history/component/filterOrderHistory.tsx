@@ -45,7 +45,7 @@ type OrderStatus =
 type PaymentStatus = "pending" | "paid" | "failed" | "expired";
 
 interface FilterProps {
-  getOrder: (params: OrderParams) => Promise<void>;
+  getOrder: (params?: any) => Promise<void>;
   setShowPaymentModal: (show: boolean) => void;
   setSelectedOrder: (order: Order | null) => void;
   order?: any[];
@@ -266,6 +266,7 @@ export default function FilterOrderHistory({
             setSelectedOrder={setSelectedOrder}
             isLoading={isLoading}
             isError={isError}
+            getOrder={getOrder}
           />
         ))
       )}

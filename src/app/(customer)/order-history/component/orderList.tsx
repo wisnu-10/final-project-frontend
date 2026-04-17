@@ -16,6 +16,10 @@ import { getStatusConfig } from "@/utils/orderStatus.utils";
 import { useState } from "react";
 import ButtonComplaint from "@/components/buttonComplaint";
 import Link from "next/link";
+import useConfirmOrder from "@/features/order-customer/hooks/useConfirmOrder";
+import { useParams } from "next/navigation";
+import useGetOrderById from "@/features/order-admin/hooks/useGetOrderById";
+import { useGetIdOrder } from "@/features/order-customer/hooks/useGetIdOrder";
 
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
@@ -23,6 +27,7 @@ interface OrderListProps {
   order: any; // Sekarang nerima single order object dari parent
   isLoading?: boolean;
   isError?: boolean;
+  getOrder?: (params?: any) => Promise<void>;
 }
 
 export default function OrderList({
@@ -31,12 +36,18 @@ export default function OrderList({
   order,
   isLoading,
   isError,
+  getOrder,
 }: OrderListProps) {
+  
+  const { data, isLoading: isConfirming, confirmOrder } = useConfirmOrder();
+
   if (isError) return <PageError />;
 
   if (!order) return null;
 
-  const statusKey = order.statusLogs?.[0]?.status?.toLowerCase() || "";
+  const statusKey =
+    order.statusLogs?.[order.statusLogs.length - 1]?.status?.toLowerCase() ||
+    "";
   const config = getStatusConfig(statusKey);
   const StatusIcon = config.icon;
 
@@ -139,30 +150,36 @@ export default function OrderList({
       </div>
 
       {/* --- ACTION SECTION --- */}
-      {order.statusLogs[0].status === "scheduled" && (
+      {order.statusLogs[order.statusLogs.length - 1].status === "scheduled" && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Laundry will be pickup
           at {formatScheduleDateTime(order.scheduleTime)}
         </div>
       )}
 
-      {(order.statusLogs[0].status === "waiting_pickup" ||
-        order.statusLogs[0].status === "on_the_way_to_outlet") && (
+      {(order.statusLogs[order.statusLogs.length - 1].status ===
+        "waiting_pickup" ||
+        order.statusLogs[order.statusLogs.length - 1].status ===
+          "on_the_way_to_outlet") && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Waiting for driver to
           arrive at outlet...
         </div>
       )}
 
-      {order.statusLogs[0].status === "arrived_outlet" && !order.totalPrice && (
-        <div className="w-full px-4 py-3 rounded-xl bg-orange-50 text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 border border-[#FF6B4A]">
-          <Package className="w-4 h-4" /> Awaiting admin price review...
-        </div>
-      )}
+      {order.statusLogs[order.statusLogs.length - 1].status ===
+        "arrived_outlet" &&
+        !order.totalPrice && (
+          <div className="w-full px-4 py-3 rounded-xl bg-orange-50 text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 border border-[#FF6B4A]">
+            <Package className="w-4 h-4" /> Awaiting admin price review...
+          </div>
+        )}
 
       {order.totalPrice > 0 &&
-        order.payments[0]?.status === "pending" &&
-        !["delivering", "completed"].includes(order.statusLogs[0].status) && (
+        order.payments[order.statusLogs.length - 1]?.status === "pending" &&
+        !["delivering", "completed"].includes(
+          order.statusLogs[order.statusLogs.length - 1].status,
+        ) && (
           <div>
             <button
               onClick={() => {
@@ -179,8 +196,10 @@ export default function OrderList({
           </div>
         )}
 
-      {order.payments[0]?.status === "paid" &&
-        !["delivering", "completed"].includes(order.statusLogs[0].status) && (
+      {order.payments[order.statusLogs.length - 1]?.status === "paid" &&
+        !["delivering", "completed"].includes(
+          order.statusLogs[order.statusLogs.length - 1].status,
+        ) && (
           <div className="space-y-3">
             <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
               <CheckCircle className="w-5 h-5" /> Payment Completed
@@ -194,10 +213,32 @@ export default function OrderList({
           </div>
         )}
 
-      {order.statusLogs[0].status === "delivering" && (
+      {order.statusLogs[order.statusLogs.length - 1]?.status ===
+        "delivering" && (
         <div>
-          <button className="w-full px-4 py-3 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2 hover:bg-green-700 transition-all shadow-sm">
-            <CheckCircle className="w-4 h-4" /> Confirm Order Received
+          <button
+            onClick={() =>
+              confirmOrder(order.id, async () => {
+                // Refetch keseluruhan list dari parent untuk sync data
+                if (getOrder) {
+                  await getOrder();
+                }
+              })
+            }
+            disabled={isConfirming}
+            className={`w-full px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all shadow-sm ${
+              isConfirming
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 text-white hover:bg-green-700"
+            }`}
+          >
+            {isConfirming ? (
+              "Processing..."
+            ) : (
+              <>
+                <CheckCircle className="w-4 h-4" /> Confirm Order Received
+              </>
+            )}
           </button>
 
           <p className="text-[10px] text-gray-500 mt-3 text-center italic">
@@ -208,7 +249,7 @@ export default function OrderList({
         </div>
       )}
 
-      {order.statusLogs[0].status === "completed" && (
+      {order.statusLogs[order.statusLogs.length - 1].status === "completed" && (
         <div className="space-y-3">
           <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-600 font-semibold flex items-center justify-center gap-2 border border-gray-200">
             <CheckCircle className="w-4 h-4 text-green-600" /> Order Completed
