@@ -15,6 +15,7 @@ interface SearchableSelectProps {
   onChange: (value: string) => void;
   placeholder?: string;
   loading?: boolean;
+  direction?: 'up' | 'down';
 }
 
 export default function SearchableSelect({
@@ -23,6 +24,7 @@ export default function SearchableSelect({
   onChange,
   placeholder = "Select option...",
   loading = false,
+  direction = "up",
 }: SearchableSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -68,7 +70,7 @@ export default function SearchableSelect({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 w-full bottom-full mb-1 bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden origin-bottom animate-in fade-in zoom-in duration-150">
+        <div className={`absolute z-50 w-full ${direction === 'up' ? 'bottom-full mb-1 border-b-0 rounded-t-xl rounded-b-none' : 'top-full mt-1 border-t-0 rounded-b-xl rounded-t-none'} bg-white border border-gray-100 shadow-xl overflow-hidden animate-in fade-in zoom-in duration-150`}>
           <div className="p-2 border-b border-gray-50 flex items-center gap-2 bg-gray-50/50">
             <FiSearch className="text-gray-400 w-4 h-4" />
             <input
