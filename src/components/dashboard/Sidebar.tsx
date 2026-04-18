@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiMapPin, FiUsers, FiLogOut, FiPackage } from "react-icons/fi";
+import { FiHome, FiMapPin, FiUsers, FiLogOut, FiPackage, FiShoppingBag, FiMessageSquare } from "react-icons/fi";
 import useAuthStore from "@/stores/useAuthStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
@@ -18,6 +18,8 @@ export default function Sidebar() {
     { name: "Outlets", href: "/super-admin/outlets", icon: FiMapPin },
     { name: "Laundry Items", href: "/super-admin/laundry-items", icon: FiPackage },
     { name: "Employees", href: "/super-admin/employees", icon: FiUsers },
+    { name: "Orders", href: "/super-admin/orders", icon: FiShoppingBag },
+    { name: "Complaints", href: "/super-admin/complaints", icon: FiMessageSquare },
   ];
 
   const handleLogout = async () => {

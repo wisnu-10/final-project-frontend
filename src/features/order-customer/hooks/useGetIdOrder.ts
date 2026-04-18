@@ -1,3 +1,5 @@
+'use client";'
+
 import { AddressCustomerDTO } from "@/types/addressCustomer";
 import { ApiResponse } from "@/types/api";
 import axiosInstance from "@/utils/axiosInstance";
@@ -37,5 +39,5 @@ export function useGetIdOrder(id: string) {
     }
   }, [id]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, getById };
 }

@@ -15,6 +15,7 @@ import SubmitButton from "@/components/button";
 import { useGetAddress } from "@/features/address-customer/hooks/useGetAddress";
 import { AddressCustomerDTO } from "@/types/addressCustomer";
 import ErrorMessage from "@/components/errorMessage";
+import { useScheduleOrder } from "@/features/order-customer/hooks/useScheduleOrder";
 
 interface FormRequestPickupDTO {
   setShowRequestForm: (value: boolean) => void;
@@ -36,6 +37,12 @@ export default function RequestPickupForm({
     getOrder,
   });
 
+  const { formik: scheduleFormik, isLoading: isScheduledLoading } =
+    useScheduleOrder({
+      setShowRequestForm,
+      getOrder,
+    });
+
   const defaultAddress =
     addresses.find((addr) => addr.isPrimary) || addresses[0];
 
@@ -45,6 +52,7 @@ export default function RequestPickupForm({
   const handlePickup = (addr: AddressCustomerDTO) => {
     setPickupAddress(addr);
     formik.setFieldValue("pickupAddressId", addr.id);
+    scheduleFormik.setFieldValue("pickupAddressId", addr.id);
   };
 
   const [deliveryAddress, setDeliveryAddress] =
@@ -53,6 +61,7 @@ export default function RequestPickupForm({
   const handleDelivery = (addr: AddressCustomerDTO) => {
     setDeliveryAddress(addr);
     formik.setFieldValue("deliveryAddressId", addr.id);
+    scheduleFormik.setFieldValue("deliveryAddressId", addr.id);
   };
 
   const [showPickupAddressModal, setShowPickupAddressModal] = useState(false);
@@ -60,7 +69,6 @@ export default function RequestPickupForm({
     useState(false);
 
   const [scheduleTomorrow, setScheduleTomorrow] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
   const getAddressDisplay = (address: AddressCustomerDTO) => {
@@ -72,22 +80,6 @@ export default function RequestPickupForm({
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split("T")[0];
-  };
-
-  const handleSchedulePickup = () => {
-    const scheduleDate = scheduleTomorrow ? getTomorrowDate() : selectedDate;
-    console.log("Scheduling pickup...", {
-      pickupAddress,
-      deliveryAddress,
-      selectedDate: scheduleDate,
-      selectedTime,
-      scheduleTomorrow,
-    });
-    setShowRequestForm(false);
-    // Reset form
-    setSelectedDate("");
-    setSelectedTime("");
-    setScheduleTomorrow(false);
   };
 
   return (
@@ -108,7 +100,12 @@ export default function RequestPickupForm({
         </div>
 
         {/* Modal Content */}
-        <form onSubmit={formik.handleSubmit} className="p-6 space-y-6">
+        <form
+          onSubmit={
+            scheduleTomorrow ? scheduleFormik.handleSubmit : formik.handleSubmit
+          }
+          className="p-6 space-y-6"
+        >
           {/* Pickup Address */}
           <div>
             <label className="text-sm font-medium text-[#6B6662] mb-2 block">
@@ -172,6 +169,7 @@ export default function RequestPickupForm({
             formik.errors.deliveryAddressId ? (
               <ErrorMessage error={formik.errors.deliveryAddressId} />
             ) : null}
+
             <div className="mt-2 flex items-center gap-2">
               <input
                 type="checkbox"
@@ -180,6 +178,10 @@ export default function RequestPickupForm({
                 onChange={(e) => {
                   if (e.target.checked && pickupAddress) {
                     setDeliveryAddress(pickupAddress);
+                    scheduleFormik.setFieldValue(
+                      "deliveryAddressId",
+                      pickupAddress.id,
+                    );
                   }
                 }}
                 className="w-4 h-4 accent-[#FF6B4A]"
@@ -191,7 +193,7 @@ export default function RequestPickupForm({
           </div>
 
           {/* Schedule Tomorrow Switcher */}
-          {/* <div className="bg-[#FFF5F2] rounded-xl p-4">
+          <div className="bg-[#FFF5F2] rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-[#2C2826] mb-1">
@@ -202,12 +204,23 @@ export default function RequestPickupForm({
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => {
                   setScheduleTomorrow(!scheduleTomorrow);
+                  setSelectedTime("");
+                  formik.setFieldValue("scheduleTime", "");
+                  scheduleFormik.setFieldValue("scheduleTime", "");
+
+                  // Opsional: Langsung sinkron alamat pas toggle nyala
                   if (!scheduleTomorrow) {
-                    setSelectedDate(getTomorrowDate());
-                  } else {
-                    setSelectedDate("");
+                    scheduleFormik.setFieldValue(
+                      "pickupAddressId",
+                      pickupAddress?.id,
+                    );
+                    scheduleFormik.setFieldValue(
+                      "deliveryAddressId",
+                      deliveryAddress?.id,
+                    );
                   }
                 }}
                 className={`relative w-14 h-8 rounded-full transition-all ${
@@ -221,7 +234,7 @@ export default function RequestPickupForm({
                 />
               </button>
             </div>
-          </div> */}
+          </div>
 
           {/* Time Picker */}
           <div>
@@ -244,8 +257,13 @@ export default function RequestPickupForm({
 
                     setSelectedTime(time);
 
-                    formik.setFieldValue("scheduleTime", date);
-                    formik.setFieldTouched("scheduleTime", true);
+                    if (scheduleTomorrow) {
+                      scheduleFormik.setFieldValue("scheduleTime", date);
+                      scheduleFormik.setFieldTouched("scheduleTime", true);
+                    } else {
+                      formik.setFieldValue("scheduleTime", date);
+                      formik.setFieldTouched("scheduleTime", true);
+                    }
                   }}
                   className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                     selectedTime === time
@@ -271,10 +289,16 @@ export default function RequestPickupForm({
               Cancel
             </button>
             <SubmitButton
-              isLoading={isLoading}
-              isValid={formik.isValid}
-              cta="Schedule Pickup"
-              ctaLoading="Scheduling your Pickup..."
+              isLoading={scheduleTomorrow ? isScheduledLoading : isLoading}
+              isValid={
+                scheduleTomorrow ? scheduleFormik.isValid : formik.isValid
+              }
+              cta={scheduleTomorrow ? "Schedule Pickup" : "Create Pickup"}
+              ctaLoading={
+                scheduleTomorrow
+                  ? "Scheduling your Pickup"
+                  : "Creating your Pickup"
+              }
             />
           </div>
         </form>

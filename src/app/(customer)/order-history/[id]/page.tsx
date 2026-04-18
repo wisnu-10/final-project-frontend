@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Package,
   X,
@@ -14,6 +14,9 @@ import {
   CheckCircle,
   Truck,
   XCircle,
+  Timer,
+  WashingMachine,
+  ShoppingBag,
 } from "lucide-react";
 import { useGetIdOrder } from "@/features/order-customer/hooks/useGetIdOrder";
 import { useParams, useRouter } from "next/navigation";
@@ -22,12 +25,13 @@ import PageError from "@/components/pageError";
 import OrderDetailSkeleton from "@/components/orderDetailSkeleton";
 import { formatIDR } from "@/utils/formatCurrency.utils";
 import { getStatusConfig } from "@/utils/orderStatus.utils";
-
-
+import TrackingOrder from "./component/trackingOrder";
 
 export default function OrderDetailStatic() {
   const { id } = useParams();
   const router = useRouter();
+
+  const [showTracking, setShowTracking] = useState(false);
 
   const { data, isLoading, error } = useGetIdOrder(id as string);
 
@@ -74,9 +78,9 @@ export default function OrderDetailStatic() {
             </div>
             <button
               onClick={() => router.back()}
-              className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all backdrop-blur-sm"
+              className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all"
             >
-              <X className="w-5 h-5 text-white" />
+              <X className="w-5 h-5 text-[#2C2826]" />
             </button>
           </div>
         </div>
@@ -215,7 +219,24 @@ export default function OrderDetailStatic() {
               </div>
             </div>
           </div>
+          <div className="sticky bottom-0 bg-white border-t border-[#E5DDD3] p-6 rounded-b-3xl">
+            <button
+              onClick={() => setShowTracking(true)}
+              className="w-full px-6 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] duration-300 text-white font-bold hover:shadow-xl transition-all shadow-lg"
+            >
+              Tracking your Order
+            </button>
+          </div>
         </div>
+
+        {showTracking && (
+          <TrackingOrder
+            data={data}
+            onClose={() => setShowTracking(false)}
+            isLoading={isLoading}
+            error={error}
+          />
+        )}
       </div>
     </div>
   );

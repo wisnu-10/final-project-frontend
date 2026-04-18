@@ -1,6 +1,6 @@
 "use client";
 
-import { FiPackage, FiTrendingUp } from "react-icons/fi";
+import { FiPackage, FiTrendingUp, FiShoppingBag } from "react-icons/fi";
 import Link from "next/link";
 
 export default function OutletAdminDashboard() {
@@ -27,6 +27,24 @@ export default function OutletAdminDashboard() {
           </h3>
           <p className="text-sm text-gray-500 mt-1">
             Manage laundry item types and pricing
+          </p>
+        </Link>
+
+        <Link
+          href="/outlet-admin/orders"
+          className="group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md hover:border-[#ff7143]/30 transition-all duration-300"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+              <FiShoppingBag className="w-6 h-6 text-orange-600" />
+            </div>
+            <FiTrendingUp className="w-5 h-5 text-gray-300 group-hover:text-[#ff7143] transition-colors" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-[#ff7143] transition-colors">
+            Orders
+          </h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Process and track laundry orders
           </p>
         </Link>
       </div>

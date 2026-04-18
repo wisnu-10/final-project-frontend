@@ -22,7 +22,7 @@ import {
   ShoppingBag,
   CreditCard,
 } from "lucide-react";
-import RequestPickupForm from "./component/requestPickupForm";
+import RequestPickupForm from "../order-history/component/requestPickupForm";
 import BackLink from "@/components/backLink";
 import { useGetAllOrder } from "@/features/order-customer/hooks/useGetAllOrder";
 import Loading from "@/components/loading";

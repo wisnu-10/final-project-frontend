@@ -58,7 +58,6 @@ export default function OutletAdminCreateLaundryItemPage() {
                   checked={formik.values.pricingType === "kiloan"}
                   onChange={() => {
                     formik.setFieldValue("pricingType", "kiloan");
-                    formik.setFieldValue("price", 0);
                   }}
                   className="sr-only"
                 />
@@ -140,8 +139,8 @@ export default function OutletAdminCreateLaundryItemPage() {
           {formik.values.pricingType === "kiloan" && (
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
               <p className="text-sm text-emerald-700">
-                💡 Item dengan tipe <strong>Kiloan</strong> akan dihitung berdasarkan berat (kg)
-                menggunakan harga per kg yang ditetapkan saat membuat order.
+                💡 Item dengan tipe <strong>Kiloan</strong> akan otomatis menggunakan harga standar 
+                <strong> Rp 10.000 / kg</strong>.
               </p>
             </div>
           )}
