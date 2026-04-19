@@ -45,7 +45,10 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
                   <button
                     key={type.value}
                     type="button"
-                    onClick={() => formik.setFieldValue("label", type.value)}
+                    onClick={() => {
+                      formik.setFieldValue("label", type.value);
+                      formik.setFieldTouched("label", true);
+                    }}
                     className={`p-3 rounded-xl border-2 transition-all ${
                       isActive
                         ? "border-[#4A90E2] bg-[#F0F7FF]" // Style pas aktif (biru)
@@ -68,6 +71,9 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
                 );
               })}
             </div>
+            {formik.touched.label && formik.errors.label ? (
+              <ErrorMessage error={formik.errors.label} />
+            ) : null} 
           </div>
 
           {/* Input Fields */}

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc"; // Install dulu: npm install react-icons
+import { FcGoogle } from "react-icons/fc";
 import { FiLoader } from "react-icons/fi";
 
 export default function SocialButton() {

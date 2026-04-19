@@ -45,8 +45,9 @@ export default function TrackingOrder({
 
   const orders = data;
 
-  // Logic ambil status terakhir dari logs
-  const currentStatus = orders?.statusLogs?.[0]?.status?.toLowerCase() || "";
+  const currentStatus =
+    orders?.statusLogs?.[orders.statusLogs.length - 1]?.status?.toLowerCase() ||
+    "";
   const currentOrderIndex = orderStatus.findIndex(
     (step) => step.id === currentStatus,
   );

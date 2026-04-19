@@ -24,6 +24,7 @@ import Pagination from "./component/pagination";
 import Loading from "@/components/loading";
 import PageError from "@/components/pageError";
 import RequestPickupForm from "./component/requestPickupForm";
+import PaymentModal from "./component/paymentModal";
 
 type OrderStatus =
   | "waiting_pickup"
@@ -69,9 +70,6 @@ export default function CustomerOrderHistory() {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<
-    "credit-card" | "bank-transfer" | "e-wallet"
-  >("credit-card");
 
   if (isLoading) return <Loading />;
 
@@ -103,51 +101,14 @@ export default function CustomerOrderHistory() {
         <FilterOrderHistory
           order={order?.orders}
           getOrder={getOrder}
+          
           setShowPaymentModal={setShowPaymentModal}
           setSelectedOrder={setSelectedOrder}
           isLoading={isLoading}
           isError={isError}
         />
 
-        {/* Payment Modal */}
-        {showPaymentModal && selectedOrder && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl max-w-md w-full p-8">
-              <div className="text-center mb-6">
-                <CreditCard className="w-12 h-12 text-[#FF6B4A] mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-[#2C2826]">
-                  Pembayaran
-                </h2>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                {["credit-card", "bank-transfer", "e-wallet"].map((m) => (
-                  <button
-                    key={m}
-                    onClick={() => setPaymentMethod(m as any)}
-                    className={`w-full p-4 rounded-xl border-2 transition-all text-left ${paymentMethod === m ? "border-[#FF6B4A] bg-[#FFF5F2]" : "border-[#E5DDD3]"}`}
-                  >
-                    <p className="font-medium capitalize">
-                      {m.replace("-", " ")}
-                    </p>
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowPaymentModal(false)}
-                  className="flex-1 py-3 rounded-xl border-2 border-[#E5DDD3]"
-                >
-                  Batal
-                </button>
-                <button className="flex-1 py-3 rounded-xl bg-[#FF6B4A] text-white">
-                  Bayar Sekarang
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        
       </div>
 
       <Pagination
