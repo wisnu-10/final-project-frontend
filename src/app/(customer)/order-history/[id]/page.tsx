@@ -57,10 +57,10 @@ export default function OrderDetailStatic() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-white">
-                    Order {data?.id?.slice(0, 8).toUpperCase()}
+                    Order DL_{data?.id?.slice(0, 8).toUpperCase()}
                   </h2>
                   <p className="text-sm text-white/90">
-                    {new Date(data?.createdAt).toLocaleDateString("id-ID", {
+                    {new Date(data?.createdAt).toLocaleDateString("en-EN", {
                       weekday: "long",
                       year: "numeric",
                       month: "long",

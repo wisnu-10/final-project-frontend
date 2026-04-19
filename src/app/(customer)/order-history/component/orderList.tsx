@@ -71,6 +71,8 @@ export default function OrderList({
     return `${datePart} - ${timePart}`;
   };
 
+  const shortOrderId = order?.id?.slice(0, 8).toUpperCase();
+
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
       <div className="flex items-start justify-between mb-4">
@@ -80,7 +82,7 @@ export default function OrderList({
           </div>
           <div>
             <h3 className="font-bold text-[#2C2826]">
-              Order DL_{order.id.slice(0, 8).toUpperCase()}_{Date.now()}
+              Order DL_{shortOrderId}
             </h3>
             <div className="flex items-center gap-2 text-xs text-[#6B6662]">
               <Calendar className="w-3 h-3" />
@@ -132,8 +134,8 @@ export default function OrderList({
             <div>
               <p className="text-[#6B6662] mb-1">Pickup:</p>
               <p className="text-[#2C2826] font-medium">
-                {order.pickupAddress.address},{" "}
-                {order.pickupAddress.cityName
+                {order?.pickupAddress.address},{" "}
+                {order?.pickupAddress.cityName
                   .toLowerCase()
                   .replace(/\b\w/g, (c: any) => c.toUpperCase())}
               </p>
@@ -141,8 +143,8 @@ export default function OrderList({
             <div>
               <p className="text-[#6B6662] mb-1">Delivery:</p>
               <p className="text-[#2C2826] font-medium">
-                {order.deliveryAddress.address},{" "}
-                {order.deliveryAddress.cityName
+                {order?.deliveryAddress.address},{" "}
+                {order?.deliveryAddress.cityName
                   .toLowerCase()
                   .replace(/\b\w/g, (c: any) => c.toUpperCase())}
               </p>
@@ -152,16 +154,17 @@ export default function OrderList({
       </div>
 
       {/* --- ACTION SECTION --- */}
-      {order.statusLogs[order.statusLogs.length - 1].status === "scheduled" && (
+      {order?.statusLogs[order?.statusLogs.length - 1]?.status ===
+        "scheduled" && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Laundry will be pickup
-          at {formatScheduleDateTime(order.scheduleTime)}
+          at {formatScheduleDateTime(order?.scheduleTime)}
         </div>
       )}
 
-      {(order.statusLogs[order.statusLogs.length - 1].status ===
+      {(order?.statusLogs[order?.statusLogs.length - 1]?.status ===
         "waiting_pickup" ||
-        order.statusLogs[order.statusLogs.length - 1].status ===
+        order?.statusLogs[order?.statusLogs.length - 1]?.status ===
           "on_the_way_to_outlet") && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Waiting for driver to
@@ -169,16 +172,16 @@ export default function OrderList({
         </div>
       )}
 
-      {order.statusLogs[order.statusLogs.length - 1].status ===
+      {order?.statusLogs[order?.statusLogs.length - 1]?.status ===
         "arrived_outlet" &&
-        !order.totalPrice && (
+        !order?.totalPrice && (
           <div className="w-full px-4 py-3 rounded-xl bg-orange-50 text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 border border-[#FF6B4A]">
             <Package className="w-4 h-4" /> Awaiting admin price review...
           </div>
         )}
 
       {order.totalPrice > 0 &&
-        order.payments[order.statusLogs.length - 1]?.status === "pending" &&
+        order.payments[order.payments.length - 1]?.status === "pending" &&
         !["delivering", "completed"].includes(
           order.statusLogs[order.statusLogs.length - 1].status,
         ) && (
@@ -201,19 +204,19 @@ export default function OrderList({
       {order.payments[order.payments.length - 1]?.status === "paid" &&
         order.statusLogs[order.statusLogs.length - 1].status !== "delivering" &&
         order.statusLogs[order.statusLogs.length - 1].status !==
-          "completed" &&(
-            <div className="space-y-3">
-              <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
-                <CheckCircle className="w-5 h-5" /> Payment Completed
-              </div>
-              <div className="flex items-center justify-center gap-2 text-[10px] mt-3 text-center italic">
-                <Truck className="w-3 h-3 text-blue-600 flex-shrink-0" />
-                <p className=" text-blue-800 leading-relaxed">
-                  Your laundry is now in the queue. We'll deliver it soon!
-                </p>
-              </div>
+          "completed" && (
+          <div className="space-y-3">
+            <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
+              <CheckCircle className="w-5 h-5" /> Payment Completed
             </div>
-          )}
+            <div className="flex items-center justify-center gap-2 text-[10px] mt-3 text-center italic">
+              <Truck className="w-3 h-3 text-blue-600 flex-shrink-0" />
+              <p className=" text-blue-800 leading-relaxed">
+                Your laundry is now in the queue. We'll deliver it soon!
+              </p>
+            </div>
+          </div>
+        )}
 
       {order.statusLogs[order.statusLogs.length - 1]?.status ===
         "delivering" && (

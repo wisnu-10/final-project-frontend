@@ -11,6 +11,7 @@ import { useUpdateAddress } from "@/features/address-customer/hooks/useUpdateAdd
 import { Briefcase, Home, MapPinned } from "lucide-react";
 import { useParams } from "next/navigation";
 import FormUpdateAddress from "../component/formUpdateAddress";
+import FormAddressSkeleton from "@/components/formAddressSkeleton";
 
 export default function updateAddressPage() {
   const params = useParams();
@@ -19,11 +20,15 @@ export default function updateAddressPage() {
   const { data, isLoading: isUpdating, error } = useGetIdAddress(id);
 
   if (isUpdating) {
-    return <Loading />;
+    return <FormAddressSkeleton />;
   }
 
-  if (error || !data) {
+  if (error) {
     return <PageError />;
+  }
+
+  if (!data) {
+    return <FormAddressSkeleton />
   }
 
   return <FormUpdateAddress key={id} initialData={data} />;
