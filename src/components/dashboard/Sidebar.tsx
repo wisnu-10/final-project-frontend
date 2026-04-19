@@ -28,7 +28,15 @@ export default function Sidebar() {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
+      setAuth({
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: "",
+        profilePicture: "",
+        outletId: null,
+        outletName: null,
+      });
       router.push("/auth-employee");
     }
   };
