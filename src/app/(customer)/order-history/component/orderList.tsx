@@ -20,6 +20,7 @@ import useConfirmOrder from "@/features/order-customer/hooks/useConfirmOrder";
 import { useParams } from "next/navigation";
 import useGetOrderById from "@/features/order-admin/hooks/useGetOrderById";
 import { useGetIdOrder } from "@/features/order-customer/hooks/useGetIdOrder";
+import PaymentModal from "./paymentModal";
 
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
@@ -38,8 +39,9 @@ export default function OrderList({
   isError,
   getOrder,
 }: OrderListProps) {
-  
   const { data, isLoading: isConfirming, confirmOrder } = useConfirmOrder();
+
+  const [showPayment, setShowPayment] = useState(false);
 
   if (isError) return <PageError />;
 
@@ -78,7 +80,7 @@ export default function OrderList({
           </div>
           <div>
             <h3 className="font-bold text-[#2C2826]">
-              Order {order.id.slice(0, 8).toUpperCase()}
+              Order DL_{order.id.slice(0, 8).toUpperCase()}_{Date.now()}
             </h3>
             <div className="flex items-center gap-2 text-xs text-[#6B6662]">
               <Calendar className="w-3 h-3" />
@@ -87,7 +89,7 @@ export default function OrderList({
           </div>
         </div>
 
-        {/* --- Tombol Detail Kecil & Elegan --- */}
+        {/* ========= Order Detail */}
         <div className="flex flex-col items-end gap-2">
           <div
             className={`flex items-center gap-1 px-3 py-1 rounded-full ${config.bgColor}`}
@@ -184,7 +186,7 @@ export default function OrderList({
             <button
               onClick={() => {
                 setSelectedOrder(order);
-                setShowPaymentModal(true);
+                setShowPayment(true);
               }}
               className="w-full px-4 py-3 rounded-xl bg-[#FF6B4A] text-white font-semibold hover:bg-[#FF5533] transition-all shadow-lg flex items-center justify-center gap-2"
             >
@@ -196,22 +198,22 @@ export default function OrderList({
           </div>
         )}
 
-      {order.payments[order.statusLogs.length - 1]?.status === "paid" &&
-        !["delivering", "completed"].includes(
-          order.statusLogs[order.statusLogs.length - 1].status,
-        ) && (
-          <div className="space-y-3">
-            <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
-              <CheckCircle className="w-5 h-5" /> Payment Completed
+      {order.payments[order.payments.length - 1]?.status === "paid" &&
+        order.statusLogs[order.statusLogs.length - 1].status !== "delivering" &&
+        order.statusLogs[order.statusLogs.length - 1].status !==
+          "completed" &&(
+            <div className="space-y-3">
+              <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
+                <CheckCircle className="w-5 h-5" /> Payment Completed
+              </div>
+              <div className="flex items-center justify-center gap-2 text-[10px] mt-3 text-center italic">
+                <Truck className="w-3 h-3 text-blue-600 flex-shrink-0" />
+                <p className=" text-blue-800 leading-relaxed">
+                  Your laundry is now in the queue. We'll deliver it soon!
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
-              <Truck className="w-4 h-4 text-blue-600 flex-shrink-0" />
-              <p className="text-xs text-blue-800 leading-relaxed">
-                Your laundry is now in the queue. We'll deliver it soon!
-              </p>
-            </div>
-          </div>
-        )}
+          )}
 
       {order.statusLogs[order.statusLogs.length - 1]?.status ===
         "delivering" && (
@@ -219,7 +221,6 @@ export default function OrderList({
           <button
             onClick={() =>
               confirmOrder(order.id, async () => {
-                // Refetch keseluruhan list dari parent untuk sync data
                 if (getOrder) {
                   await getOrder();
                 }
@@ -257,6 +258,11 @@ export default function OrderList({
 
           <ButtonComplaint id={order.id} />
         </div>
+      )}
+
+      {/* Payment Modal */}
+      {showPayment && (
+        <PaymentModal order={order} setShowPayment={setShowPayment} />
       )}
     </div>
   );
