@@ -44,7 +44,7 @@ export default function ComplaintModal() {
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-[#6B6662]">Order Number</span>
             <span className="font-bold text-[#2C2826]">
-              {data?.id?.slice(0, 8)?.toUpperCase()}
+              DL_{data?.id?.slice(0, 8)?.toUpperCase()}
             </span>
           </div>
           <div className="flex justify-between items-center">

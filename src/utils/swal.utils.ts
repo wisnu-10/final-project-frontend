@@ -19,16 +19,16 @@ export const showConfirmDelete = ({
     title: `<span style="color: #2C2826; font-family: sans-serif;">${title}</span>`,
     text: text,
     icon: "warning",
-    iconColor: "#FF6B4A", // Your signature orange
+    iconColor: "#FF6B4A", 
     showCancelButton: true,
-    confirmButtonColor: "#FF6B4A", // Match your theme
-    cancelButtonColor: "#6B6662", // Neutral grayish
+    confirmButtonColor: "#FF6B4A", 
+    cancelButtonColor: "#6B6662", 
     confirmButtonText: confirmButtonText,
     cancelButtonText: "Cancel",
-    reverseButtons: true, // Puts Cancel on the left, Confirm on the right
+    reverseButtons: true, 
     showLoaderOnConfirm: true,
     customClass: {
-      popup: "rounded-3xl", // Matches your rounded-2xl/3xl UI
+      popup: "rounded-3xl", 
       confirmButton: "rounded-xl px-6 py-2 font-semibold",
       cancelButton: "rounded-xl px-6 py-2 font-semibold",
     },

@@ -259,7 +259,7 @@ export default function FilterOrderHistory({
           <p className="text-[#6B6662]">No orders found for this status.</p>
         </div>
       ) : (
-        filteredOrders.map((order: any) => (
+        filteredOrders?.map((order: any) => (
           <OrderList key={order.id}
             order={order}
             setShowPaymentModal={setShowPaymentModal}

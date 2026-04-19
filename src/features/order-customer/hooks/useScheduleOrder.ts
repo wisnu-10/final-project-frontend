@@ -27,6 +27,7 @@ export function useScheduleOrder({
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
+        console.log(values.scheduleTime)
 
         await scheduledOrderApi(values);
 

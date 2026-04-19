@@ -1,9 +1,15 @@
+'use client'
+
 import { Award, Clock, Shield, Sparkles } from "lucide-react";
 import Image from "next/image";
 import heroImage from "../../../../public/laundry-Photoroom.png";
 import Link from "next/link";
+import useAuthStore from "@/stores/useAuthStore";
 
 export default function Hero() {
+
+  const {email} = useAuthStore()
+
   return (
     <section
       id="home"
@@ -27,7 +33,7 @@ export default function Hero() {
 
             <div className="flex gap-4">
               <Link
-                href="/login"
+                href={email ? "/order-history" : "/login"}
                 className="px-8 py-3 rounded-full bg-[#FF6B4A] text-white hover:bg-[#FF5533] transition-all shadow-lg"
               >
                 Get Started

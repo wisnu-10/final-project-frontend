@@ -108,6 +108,7 @@ export default function NavBar() {
               {/* Avatar Bulat */}
               <div className="relative">
                 <button
+                  suppressHydrationWarning
                   onClick={() => setIsOpen(!isOpen)}
                   className="relative group focus:outline-none"
                 >
