@@ -27,9 +27,12 @@ export function useFormLogin() {
 
         setAuth({
           firstName: user.firstName,
+          lastName: user.lastName || "",
           email: user.email,
           role: user.role,
-          profilePicture: user.profilePicture,
+          profilePicture: user.profilePicture || "",
+          outletId: null,
+          outletName: null,
         });
 
         router.push("/");
