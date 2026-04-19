@@ -17,8 +17,8 @@ export const useGetProfile = () => {
       const res = await axiosInstance.get<ApiResponse<ProfileUpdateDTO | null >>("/profile/me");
 
       setProfile(res.data.data);
-    } catch (error) {
-      toast.error("Failed to load profile");
+    } catch (error:any) {
+      toast.error(error.response?.data?.message || "Something went wrong");
       setIsError(true)
     } finally {
       setIsLoading(false);

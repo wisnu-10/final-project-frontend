@@ -39,7 +39,9 @@ export default function OrderDetailStatic() {
 
   if (error || !data) return <PageError />;
 
-  const statusConfig = getStatusConfig(data?.statusLogs[0]?.status);
+  const statusConfig = getStatusConfig(
+    data?.statusLogs[data?.statusLogs.length - 1]?.status,
+  );
   const StatusIcon = statusConfig.icon;
 
   return (

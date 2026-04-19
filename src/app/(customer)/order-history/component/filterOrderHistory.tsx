@@ -260,7 +260,7 @@ export default function FilterOrderHistory({
         </div>
       ) : (
         filteredOrders.map((order: any) => (
-          <OrderList
+          <OrderList key={order.id}
             order={order}
             setShowPaymentModal={setShowPaymentModal}
             setSelectedOrder={setSelectedOrder}
