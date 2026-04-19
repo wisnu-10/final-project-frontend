@@ -29,7 +29,15 @@ export default function NavBar() {
       setIsLoading(true);
       await axiosInstance.post<ApiResponse<any>>("/auth/logout");
 
-      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
+      setAuth({
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: "",
+        profilePicture: "",
+        outletId: null,
+        outletName: null,
+      });
       router.push("/auth");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -45,12 +53,23 @@ export default function NavBar() {
 
       setAuth({
         firstName: user.firstName,
+        lastName: user.lastName || "",
         email: user.email,
         role: user.role,
         profilePicture: user.profilePicture,
+        outletId: user.outletId || null,
+        outletName: user.outletName || null,
       });
     } catch (error: any) {
-      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
+      setAuth({
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: "",
+        profilePicture: "",
+        outletId: null,
+        outletName: null,
+      });
     }
   };
 
