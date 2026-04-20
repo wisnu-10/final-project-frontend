@@ -5,8 +5,10 @@ import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
 import useGetLaundryItems from "@/features/super-admin/laundry-items/hooks/useGetLaundryItems";
 import useDeleteLaundryItem from "@/features/super-admin/laundry-items/hooks/useDeleteLaundryItem";
 import Pagination from "@/components/Pagination";
+import useGetOutletInfo from "@/features/order-admin/hooks/useGetOutletInfo";
 
 export default function OutletAdminLaundryItemsPage() {
+  const { outlet } = useGetOutletInfo();
   const {
     laundryItems,
     loading,
@@ -23,12 +25,13 @@ export default function OutletAdminLaundryItemsPage() {
     fetchLaundryItems();
   });
 
-  const formatPrice = (price: string | number) => {
+  const formatPrice = (price: string | number, type: string) => {
+    const finalPrice = type === "kiloan" ? (outlet?.pricePerKg || 0) : price;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(Number(price));
+    }).format(Number(finalPrice));
   };
 
   return (
@@ -115,7 +118,7 @@ export default function OutletAdminLaundryItemsPage() {
                     </td>
                     <td className="p-4">
                       <span className="text-gray-700 font-medium">
-                        {formatPrice(item.price)}
+                        {formatPrice(item.price, item.pricingType)}
                         <span className="text-gray-400 text-xs ml-1">
                           {item.pricingType === "kiloan" ? "/ kg" : "/ pcs"}
                         </span>

@@ -37,6 +37,7 @@ export default function OutletsPage() {
                   <th className="p-4 font-semibold text-gray-600">Outlet Info</th>
                   <th className="p-4 font-semibold text-gray-600">Location</th>
                   <th className="p-4 font-semibold text-gray-600 w-32">Coverage</th>
+                  <th className="p-4 font-semibold text-gray-600 w-32">Price/kg</th>
                   <th className="p-4 font-semibold text-gray-600 w-24">Status</th>
                   <th className="p-4 font-semibold text-gray-600 w-28">Actions</th>
                 </tr>
@@ -56,6 +57,11 @@ export default function OutletsPage() {
                     </td>
                     <td className="p-4">
                       <div className="text-sm text-gray-700">{outlet.maxServiceDistance ? `${outlet.maxServiceDistance} km` : "-"}</div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm font-semibold text-[#ff7143]">
+                        {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(outlet.pricePerKg || 0)}
+                      </div>
                     </td>
                     <td className="p-4">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${outlet.isActive !== false ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>

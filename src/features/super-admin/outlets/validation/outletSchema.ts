@@ -10,6 +10,7 @@ export const OutletSchema = Yup.object().shape({
   districtId: Yup.number().required("Required"),
   districtName: Yup.string().required("Required"),
   postalCode: Yup.string().required("Required"),
-  maxServiceDistance: Yup.number().min(0).required("Required"),
+   maxServiceDistance: Yup.number().min(0).required("Required"),
   isActive: Yup.boolean().required("Required"),
+  pricePerKg: Yup.number().min(0).required("Required"),
 });

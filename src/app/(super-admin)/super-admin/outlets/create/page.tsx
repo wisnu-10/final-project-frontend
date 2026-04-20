@@ -130,7 +130,7 @@ export default function CreateOutletPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Postal Code
@@ -154,6 +154,22 @@ export default function CreateOutletPage() {
                   onChange={formik.handleChange}
                   className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143]"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Price per Kg (IDR)
+                </label>
+                <input
+                  type="number"
+                  name="pricePerKg"
+                  value={formik.values.pricePerKg}
+                  onChange={formik.handleChange}
+                  className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143]"
+                  placeholder="e.g. 5000"
+                />
+                {formik.touched.pricePerKg && formik.errors.pricePerKg && (
+                  <div className="text-red-500 text-sm mt-1">{formik.errors.pricePerKg as string}</div>
+                )}
               </div>
             </div>
           </div>

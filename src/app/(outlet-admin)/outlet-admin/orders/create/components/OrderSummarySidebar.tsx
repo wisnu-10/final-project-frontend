@@ -10,6 +10,8 @@ interface OrderSummarySidebarProps {
   workers: any[];
   laundryItems: any[];
   createLoading: boolean;
+  outlet: any;
+  outletLoading: boolean;
 }
 
 export default function OrderSummarySidebar({
@@ -21,10 +23,12 @@ export default function OrderSummarySidebar({
   workers,
   laundryItems,
   createLoading,
+  outlet,
+  outletLoading,
 }: OrderSummarySidebarProps) {
   const calcEstimatedTotal = () => {
-    const kiloanPrice = laundryItems.find((li) => li.pricingType === "kiloan")?.price || 0;
-    const weightPrice = Number(values.totalWeight) * Number(kiloanPrice);
+    const kiloanPrice = Number(outlet?.pricePerKg || 0);
+    const weightPrice = Number(values.totalWeight) * kiloanPrice;
     const itemsPrice = values.orderItems.reduce((sum: number, item: any) => {
       const laundryItem = laundryItems.find((li: any) => li.id === item.laundryItemId);
       if (laundryItem && laundryItem.pricingType === "per_item") {
@@ -35,7 +39,7 @@ export default function OrderSummarySidebar({
     return weightPrice + itemsPrice;
   };
 
-  const kiloanItem = laundryItems.find((li) => li.pricingType === "kiloan");
+  const kiloanPrice = Number(outlet?.pricePerKg || 0);
   const estimatedTotal = calcEstimatedTotal();
 
   return (
@@ -97,13 +101,13 @@ export default function OrderSummarySidebar({
           <div className="flex justify-between text-sm text-white/90">
             <span>Weight Price</span>
             <span className="font-bold">
-              {values.totalWeight ? formatIDR(Number(values.totalWeight) * Number(kiloanItem?.price || 0)) : "—"}
+              {values.totalWeight ? formatIDR(Number(values.totalWeight) * kiloanPrice) : "—"}
             </span>
           </div>
           <div className="flex justify-between text-sm text-white/90">
             <span>Items Extra</span>
             <span className="font-bold">
-              {formatIDR(estimatedTotal - Number(values.totalWeight) * Number(kiloanItem?.price || 0))}
+              {formatIDR(estimatedTotal - Number(values.totalWeight) * kiloanPrice)}
             </span>
           </div>
           <hr className="border-white/20" />

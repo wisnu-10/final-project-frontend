@@ -137,10 +137,10 @@ export default function CreateLaundryItemPage() {
           )}
 
           {formik.values.pricingType === "kiloan" && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
               <p className="text-sm text-emerald-700">
-                💡 Item dengan tipe <strong>Kiloan</strong> akan otomatis menggunakan harga standar 
-                <strong> Rp 10.000 / kg</strong>.
+                💡 Item dengan tipe <strong>Kiloan</strong> akan otomatis mengikuti harga 
+                per kilogram yang telah diatur pada masing-masing <strong>Management Outlet</strong>.
               </p>
             </div>
           )}
