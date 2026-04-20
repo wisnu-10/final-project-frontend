@@ -151,10 +151,10 @@ export default function OutletAdminEditLaundryItemPage() {
           )}
 
           {formik.values.pricingType === "kiloan" && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
               <p className="text-sm text-emerald-700">
-                💡 Item dengan tipe <strong>Kiloan</strong> akan dihitung berdasarkan berat (kg)
-                menggunakan harga per kg yang ditetapkan saat membuat order.
+                💡 Item dengan tipe <strong>Kiloan</strong> akan otomatis mengikuti harga 
+                per kilogram yang telah diatur pada masing-masing <strong>Management Outlet</strong>.
               </p>
             </div>
           )}

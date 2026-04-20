@@ -12,6 +12,7 @@ import { createManualOrderSchema } from "@/features/order-admin/validation/order
 import CustomerSelector from "./components/CustomerSelector";
 import LaundryItemsForm from "./components/LaundryItemsForm";
 import OrderSummarySidebar from "./components/OrderSummarySidebar";
+import useGetOutletInfo from "@/features/order-admin/hooks/useGetOutletInfo";
 import toast from "react-hot-toast";
 
 export default function CreateManualOrderPage() {
@@ -19,12 +20,13 @@ export default function CreateManualOrderPage() {
   const { customers, loading: customersLoading } = useGetCustomers(searchTerm);
   const { handleCreateManual, loading: createLoading } = useCreateManualOrder();
   const { workers } = useGetOutletWorkers();
+  const { outlet, loading: outletLoading } = useGetOutletInfo();
 
   const [laundryItems, setLaundryItems] = useState<any[]>([]);
 
   const fetchLaundryItems = useCallback(async () => {
     try {
-      const res = await getLaundryItemsApi({ limit: 100 });
+      const res = await getLaundryItemsApi({ limit: 200 });
       if (res.success) {
         setLaundryItems(res.data.laundryItems || []);
       }
@@ -105,6 +107,8 @@ export default function CreateManualOrderPage() {
                 workers={workers}
                 laundryItems={laundryItems}
                 createLoading={createLoading}
+                outlet={outlet}
+                outletLoading={outletLoading}
               />
             </div>
           </div>

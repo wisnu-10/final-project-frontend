@@ -24,6 +24,7 @@ export default function useUpdateOutlet(id: string) {
       postalCode: "",
       maxServiceDistance: 10,
       isActive: true,
+      pricePerKg: 0,
     },
     validationSchema: OutletSchema,
     onSubmit: async (values) => {
@@ -58,6 +59,7 @@ export default function useUpdateOutlet(id: string) {
               postalCode: res.data.postalCode || "",
               maxServiceDistance: res.data.maxServiceDistance || 10,
               isActive: res.data.isActive ?? true,
+              pricePerKg: res.data.pricePerKg || 0,
             });
           }
           setFetching(false);

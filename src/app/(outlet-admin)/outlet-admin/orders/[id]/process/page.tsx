@@ -18,6 +18,7 @@ import { getLaundryItemsApi } from "@/features/order-admin/api/getLaundryItems.a
 import { processOrderSchema } from "@/features/order-admin/validation/orderSchema";
 import { formatIDR } from "@/utils/formatCurrency.utils";
 import toast from "react-hot-toast";
+import SearchableSelect from "@/components/SearchableSelect";
 
 export default function ProcessOrderPage({
   params,
@@ -33,7 +34,7 @@ export default function ProcessOrderPage({
 
   const fetchLaundryItems = useCallback(async () => {
     try {
-      const res = await getLaundryItemsApi();
+      const res = await getLaundryItemsApi({ limit: 200 });
       if (res.success) {
         setLaundryItems(res.data.laundryItems || []);
       }
@@ -67,8 +68,9 @@ export default function ProcessOrderPage({
 
   const calcEstimatedTotal = () => {
     if (!order || !formik.values.totalWeight) return 0;
+    const currentPricePerKg = Number(order.outlet?.pricePerKg || order.pricePerKg || 0);
     const weightPrice =
-      Number(formik.values.totalWeight) * Number(order.pricePerKg);
+      Number(formik.values.totalWeight) * currentPricePerKg;
     const itemsPrice = formik.values.orderItems.reduce((sum, item) => {
       const laundryItem = laundryItems.find(
         (li: any) => li.id === item.laundryItemId,
@@ -157,7 +159,8 @@ export default function ProcessOrderPage({
                 </p>
               )}
               <p className="text-[10px] text-gray-400 mt-2 italic">
-                Price/kg applicable: {formatIDR(Number(order.pricePerKg))}
+                Price/kg applicable:{" "}
+                {formatIDR(Number(order.outlet?.pricePerKg || order.pricePerKg || 0))}
               </p>
             </div>
 
@@ -166,24 +169,18 @@ export default function ProcessOrderPage({
                 <FiUser className="w-5 h-5 text-[#ff7143]" />
                 Assign Worker
               </h2>
-              <select
-                name="workerId"
+              <SearchableSelect
+                options={workers.map((w: any) => ({
+                  id: w.id,
+                  label: `${w.firstName} ${w.lastName}`,
+                  sublabel: w.role,
+                }))}
                 value={formik.values.workerId}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#ff7143] focus:border-transparent outline-none text-sm transition-all ${
-                  formik.touched.workerId && formik.errors.workerId
-                    ? "border-red-500 bg-red-50/30"
-                    : "border-gray-200"
-                }`}
-              >
-                <option value="">Select worker for washing...</option>
-                {workers.map((w: any) => (
-                  <option key={w.id} value={w.id}>
-                    {w.firstName} {w.lastName} ({w.role})
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => formik.setFieldValue("workerId", val)}
+                placeholder="Select worker for washing..."
+                direction="down"
+                error={!!(formik.touched.workerId && formik.errors.workerId)}
+              />
               {formik.touched.workerId && formik.errors.workerId && (
                 <p className="text-red-500 text-xs mt-1">
                   {formik.errors.workerId}
@@ -232,24 +229,31 @@ export default function ProcessOrderPage({
                       >
                         <div className="flex items-center gap-3">
                           <div className="flex-1">
-                            <select
-                              name={`orderItems.${index}.laundryItemId`}
-                              value={item.laundryItemId}
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#ff7143] focus:border-transparent outline-none bg-white text-sm"
-                            >
-                              <option value="">Select item...</option>
-                              {laundryItems.map((li: any) => (
-                                <option key={li.id} value={li.id}>
-                                  {li.name} (
-                                  {li.pricingType === "kiloan"
+                            <SearchableSelect
+                              options={laundryItems.map((li: any) => ({
+                                id: li.id,
+                                label: li.name,
+                                sublabel:
+                                  li.pricingType === "kiloan"
                                     ? "Kiloan"
-                                    : `${formatIDR(Number(li.price))}/pcs`}
-                                  )
-                                </option>
-                              ))}
-                            </select>
+                                    : `${formatIDR(Number(li.price))}/pcs`,
+                              }))}
+                              value={item.laundryItemId}
+                              onChange={(val) =>
+                                formik.setFieldValue(
+                                  `orderItems.${index}.laundryItemId`,
+                                  val,
+                                )
+                              }
+                              placeholder="Select item..."
+                              direction="down"
+                              error={!!(
+                                formik.touched.orderItems?.[index]
+                                  ?.laundryItemId &&
+                                (formik.errors.orderItems?.[index] as any)
+                                  ?.laundryItemId
+                              )}
+                            />
                           </div>
                           <div className="w-24">
                             <input
@@ -296,14 +300,13 @@ export default function ProcessOrderPage({
               {formik.values.totalWeight && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
-                    Kiloan (
-                    {formik.values.totalWeight} kg ×{" "}
-                    {formatIDR(Number(order.pricePerKg))})
+                    Kiloan ({formik.values.totalWeight} kg ×{" "}
+                    {formatIDR(Number(order.outlet?.pricePerKg || order.pricePerKg || 0))})
                   </span>
                   <span className="text-gray-800 font-medium">
                     {formatIDR(
                       Number(formik.values.totalWeight) *
-                        Number(order.pricePerKg),
+                        Number(order.outlet?.pricePerKg || order.pricePerKg || 0),
                     )}
                   </span>
                 </div>

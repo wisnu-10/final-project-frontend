@@ -16,6 +16,7 @@ interface SearchableSelectProps {
   placeholder?: string;
   loading?: boolean;
   direction?: 'up' | 'down';
+  error?: boolean;
 }
 
 export default function SearchableSelect({
@@ -25,6 +26,7 @@ export default function SearchableSelect({
   placeholder = "Select option...",
   loading = false,
   direction = "up",
+  error = false,
 }: SearchableSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,7 +62,11 @@ export default function SearchableSelect({
         onClick={() => setIsOpen(!isOpen)}
         disabled={loading}
         className={`w-full flex items-center justify-between px-3 py-3 border rounded-xl text-sm bg-white outline-none transition-all ${
-          isOpen ? "ring-2 ring-[#ff7143]/20 border-[#ff7143]" : "border-gray-200"
+          isOpen
+            ? "ring-2 ring-[#ff7143]/20 border-[#ff7143]"
+            : error
+              ? "border-red-500 bg-red-50/30"
+              : "border-gray-200"
         } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <span className={selectedOption ? "text-gray-800 font-medium" : "text-gray-400"}>

@@ -22,6 +22,7 @@ export default function useCreateOutlet() {
       postalCode: "23891",
       maxServiceDistance: 10,
       isActive: true,
+      pricePerKg: 0,
     },
     validationSchema: OutletSchema,
     onSubmit: async (values) => {
