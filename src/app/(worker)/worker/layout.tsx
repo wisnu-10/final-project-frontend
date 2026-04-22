@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import WorkerSidebar from "@/components/dashboard/WorkerSidebar";
 import Navbar from "@/components/dashboard/Navbar";
-import withAuth from "@/hoc/useAuthGuard";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function WorkerLayout({ children }: { children: ReactNode }) {
   return (
@@ -22,4 +22,4 @@ function WorkerLayout({ children }: { children: ReactNode }) {
 }
 
 // Ensure only Worker can access these routes
-export default withAuth(WorkerLayout, ["worker"], "/auth-employee");
+export default withEmployeeAuth(WorkerLayout, ["worker"]);

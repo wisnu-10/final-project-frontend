@@ -1,54 +1,26 @@
 import { create } from "zustand";
 
-type UseAuthStore = {
+type UserData = {
   firstName: string;
   lastName: string;
   email: string;
   role: string;
   profilePicture: string;
-  outletId: string | null;
-  outletName: string | null;
-  setAuth: ({
-    firstName,
-    lastName,
-    email,
-    role,
-    profilePicture,
-    outletId,
-    outletName,
-  }: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-    profilePicture: string;
-    outletId: string | null;
-    outletName: string | null;
-  }) => void;
+}
+
+type UseAuthStore = {
+  user: UserData | null;
+  setAuth: (data: UserData) => void;
   clearAuth: () => void;
 };
 
 const useAuthStore = create<UseAuthStore>((set) => ({
-  firstName: "",
-  lastName: "",
-  email: "",
-  role: "",
-  profilePicture: "",
-  outletId: null,
-  outletName: null,
+  user: null,
   setAuth: (data) => {
-    set(data);
+    set({ user: data });
   },
   clearAuth: () => {
-    set({
-      firstName: "",
-      lastName: "",
-      email: "",
-      role: "",
-      profilePicture: "",
-      outletId: null,
-      outletName: null,
-    });
+    set({ user: null });
   },
 }));
 

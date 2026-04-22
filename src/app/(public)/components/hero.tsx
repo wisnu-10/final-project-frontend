@@ -8,7 +8,8 @@ import useAuthStore from "@/stores/useAuthStore";
 
 export default function Hero() {
 
-  const {email} = useAuthStore()
+  const { user } = useAuthStore()
+  const email = user?.email;
 
   return (
     <section

@@ -1,9 +1,9 @@
 "use client"
-import withAuth from "@/hoc/useAuthGuard";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 import { useState } from "react";
 import Image from "next/image";
 import Logo from "../../../../public/logo-Photoroom.png";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import {
   ClipboardList,
   History,
@@ -27,7 +27,7 @@ const tabList = [
 type TabKey = (typeof tabList)[number]["key"];
 
 function WorkerDashboard() {
-  const { firstName } = useAuthStore();
+  const { employee } = useEmployeeStore();
   const [activeTab, setActiveTab] = useState<TabKey>("attendance");
 
   return (
@@ -238,4 +238,4 @@ function EmptyTasks({ label }: { label: string }) {
   );
 }
 
-export default withAuth(WorkerDashboard, ["worker"], "/auth/employee");
+export default withEmployeeAuth(WorkerDashboard, ["worker"]);

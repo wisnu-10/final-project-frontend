@@ -31,8 +31,6 @@ export function useFormLogin() {
           email: user.email,
           role: user.role,
           profilePicture: user.profilePicture || "",
-          outletId: null,
-          outletName: null,
         });
 
         router.push("/");

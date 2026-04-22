@@ -27,7 +27,7 @@ export default function AttendancePage({ roleLabel }: AttendancePageProps) {
           <button className="w-8 h-8 rounded-full bg-[#F0F4F8] flex items-center justify-center hover:bg-[#E0E8F0] transition-colors">
             <ChevronLeft className="w-4 h-4 text-[#6B6662]" />
           </button>
-          <div className="w-10 h-10 bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
             <CalendarCheck className="w-5 h-5 text-white" />
           </div>
           <div>
