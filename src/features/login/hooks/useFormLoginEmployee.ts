@@ -1,4 +1,4 @@
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { authLoginSchema } from "@/features/auth-customer/login/validation/loginSchema";
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 export function useFormLoginEmployee() {
   const router = useRouter();
-  const { setAuth } = useAuthStore();
+  const { setEmployee } = useEmployeeStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
@@ -23,7 +23,7 @@ export function useFormLoginEmployee() {
         setIsLoading(true);
         const employee = await loginEmployeeApi(values);
 
-        setAuth({
+        setEmployee({
           firstName: employee.firstName,
           lastName: employee.lastName || "",
           email: employee.email,
@@ -45,7 +45,7 @@ export function useFormLoginEmployee() {
           router.push("/dashboard");
         }
 
-        toast.success("Welcome back! 🎉");
+        toast.success(`Welcome back! ${employee.firstName} 🎉`);
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {

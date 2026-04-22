@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Navbar from "@/components/dashboard/Navbar";
-import withAuth from "@/hoc/useAuthGuard";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function SuperAdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -22,4 +22,4 @@ function SuperAdminLayout({ children }: { children: ReactNode }) {
 }
 
 // Ensure only Super Admin can access these routes
-export default withAuth(SuperAdminLayout, ["super_admin"], "/auth-employee");
+export default withEmployeeAuth(SuperAdminLayout, ["super_admin"]);

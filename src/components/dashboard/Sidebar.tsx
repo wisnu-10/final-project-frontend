@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FiHome, FiMapPin, FiUsers, FiLogOut, FiPackage, FiShoppingBag, FiMessageSquare } from "react-icons/fi";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
 import { logoutEmployeeApi } from "@/features/login/api/login-employee.api";
+import toast from "react-hot-toast";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { setAuth } = useAuthStore();
+  const { clearEmployee } = useEmployeeStore();
   const router = useRouter();
 
   const navLinks = [
@@ -28,16 +29,9 @@ export default function Sidebar() {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      setAuth({
-        firstName: "",
-        lastName: "",
-        email: "",
-        role: "",
-        profilePicture: "",
-        outletId: null,
-        outletName: null,
-      });
+      clearEmployee();
       router.push("/auth-employee");
+      toast.success("Logged out successfully");
     }
   };
 

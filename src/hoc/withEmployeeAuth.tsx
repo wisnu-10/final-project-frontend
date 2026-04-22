@@ -2,31 +2,30 @@
 
 import { ComponentType, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
+import { sessionEmployeeApi } from "@/features/login/api/login-employee.api";
 import { FiLock, FiLoader } from "react-icons/fi";
 import BackLink from "@/components/backLink";
 import toast from "react-hot-toast";
-import axiosInstance from "@/utils/axiosInstance";
-import { ApiResponse } from "@/types/api";
 
-export default function withAuth<P extends object>(
+export default function withEmployeeAuth<P extends object>(
   WrappedComponent: ComponentType<P>,
   allowedRoles: string[],
-  redirectPath: string = "/auth"
+  redirectPath: string = "/auth-employee"
 ) {
-  return function AuthGuardComponent(props: P) {
-    const { user, setAuth, clearAuth } = useAuthStore();
+  return function EmployeeAuthGuard(props: P) {
+    const { employee, setEmployee, clearEmployee } = useEmployeeStore();
     const [isChecking, setIsChecking] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
       const checkAuth = async () => {
         try {
-          const res = await axiosInstance<ApiResponse<any>>("/auth/session");
-          setAuth(res.data.data);
+          const data = await sessionEmployeeApi();
+          setEmployee(data);
         } catch (error: any) {
-          clearAuth();
-          toast.error("Please login first");
+          clearEmployee();
+          toast.error("Session expired or invalid. Please login again.");
           router.push(redirectPath);
         } finally {
           setIsChecking(false);
@@ -34,7 +33,7 @@ export default function withAuth<P extends object>(
       };
 
       checkAuth();
-    }, [router, setAuth, clearAuth, redirectPath]);
+    }, [router, setEmployee, clearEmployee, redirectPath]);
 
     if (isChecking) {
       return (
@@ -45,11 +44,10 @@ export default function withAuth<P extends object>(
       );
     }
 
-    if (!user) {
+    if (!employee) {
       return null;
     }
-
-    const isAuthorized = allowedRoles.includes(user.role);
+    const isAuthorized = allowedRoles.includes(employee.role);
 
     if (!isAuthorized) {
       return (
@@ -61,11 +59,10 @@ export default function withAuth<P extends object>(
             Restricted Access 🔐
           </h1>
           <p className="text-[#6B6662] mb-10 max-w-sm leading-relaxed text-sm">
-            This page can only be opened by{" "}
+            This dashboard is only for{" "}
             <span className="font-bold text-[#FF6B4A] uppercase bg-[#FFF0ED] px-2 py-0.5 rounded-md text-xs">
-              {allowedRoles.join(" or ")}
+              {allowedRoles.join(" or ").replace("_", " ")}
             </span>
-            .
           </p>
           <BackLink link="/" page="Home" />
         </div>
