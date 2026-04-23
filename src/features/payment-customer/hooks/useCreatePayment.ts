@@ -2,7 +2,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function createPayment() {
+export default function useCreatePayment() {
   const [isLoading, setIsLoading] = useState(false);
 
   const createPayment = async (

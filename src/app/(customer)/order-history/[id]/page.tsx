@@ -34,10 +34,13 @@ export default function OrderDetailStatic() {
   const [showTracking, setShowTracking] = useState(false);
 
   const { data, isLoading, error } = useGetIdOrder(id as string);
+  console.log(data)
 
   if (isLoading) return <OrderDetailSkeleton />;
 
-  if (error || !data) return <PageError />;
+  if (error) return <PageError />;
+
+  if (!data) return <OrderDetailSkeleton />;
 
   const statusConfig = getStatusConfig(
     data?.statusLogs[data?.statusLogs.length - 1]?.status,
@@ -57,7 +60,7 @@ export default function OrderDetailStatic() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-white">
-                    Order DL_{data?.id?.slice(0, 8).toUpperCase()}
+                    Order {data.invoiceNumber}
                   </h2>
                   <p className="text-sm text-white/90">
                     {new Date(data?.createdAt).toLocaleDateString("en-EN", {
@@ -149,7 +152,7 @@ export default function OrderDetailStatic() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-[#6B6662]">Payment Status</span>
                   <span className="font-bold text-green-600 uppercase">
-                    {data?.payments?.status}
+                    {data?.payments[data.payments.length - 1]?.status}
                   </span>
                 </div>
               </div>
