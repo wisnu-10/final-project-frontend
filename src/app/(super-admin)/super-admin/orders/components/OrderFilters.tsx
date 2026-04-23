@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { FiSearch, FiFilter } from "react-icons/fi";
+import SearchableSelect from "@/components/SearchableSelect";
 
 const statusOptions = [
   { value: "", label: "All Status" },
@@ -43,6 +45,22 @@ export default function OrderFilters({
   outlets,
   setPage,
 }: OrderFiltersProps) {
+  const outletOptions = useMemo(
+    () => [
+      { id: "", label: "All Outlets" },
+      ...outlets.map((o: any) => ({
+        id: o.id.toString(),
+        label: o.name,
+      })),
+    ],
+    [outlets],
+  );
+
+  const handleOutletChange = (val: string) => {
+    setOutletId(val);
+    setPage(1);
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -61,22 +79,13 @@ export default function OrderFilters({
         </div>
 
         <div className="relative">
-          <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <select
+          <SearchableSelect
+            options={outletOptions}
             value={outletId}
-            onChange={(e) => {
-              setOutletId(e.target.value);
-              setPage(1);
-            }}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143] focus:border-transparent outline-none transition-all bg-white appearance-none cursor-pointer text-sm"
-          >
-            <option value="">All Outlets</option>
-            {outlets.map((o: any) => (
-              <option key={o.id} value={o.id}>
-                {o.name}
-              </option>
-            ))}
-          </select>
+            onChange={handleOutletChange}
+            placeholder="All Outlets"
+            direction="down"
+          />
         </div>
 
         <div className="relative">
