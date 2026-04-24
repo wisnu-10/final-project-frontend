@@ -12,6 +12,7 @@ import {
   FiMessageSquare,
   FiBarChart2,
   FiChevronDown,
+  FiClock,
 } from "react-icons/fi";
 import useEmployeeStore from "@/stores/useEmployeeStore";
 import Image from "next/image";
@@ -47,6 +48,7 @@ export default function Sidebar() {
       href: "/super-admin/complaints",
       icon: FiMessageSquare,
     },
+    { name: "Shifts", href: "/super-admin/shifts", icon: FiClock },
   ];
 
   const handleLogout = async () => {
