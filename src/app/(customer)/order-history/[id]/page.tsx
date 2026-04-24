@@ -34,7 +34,6 @@ export default function OrderDetailStatic() {
   const [showTracking, setShowTracking] = useState(false);
 
   const { data, isLoading, error } = useGetIdOrder(id as string);
-  console.log(data)
 
   if (isLoading) return <OrderDetailSkeleton />;
 
@@ -137,16 +136,85 @@ export default function OrderDetailStatic() {
                 </h3>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#6B6662]">Total Weight</span>
-                  <span className="font-bold text-[#2C2826] text-lg">
-                    {data?.totalWeight || 0} kg
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-3 border-t border-b border-[#E5DDD3]">
+                {
+                  (data.orderItems.some(
+                    (o: any) => o?.laundryItems?.pricingType === "kiloan",
+                  ),
+                  (
+                    <div className="py-4 border-t border-[#E5DDD3] space-y-3">
+                      <span className="text-sm text-[#6B6662]">
+                        Weight Service
+                      </span>
+
+                      <div className="space-y-2 mt-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-[#4A4541] text-base">
+                              Basic Wash
+                            </span>
+                            <span className="text-xs text-[#6B6662]">
+                              {data.totalWeight} kg x Rp{" "}
+                              {Number(data.pricePerKg).toLocaleString("id-ID")}
+                            </span>
+                          </div>
+
+                          <span className="font-bold text-[#FF6B4A] text-lg">
+                            Rp{" "}
+                            {(
+                              Number(data?.totalWeight || 0) *
+                              Number(data?.pricePerKg || 0)
+                            ).toLocaleString("id-ID")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                }
+
+                {/* item detail */}
+                {data?.orderItems?.some(
+                  (o: any) => o.laundryItem?.pricingType === "per_item",
+                ) && (
+                  <div className="py-4 border-t border-[#E5DDD3] space-y-3">
+                    <span className="text-sm text-[#6B6662]">Item Details</span>
+
+                    <div className="space-y-2 mt-2">
+                      {data?.orderItems
+                        ?.filter(
+                          (o: any) => o.laundryItem?.pricingType === "per_item",
+                        )
+                        .map((o: any) => (
+                          <div
+                            key={o.id}
+                            className="flex justify-between items-start"
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-bold text-[#4A4541] text-base">
+                                {o.laundryItem?.name}
+                              </span>
+                              <span className="text-xs text-[#6B6662]">
+                                {o.quantity} pcs x{" "}
+                                {Number(o.laundryItem?.price).toLocaleString(
+                                  "id-ID",
+                                )}
+                              </span>
+                            </div>
+
+                            <span className="font-bold text-[#FF6B4A] text-lg">
+                              Rp {Number(o.subTotal).toLocaleString("id-ID")}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between py-3 border-t border-[#E5DDD3]">
                   <span className="text-sm text-[#6B6662]">Total Amount</span>
                   <span className="font-bold text-[#FF6B4A] text-xl">
-                    {formatIDR(data?.totalPrice || 0)}
+                    {formatIDR(
+                      data?.payments[data.payments.length - 1].amount || 0,
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">

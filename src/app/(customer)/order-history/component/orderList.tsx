@@ -23,6 +23,8 @@ import { useGetIdOrder } from "@/features/order-customer/hooks/useGetIdOrder";
 import PaymentModal from "./paymentModal";
 import useCreatePayment from "@/features/payment-customer/hooks/useCreatePayment";
 import { FiLoader } from "react-icons/fi";
+import invoicePage from "./invoice";
+import InvoicePage from "./invoice";
 
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
@@ -44,6 +46,8 @@ export default function OrderList({
   const { data, isLoading: isConfirming, confirmOrder } = useConfirmOrder();
 
   const [showPayment, setShowPayment] = useState(false);
+
+  const [showInvoice, setShowInvoice] = useState(false)
 
   const { createPayment, isLoading: isPayment } = useCreatePayment();
 
@@ -221,9 +225,12 @@ export default function OrderList({
         order.statusLogs[order.statusLogs.length - 1].status !==
           "completed" && (
           <div className="space-y-3">
-            <div className="w-full px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 font-semibold flex items-center justify-center gap-2">
-              <CheckCircle className="w-5 h-5" /> Payment Completed
-            </div>
+            <button
+              onClick={() => setShowInvoice(true)}
+              className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] duration-300 text-white font-bold hover:shadow-xl transition-all shadow-lg flex items-center justify-center"
+            >
+              <span className="w-5 h-5" /> View Invoice
+            </button>
             <div className="flex items-center justify-center gap-2 text-[10px] mt-3 text-center italic">
               <Truck className="w-3 h-3 text-blue-600 flex-shrink-0" />
               <p className=" text-blue-800 leading-relaxed">
@@ -276,6 +283,10 @@ export default function OrderList({
 
           <ButtonComplaint id={order.id} />
         </div>
+      )}
+
+      {showInvoice === true && (
+        <InvoicePage order={order} setShowInvoice={setShowInvoice} />
       )}
 
       {/* Payment Modal */}
