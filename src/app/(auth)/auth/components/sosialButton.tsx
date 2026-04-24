@@ -15,6 +15,7 @@ export default function SocialButton() {
       {socialProviders.map((provider) => (
         <a
           href={`${process.env.NEXT_PUBLIC_API_URL}/auth/${provider.id}`}
+          key={provider.id}
           onClick={() => setIsLoading(true)} 
           className="flex items-center justify-center gap-3 py-2.5 rounded-xl text-sm bg-white border border-[#E5DDD3] text-[#6B6662] hover:border-[#FF6B4A] hover:text-[#2C2826] transition-all duration-200"
         >
