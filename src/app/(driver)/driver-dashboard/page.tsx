@@ -136,5 +136,5 @@ function QuickAttendance() {
 }
 
 
-export default withAuth(DriverDashboard, ["driver"], "/auth-employee");
+export default withEmployeeAuth(DriverDashboard, ["driver"], "/auth-employee");
 

@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/order-driver/EmptyState";
 import { LoadingState } from "@/components/order-driver/LoadingState";
 import { StatusBadge } from "@/components/order-driver/StatusBadge";
 import { ClipboardList } from "lucide-react";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function HistoryPage() {
   const { history, isLoading, refresh } = useDriverHistory();
@@ -132,4 +133,4 @@ function HistoryPage() {
   );
 }
 
-export default withAuth(HistoryPage, ["driver"], "/auth-employee");
+export default withEmployeeAuth(HistoryPage, ["driver"], "/auth-employee");

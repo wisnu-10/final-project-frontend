@@ -19,6 +19,7 @@ export interface Complaint {
   resolvedById?: string;
   order: {
     id: string;
+    invoiceNumber?: string;
     outletId: string;
     outlet: {
       name: string;

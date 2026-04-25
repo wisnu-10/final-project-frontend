@@ -11,6 +11,7 @@ import { LoadingState } from "@/components/order-driver/LoadingState";
 import { StatusBadge } from "@/components/order-driver/StatusBadge";
 import { ClipboardList } from "lucide-react";
 import toast from "react-hot-toast";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function ActiveOrderPage() {
   const {
@@ -234,4 +235,4 @@ function ActiveOrderPage() {
   );
 }
 
-export default withAuth(ActiveOrderPage, ["driver"], "/auth-employee");
+export default withEmployeeAuth(ActiveOrderPage, ["driver"], "/auth-employee");
