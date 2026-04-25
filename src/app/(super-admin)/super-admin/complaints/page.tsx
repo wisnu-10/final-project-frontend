@@ -118,7 +118,7 @@ export default function SuperAdminComplaintsPage() {
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Date</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Customer</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Outlet</th>
-                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Order</th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Invoice</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Status</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Actions</th>
                   </tr>
@@ -161,7 +161,7 @@ export default function SuperAdminComplaintsPage() {
                       </td>
                       <td className="px-6 py-5 whitespace-nowrap">
                         <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-mono font-bold">
-                          #{complaint.orderId.substring(0, 8)}
+                          {complaint.order.invoiceNumber || `ORD-${complaint.orderId.substring(0, 8)}`}
                         </span>
                       </td>
                       <td className="px-6 py-5 whitespace-nowrap text-center">

@@ -12,6 +12,7 @@ import { EmptyState } from "@/components/order-driver/EmptyState";
 import { LoadingState } from "@/components/order-driver/LoadingState";
 import { StatusBadge } from "@/components/order-driver/StatusBadge";
 import toast from "react-hot-toast";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function RequestListPage() {
   const { availableOrders } = useDriverStore();
@@ -161,4 +162,4 @@ function RequestListPage() {
   );
 }
 
-export default withAuth(RequestListPage, ["driver"], "/auth-employee");
+export default withEmployeeAuth(RequestListPage, ["driver"], "/auth-employee");
