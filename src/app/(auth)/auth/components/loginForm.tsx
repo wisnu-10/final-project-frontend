@@ -147,7 +147,9 @@ export default function login() {
       </div>
 
       {/* Social Buttons */}
-      <SocialButton />
+      <SocialButton
+      
+      />
 
       <p className="text-center text-sm text-[#6B6662]">
         Don't have an account?{" "}

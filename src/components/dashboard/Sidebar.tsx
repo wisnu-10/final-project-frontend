@@ -2,24 +2,53 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiHome, FiMapPin, FiUsers, FiLogOut, FiPackage, FiShoppingBag, FiMessageSquare } from "react-icons/fi";
-import useAuthStore from "@/stores/useAuthStore";
+import {
+  FiHome,
+  FiMapPin,
+  FiUsers,
+  FiLogOut,
+  FiPackage,
+  FiShoppingBag,
+  FiMessageSquare,
+  FiBarChart2,
+  FiChevronDown,
+  FiClock,
+} from "react-icons/fi";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
 import { logoutEmployeeApi } from "@/features/login/api/login-employee.api";
+import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { setAuth } = useAuthStore();
+  const { clearEmployee } = useEmployeeStore();
   const router = useRouter();
+  const [isReportsOpen, setIsReportsOpen] = useState(false);
+
+  useEffect(() => {
+    if (pathname.startsWith("/super-admin/reports")) {
+      setIsReportsOpen(true);
+    }
+  }, [pathname]);
 
   const navLinks = [
     { name: "Dashboard", href: "/super-admin/dashboard", icon: FiHome },
     { name: "Outlets", href: "/super-admin/outlets", icon: FiMapPin },
-    { name: "Laundry Items", href: "/super-admin/laundry-items", icon: FiPackage },
+    {
+      name: "Laundry Items",
+      href: "/super-admin/laundry-items",
+      icon: FiPackage,
+    },
     { name: "Employees", href: "/super-admin/employees", icon: FiUsers },
     { name: "Orders", href: "/super-admin/orders", icon: FiShoppingBag },
-    { name: "Complaints", href: "/super-admin/complaints", icon: FiMessageSquare },
+    {
+      name: "Complaints",
+      href: "/super-admin/complaints",
+      icon: FiMessageSquare,
+    },
+    { name: "Shifts", href: "/super-admin/shifts", icon: FiClock },
   ];
 
   const handleLogout = async () => {
@@ -28,16 +57,9 @@ export default function Sidebar() {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      setAuth({
-        firstName: "",
-        lastName: "",
-        email: "",
-        role: "",
-        profilePicture: "",
-        outletId: null,
-        outletName: null,
-      });
+      clearEmployee();
       router.push("/auth-employee");
+      toast.success("Logged out successfully");
     }
   };
 
@@ -67,12 +89,67 @@ export default function Sidebar() {
               }`}
             >
               <link.icon
-                className={`w-5 h-5 ${isActive ? "text-[#ff7143]" : "text-gray-400"}`}
+                className={`w-5 h-5 ${
+                  isActive ? "text-[#ff7143]" : "text-gray-400"
+                }`}
               />
               {link.name}
             </Link>
           );
         })}
+
+        {/* Reports Dropdown */}
+        <div>
+          <button
+            onClick={() => setIsReportsOpen(!isReportsOpen)}
+            className={`flex items-center justify-between w-full px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${
+              pathname.startsWith("/super-admin/reports")
+                ? "bg-[#ff7143]/10 text-[#ff7143]"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <FiBarChart2
+                className={`w-5 h-5 ${
+                  pathname.startsWith("/super-admin/reports")
+                    ? "text-[#ff7143]"
+                    : "text-gray-400"
+                }`}
+              />
+              <span>Reports</span>
+            </div>
+            <FiChevronDown
+              className={`w-4 h-4 transition-transform duration-200 ${
+                isReportsOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {isReportsOpen && (
+            <div className="mt-1 ml-4 pl-4 border-l border-gray-100 space-y-1">
+              <Link
+                href="/super-admin/reports/sales"
+                className={`flex items-center px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  pathname === "/super-admin/reports/sales"
+                    ? "text-[#ff7143] font-semibold"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                Sales Report
+              </Link>
+              <Link
+                href="/super-admin/reports/employee-performance"
+                className={`flex items-center px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  pathname === "/super-admin/reports/employee-performance"
+                    ? "text-[#ff7143] font-semibold"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                Employee Report
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="p-4 border-t border-gray-100">

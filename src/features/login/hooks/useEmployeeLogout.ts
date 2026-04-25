@@ -1,19 +1,19 @@
 import { logoutEmployeeApi } from "../api/login-employee.api";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
 export function useEmployeeLogout() {
   const router = useRouter();
-  const { clearAuth } = useAuthStore();
+  const { clearEmployee } = useEmployeeStore();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
       await logoutEmployeeApi();
-      clearAuth();
+      clearEmployee();
       router.push("/auth-employee");
       toast.success("Logged out successfully");
     } catch (error: any) {

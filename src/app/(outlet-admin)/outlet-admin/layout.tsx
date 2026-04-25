@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import OutletAdminSidebar from "@/components/dashboard/OutletAdminSidebar";
 import Navbar from "@/components/dashboard/Navbar";
-import withAuth from "@/hoc/useAuthGuard";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function OutletAdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -22,4 +22,4 @@ function OutletAdminLayout({ children }: { children: ReactNode }) {
 }
 
 // Ensure only Outlet Admin can access these routes
-export default withAuth(OutletAdminLayout, ["outlet_admin"], "/auth-employee");
+export default withEmployeeAuth(OutletAdminLayout, ["outlet_admin"]);

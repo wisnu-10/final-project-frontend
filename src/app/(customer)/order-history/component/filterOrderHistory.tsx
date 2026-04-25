@@ -89,16 +89,18 @@ export default function FilterOrderHistory({
   const filteredOrders = listOrder?.filter((order: any) => {
     const query = debouncedSearch.toLowerCase();
 
+    console.log(order)
+
     const isMatchSearch =
       !query ||
-      order.id.toLowerCase().includes(query) ||
+      order.invoiceNumber?.toLowerCase().includes(query) ||
       order.pickupAddress?.address?.toLowerCase().slice(0, 8).includes(query) ||
       order.pickupAddress?.cityName?.toLowerCase().includes(query) ||
       order.deliveryAddress?.address?.toLowerCase().includes(query) ||
       order.deliveryAddress?.cityName?.toLowerCase().includes(query);
-
-    const currentStatusPayment = order.payments?.[0]?.status;
-    const currentStatusOrder = order.statusLogs?.[0]?.status;
+      
+    const currentStatusPayment = order.payments?.[order?.payments?.length - 1]?.status;
+    const currentStatusOrder = order.statusLogs?.[order?.statusLogs?.length - 1]?.status;
     const currentDate = new Date(order.createdAt).getTime();
 
     const isMatchPayment = currentStatusPayment === selectedPaymentStatus;

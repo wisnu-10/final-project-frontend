@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FiPackage, FiLogOut } from "react-icons/fi";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import Image from "next/image";
 import Logo from "../../../public/logo-Photoroom.png";
 import { logoutEmployeeApi } from "@/features/login/api/login-employee.api";
 
 export default function WorkerSidebar() {
   const pathname = usePathname();
-  const { setAuth } = useAuthStore();
+  const { clearEmployee } = useEmployeeStore();
   const router = useRouter();
 
   const navLinks = [
@@ -23,7 +23,7 @@ export default function WorkerSidebar() {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      setAuth({ firstName: "", email: "", role: "", profilePicture: "" });
+      clearEmployee();
       router.push("/auth-employee");
     }
   };

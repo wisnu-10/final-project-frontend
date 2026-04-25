@@ -1,9 +1,9 @@
 "use client";
-import withAuth from "@/hoc/useAuthGuard";
+import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../../../../public/logo-Photoroom.png";
-import useAuthStore from "@/stores/useAuthStore";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 import {
   Truck,
   History,
@@ -14,6 +14,8 @@ import {
 import AttendancePage from "@/components/attendance/attendancePage";
 import { useAttendanceStatus, useCheckIn, useCheckOut } from "@/features/attendance/hooks/useAttendance";
 import EmployeeProfileLogout from "@/components/dashboard/EmployeeProfileLogout";
+import withAuth from "@/hoc/useAuthGuard";
+import { useState } from "react";
 
 const navTabs = [
   { key: "pickup", label: "Pickup Tasks", icon: Truck, href: "/driver/requests" },
@@ -23,7 +25,8 @@ const navTabs = [
 ] as const;
 
 function DriverDashboard() {
-  const { firstName } = useAuthStore();
+  const { employee } = useEmployeeStore();
+  const [activeTab, setActiveTab] = useState<any>("attendance");
 
   return (
     <div className="min-h-screen bg-[#FAF6F1]">

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useGetComplaints } from "@/features/complaint-customer/hooks/useGetComplaints";
 import Pagination from "@/components/Pagination";
-import { FiSearch, FiMessageSquare, FiRefreshCw, FiMapPin } from "react-icons/fi";
+import { FiSearch, FiMessageSquare, FiRefreshCw, FiMapPin, FiEye } from "react-icons/fi";
 import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
 import { useDebounce } from "@/hooks/useDebounce";
 import SearchableSelect from "@/components/SearchableSelect";
@@ -120,14 +120,14 @@ export default function SuperAdminComplaintsPage() {
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Outlet</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Order</th>
                     <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Status</th>
+                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {data.complaints.map((complaint) => (
                     <tr 
                       key={complaint.id} 
-                      className="hover:bg-gray-50 transition-colors group cursor-pointer"
-                      onClick={() => setSelectedComplaint(complaint)}
+                      className="hover:bg-gray-50 transition-colors group"
                     >
                       <td className="px-6 py-5 whitespace-nowrap">
                         <div className="flex flex-col">
@@ -166,6 +166,17 @@ export default function SuperAdminComplaintsPage() {
                       </td>
                       <td className="px-6 py-5 whitespace-nowrap text-center">
                         {getStatusBadge(complaint.status)}
+                      </td>
+                      <td className="px-6 py-5 whitespace-nowrap text-center">
+                        <div className="flex items-center justify-center">
+                          <button
+                            onClick={() => setSelectedComplaint(complaint)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-all inline-flex items-center gap-1 text-sm font-medium cursor-pointer"
+                          >
+                            <FiEye className="w-5 h-5" />
+                            View
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

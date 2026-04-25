@@ -4,10 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Logo from "../../public/logo-Photoroom.png";
 import { useEffect, useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import useAuthStore from "@/stores/useAuthStore";
 import {
-  FiClock,
   FiLoader,
   FiLogOut,
   FiMapPin,
@@ -20,7 +18,7 @@ import toast from "react-hot-toast";
 
 export default function NavBar() {
   const router = useRouter();
-  const { email, firstName, profilePicture, setAuth } = useAuthStore(); // Tambahin setAuth buat logout
+  const { user, setAuth, clearAuth } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,16 +26,7 @@ export default function NavBar() {
     try {
       setIsLoading(true);
       await axiosInstance.post<ApiResponse<any>>("/auth/logout");
-
-      setAuth({
-        firstName: "",
-        lastName: "",
-        email: "",
-        role: "",
-        profilePicture: "",
-        outletId: null,
-        outletName: null,
-      });
+      clearAuth();
       router.push("/auth");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -46,36 +35,18 @@ export default function NavBar() {
     }
   };
 
-  const checkSession = async () => {
-    try {
-      const res = await axiosInstance<ApiResponse<any>>("/auth/session");
-      const user = res.data.data;
-
-      setAuth({
-        firstName: user.firstName,
-        lastName: user.lastName || "",
-        email: user.email,
-        role: user.role,
-        profilePicture: user.profilePicture,
-        outletId: user.outletId || null,
-        outletName: user.outletName || null,
-      });
-    } catch (error: any) {
-      setAuth({
-        firstName: "",
-        lastName: "",
-        email: "",
-        role: "",
-        profilePicture: "",
-        outletId: null,
-        outletName: null,
-      });
-    }
-  };
-
   useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await axiosInstance<ApiResponse<any>>("/auth/session");
+        setAuth(res.data.data);
+      } catch (error: any) {
+        clearAuth();
+      }
+    };
+
     checkSession();
-  }, []);
+  }, [setAuth, clearAuth]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
@@ -91,7 +62,7 @@ export default function NavBar() {
 
         {/* CTA Button Section */}
         <div className="relative flex items-center gap-8">
-          {email ? (
+          {user?.email ? (
             <>
               <button
                 onClick={handleLogout}
@@ -116,16 +87,15 @@ export default function NavBar() {
                   <div className="absolute -inset-0.5 bg-linear-to-r from-[#FF6B4A] to-[#FF8E72] rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
 
                   {/* Avatar Box */}
-                  <div className="relative w-10 h-10 rounded-full bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
-                    {profilePicture ? (
+                  <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+                    {user.profilePicture ? (
                       <img
-                        src={profilePicture}
+                        src={user.profilePicture}
                         alt="Profile"
-                        key={profilePicture}
                         className="w-full h-full rounded-full object-cover"
                       />
                     ) : (
-                      firstName.charAt(0).toUpperCase()
+                      user.firstName.charAt(0).toUpperCase()
                     )}
                   </div>
 
@@ -139,7 +109,7 @@ export default function NavBar() {
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-xs text-gray-400">Welcome back,</p>
                       <p className="text-sm font-bold text-[#2C2826] truncate">
-                        {firstName}
+                        {user.firstName}
                       </p>
                     </div>
 

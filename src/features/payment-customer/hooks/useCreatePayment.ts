@@ -1,8 +1,10 @@
 import axiosInstance from "@/utils/axiosInstance";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-export default function createPayment() {
+export default function useCreatePayment() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const createPayment = async (
@@ -19,21 +21,17 @@ export default function createPayment() {
       // @ts-ignore (biar TS ngga marah soal window.snap)
       window.snap.pay(token, {
         onSuccess: function (result: any) {
-          console.log("success", result);
           setShowPaymentModal(false);
-          window.location.reload();
-          // Lu bisa refresh data atau pindah halaman di sini
+          router.push("/payment/success");
         },
         onPending: function (result: any) {
-          console.log("pending", result);
           setShowPaymentModal(false);
+          router.push("/payment/unfinish");
         },
         onError: function (result: any) {
-          console.log("error", result);
+          router.push("/payment/error");
         },
-        onClose: function () {
-          /* alert("Yah, kok ditutup? Bayar dong biar bajunya bersih!"); */
-        },
+        onClose: function () {},
       });
     } catch (error: any) {
       console.log("Error creating payment:", error);
