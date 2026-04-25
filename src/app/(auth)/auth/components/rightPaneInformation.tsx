@@ -43,7 +43,7 @@ export default function rightPanelInformation() {
         <div className="flex flex-col gap-4">
           {features.map((feature) => (
             <div key={feature} className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-[#FFF5F2]">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-[#FFF5F2]">
                 <CheckCircle className="w-3.5 h-3.5 text-[#FF6B4A]" />
               </div>
 

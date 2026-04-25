@@ -14,7 +14,7 @@ export default function EmployeeProfileLogout({ color = "from-[#4A90D9] to-[#5B9
     <div className="relative">
       <button
         onClick={() => setShowConfirm(!showConfirm)}
-        className={`w-10 h-10 rounded-full bg-gradient-to-br ${color} text-white flex items-center justify-center font-bold shadow-md text-sm hover:scale-105 transition-transform active:scale-95`}
+        className={`w-10 h-10 rounded-full bg-linear-to-br ${color} text-white flex items-center justify-center font-bold shadow-md text-sm hover:scale-105 transition-transform active:scale-95`}
       >
         {employee?.firstName ? employee.firstName.charAt(0).toUpperCase() : "E"}
       </button>

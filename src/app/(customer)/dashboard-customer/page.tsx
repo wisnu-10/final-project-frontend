@@ -79,7 +79,7 @@ export default function CustomerDashboard() {
           {/* Need Pickup Button Card */}
           <button
             onClick={() => setShowRequestForm(true)}
-            className="w-full bg-gradient-to-r from-[#FF6B4A] to-[#FF8A6E] rounded-2xl shadow-lg p-6 text-left hover:shadow-xl transition-all"
+            className="w-full bg-linear-to-r from-[#FF6B4A] to-[#FF8A6E] rounded-2xl shadow-lg p-6 text-left hover:shadow-xl transition-all"
           >
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -90,7 +90,7 @@ export default function CustomerDashboard() {
                   Schedule your laundry pickup in just a few taps
                 </p>
               </div>
-              <ChevronRight className="w-8 h-8 text-white flex-shrink-0" />
+              <ChevronRight className="w-8 h-8 text-white shrink-0" />
             </div>
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/20 backdrop-blur-sm">
               <Package className="w-4 h-4 text-white" />
@@ -124,7 +124,7 @@ export default function CustomerDashboard() {
                   <h3 className="text-xl font-bold text-[#2C2826]">
                     No Active Orders
                   </h3>
-                  <p className="text-[#6B6662] max-w-[250px] mt-2 text-sm leading-relaxed">
+                  <p className="text-[#6B6662] max-w-62.5 mt-2 text-sm leading-relaxed">
                     Looks like you haven't placed any laundry orders yet.
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function CustomerDashboard() {
                       {/* Connector Line */}
                       {!isLast && (
                         <div
-                          className={`absolute left-[19px] top-10 w-0.5 h-12 ${
+                          className={`absolute left-4.75 top-10 w-0.5 h-12 ${
                             isCompleted ? "bg-[#FF6B4A]" : "bg-[#E5DDD3]"
                           }`}
                         />
@@ -148,7 +148,7 @@ export default function CustomerDashboard() {
 
                       {/* Icon */}
                       <div
-                        className={`relative w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 z-10 ${
+                        className={`relative w-10 h-10 rounded-full flex items-center justify-center shrink-0 z-10 ${
                           isActive
                             ? "bg-[#FF6B4A] shadow-lg shadow-[#FF6B4A]/30"
                             : isCompleted
