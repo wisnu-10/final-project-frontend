@@ -95,7 +95,7 @@ export default function WorkerOrderDetailPage({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-100">
         <div className="text-center">
           <div className="inline-block w-8 h-8 border-3 border-[#ff7143] border-t-transparent rounded-full animate-spin mb-3"></div>
           <p className="text-gray-500">Loading order details...</p>
@@ -158,7 +158,7 @@ export default function WorkerOrderDetailPage({
       {/* Pending Bypass Alert */}
       {pendingBypass && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3">
-          <FiClock className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+          <FiClock className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
           <div>
             <p className="font-semibold text-amber-800">
               Bypass Request Pending
@@ -174,7 +174,7 @@ export default function WorkerOrderDetailPage({
       {/* Rejected Bypass Alert */}
       {lastRejected && !pendingBypass && (
         <div className="bg-red-50 border border-red-200 rounded-2xl p-5 flex items-start gap-3">
-          <FiXCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+          <FiXCircle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
           <div>
             <p className="font-semibold text-red-800">
               Bypass Request Rejected
@@ -313,7 +313,7 @@ export default function WorkerOrderDetailPage({
           {hasDiscrepancy ? (
             <div className="space-y-4">
               <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <FiAlertCircle className="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" />
+                <FiAlertCircle className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
                 <div>
                   <p className="font-semibold text-amber-800 text-sm">
                     Item Discrepancy Detected

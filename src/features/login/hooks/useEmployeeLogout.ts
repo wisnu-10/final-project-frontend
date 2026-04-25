@@ -14,7 +14,7 @@ export function useEmployeeLogout() {
       setIsLoggingOut(true);
       await logoutEmployeeApi();
       clearAuth();
-      router.push("/auth/employee");
+      router.push("/auth-employee");
       toast.success("Logged out successfully");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to logout");

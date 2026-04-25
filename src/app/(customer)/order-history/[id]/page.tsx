@@ -48,7 +48,7 @@ export default function OrderDetailStatic() {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Modal Header with Gradient */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-[#FF6B4A] to-[#FF8A6E] p-6 rounded-t-3xl">
+        <div className="sticky top-0 z-10 bg-linear-to-r from-[#FF6B4A] to-[#FF8A6E] p-6 rounded-t-3xl">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
@@ -91,7 +91,7 @@ export default function OrderDetailStatic() {
         <div className="p-6 space-y-5">
           <div className="grid md:grid-cols-2 gap-4">
             {/* Customer Information Card */}
-            <div className="bg-gradient-to-br from-[#FFF5F2] to-white rounded-2xl p-5 border-2 border-[#FFE5DD] shadow-sm">
+            <div className="bg-linear-to-br from-[#FFF5F2] to-white rounded-2xl p-5 border-2 border-[#FFE5DD] shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[#FF6B4A] flex items-center justify-center">
                   <UserIcon className="w-5 h-5 text-white" />
@@ -124,7 +124,7 @@ export default function OrderDetailStatic() {
             </div>
 
             {/* Order Summary Card */}
-            <div className="bg-gradient-to-br from-[#EFF6FF] to-white rounded-2xl p-5 border-2 border-[#D4E7FF] shadow-sm">
+            <div className="bg-linear-to-br from-[#EFF6FF] to-white rounded-2xl p-5 border-2 border-[#D4E7FF] shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[#4A90E2] flex items-center justify-center">
                   <Package className="w-5 h-5 text-white" />

@@ -113,10 +113,10 @@ export default function NavBar() {
                   className="relative group focus:outline-none"
                 >
                   {/* Ring Animasi di Belakang Avatar */}
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-[#FF6B4A] to-[#FF8E72] rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+                  <div className="absolute -inset-0.5 bg-linear-to-r from-[#FF6B4A] to-[#FF8E72] rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
 
                   {/* Avatar Box */}
-                  <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+                  <div className="relative w-10 h-10 rounded-full bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
                     {profilePicture ? (
                       <img
                         src={profilePicture}

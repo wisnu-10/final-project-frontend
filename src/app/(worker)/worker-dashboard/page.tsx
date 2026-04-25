@@ -36,7 +36,7 @@ function WorkerDashboard() {
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
+            <div className="w-10 h-10 bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
               <Image src={Logo} alt="Logo" className="w-7 h-auto" />
             </div>
             <div>
@@ -238,4 +238,4 @@ function EmptyTasks({ label }: { label: string }) {
   );
 }
 
-export default withAuth(WorkerDashboard, ["worker"], "/auth/employee");
+export default withAuth(WorkerDashboard, ["worker"], "/auth-employee");
