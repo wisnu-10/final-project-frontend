@@ -23,8 +23,11 @@ import { useGetIdOrder } from "@/features/order-customer/hooks/useGetIdOrder";
 import PaymentModal from "./paymentModal";
 import useCreatePayment from "@/features/payment-customer/hooks/useCreatePayment";
 import { FiLoader } from "react-icons/fi";
-import invoicePage from "./invoice";
 import InvoicePage from "./invoice";
+import Loading from "@/components/loading";
+import useEmailInvoice from "@/features/payment-customer/hooks/useEmailInvoice";
+import ResponseComplaint from "../[id]/response/page";
+import ButtonResponse from "@/components/buttonResponse";
 
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
@@ -43,11 +46,11 @@ export default function OrderList({
   isError,
   getOrder,
 }: OrderListProps) {
-  const { data, isLoading: isConfirming, confirmOrder } = useConfirmOrder();
+  const { isLoading: isConfirming, confirmOrder } = useConfirmOrder();
 
   const [showPayment, setShowPayment] = useState(false);
 
-  const [showInvoice, setShowInvoice] = useState(false)
+  const [showInvoice, setShowInvoice] = useState(false);
 
   const { createPayment, isLoading: isPayment } = useCreatePayment();
 
@@ -57,7 +60,7 @@ export default function OrderList({
 
   if (isError) return <PageError />;
 
-  if (!order) return null;
+  if (isLoading || !order) return <Loading />;
 
   const statusKey =
     order.statusLogs?.[order.statusLogs.length - 1]?.status?.toLowerCase() ||
@@ -77,13 +80,11 @@ export default function OrderList({
     const timePart = date.toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
-      hour12: true, // Biar muncul AM/PM biar keren kayak di form
+      hour12: true,
     });
 
     return `${datePart} - ${timePart}`;
   };
-
-  const shortOrderId = order?.id?.slice(0, 8).toUpperCase();
 
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
@@ -271,17 +272,28 @@ export default function OrderList({
             Auto-confirmed in 3 days if no complaint
           </p>
 
-          <ButtonComplaint id={order.id} />
+          {!order?.complaints[order.complaints.length - 1]?.adminResponse ? (
+            <ButtonComplaint id={order.id} />
+          ) : (
+            <ButtonResponse isLoading={isLoading} id={order.id} />
+          )}
         </div>
       )}
 
       {order.statusLogs[order.statusLogs.length - 1].status === "completed" && (
         <div className="space-y-3">
-          <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-gray-600 font-semibold flex items-center justify-center gap-2 border border-gray-200">
-            <CheckCircle className="w-4 h-4 text-green-600" /> Order Completed
-          </div>
+          <button
+            onClick={() => setShowInvoice(true)}
+            className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] duration-300 text-white font-bold hover:shadow-xl transition-all shadow-lg flex items-center justify-center"
+          >
+            <span className="w-5 h-5" /> View Invoice
+          </button>
 
-          <ButtonComplaint id={order.id} />
+          {!order?.complaints[order.complaints.length - 1]?.adminResponse ? (
+            <ButtonComplaint id={order.id} />
+          ) : (
+            <ButtonResponse isLoading={isLoading} id={order.id} />
+          )}
         </div>
       )}
 

@@ -1,8 +1,11 @@
+'use client'
+
 import Footer from "@/components/footer";
 import NavBar from "@/components/navbar";
+import withAuth from "@/hoc/useAuthGuard";
 import { Toaster } from "react-hot-toast";
 
-export default function PublicLayout({
+function profileLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -17,3 +20,5 @@ export default function PublicLayout({
     </div>
   );
 }
+
+export default withAuth(profileLayout, ["customer"])

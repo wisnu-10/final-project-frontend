@@ -54,8 +54,6 @@ export default function CustomerAddresses() {
     }
   };
 
- 
-
   return (
     <div className=" relative flex flex-col justify-center items-center mx-auto pt-28 pb-28 bg-[#f4e7d6]">
       <div className="w-full max-w-2xl px-4 mb-4">
@@ -67,7 +65,7 @@ export default function CustomerAddresses() {
         <h2 className="text-2xl font-bold text-[#2C2826]">My Addresses</h2>
         <button
           onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A90E2] text-white hover:bg-[#3A7BC8] transition-all shadow-lg"
+          className="hover:scale-105 flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4A90E2] text-white hover:bg-[#3A7BC8] transition-all shadow-lg"
         >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">Add New</span>
