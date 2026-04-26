@@ -14,6 +14,7 @@ export function useGetIdOrder(id: string) {
 
   const getById = async (id: string) => {
     try {
+      
       setIsLoading(true);
       setError(false);
 

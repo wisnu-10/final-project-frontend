@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Logo from "../../public/logo-Photoroom.png";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuthStore from "@/stores/useAuthStore";
 import {
   FiLoader,
@@ -21,6 +21,27 @@ export default function NavBar() {
   const { user, setAuth, clearAuth } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null); // 1. Bikin Ref-nya
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      // 2. Cek apakah kliknya BUKAN di dalem area dropdownRef
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+
+    // 3. Daftarin event klik ke document
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // 4. Bersihin event pas komponennya mati (clean-up)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const handleLogout = async () => {
     try {
@@ -105,7 +126,10 @@ export default function NavBar() {
 
                 {/* Dropdown Menu */}
                 {isOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-[#E5DDD3] py-2 z-50 animate-in fade-in zoom-in duration-200">
+                  <div
+                    ref={dropdownRef}
+                    className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-[#E5DDD3] py-2 z-50 animate-in fade-in zoom-in duration-200"
+                  >
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-xs text-gray-400">Welcome back,</p>
                       <p className="text-sm font-bold text-[#2C2826] truncate">

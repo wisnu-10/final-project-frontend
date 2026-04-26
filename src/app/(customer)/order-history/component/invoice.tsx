@@ -4,6 +4,8 @@ import React from "react";
 import { Waves, MapPin, Package, Scale } from "lucide-react";
 import logo from "../../../../../public/logo-Photoroom.png"
 import Image from "next/image";
+import useEmailInvoice from "@/features/payment-customer/hooks/useEmailInvoice";
+import { FiLoader } from "react-icons/fi";
 
 interface InvoicePageProps {
   order:  any
@@ -12,10 +14,9 @@ interface InvoicePageProps {
 
 const InvoicePage = ({order, setShowInvoice}: InvoicePageProps) => {
 
-  console.log("INI INVOICE",order)
-  // DATA DUMMY NEATWASH
+  const {emailInvoice, isLoading} = useEmailInvoice()
 
-  const data = order; // Ganti ini nanti sama data dari API lu
+  const data = order;
 
   return (
     <div className=" fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -180,12 +181,27 @@ const InvoicePage = ({order, setShowInvoice}: InvoicePageProps) => {
               />
             ))}
           </div>
-          <div className="flex gap-3 mt-10">
+          <div className="flex flex-col gap-3 mt-10">
             <button
               onClick={() => setShowInvoice(false)}
-              className="flex-1 px-6 py-3 rounded-xl border-2 bg-[#FF6B4A] text-white hover:bg-[#f94f28] transition-all disabled:opacity-50"
+              className="flex-1 px-6 py-3 rounded-xl border-2 border-[#FF6B4A] text-[#FF6B4A]  hover:text-white hover:bg-[#FF6B4A] transition-all disabled:opacity-50"
             >
               Back
+            </button>
+            <button
+              onClick={() => emailInvoice(order.id)}
+              className="flex-1 px-6 py-3 rounded-xl border-2 bg-[#FF6B4A] text-white hover:bg-[#f94f28] transition-all disabled:opacity-50"
+            >
+              {isLoading ? (
+                      <div className="flex">
+                        <FiLoader className="w-5 h-5 animate-spin" />
+                        <span>Sending Email...</span>
+                      </div>
+                    ) : (
+                      <span>Send Email</span>
+                    )}
+
+              
             </button>
           </div>
         </div>
