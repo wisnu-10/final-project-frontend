@@ -34,7 +34,7 @@ function DriverDashboard() {
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center">
               <Image src={Logo} alt="Logo" className="w-7 h-auto" />
             </div>
             <div>
@@ -104,35 +104,35 @@ function QuickAttendance() {
 
   if (isCheckedOut) return null;
 
-  return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E2DA] flex items-center justify-between">
-      <div>
-        <h3 className="text-sm font-bold text-[#2C2826]">Quick Status</h3>
-        <p className="text-xs text-[#6B6662]">
-          {!isCheckedIn ? "Anda belum check-in" : "Anda sedang bertugas"}
-        </p>
-      </div>
-      {!isCheckedIn ? (
-        <button
-          onClick={() => handleCheckIn(refetch)}
-          disabled={cILoading}
-          className="px-6 py-2 rounded-xl bg-[#4A90D9] text-white text-sm font-bold shadow-md hover:bg-[#3A80C9] transition-colors flex items-center gap-2"
-        >
-          {cILoading && <Loader2 className="w-4 h-4 animate-spin" />}
-          Check In
-        </button>
-      ) : (
-        <button
-          onClick={() => handleCheckOut(refetch)}
-          disabled={cOLoading}
-          className="px-6 py-2 rounded-xl bg-[#FF6B4A] text-white text-sm font-bold shadow-md hover:bg-[#EF5B3A] transition-colors flex items-center gap-2"
-        >
-          {cOLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-          Check Out
-        </button>
-      )}
-    </div>
-  );
+  // return (
+  //   // <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E2DA] flex items-center justify-between">
+  //   //   {/* <div>
+  //   //     <h3 className="text-sm font-bold text-[#2C2826]">Quick Status</h3>
+  //   //     <p className="text-xs text-[#6B6662]">
+  //   //       {!isCheckedIn ? "Anda belum check-in" : "Anda sedang bertugas"}
+  //   //     </p>
+  //   //   </div> */}
+  //   //   {!isCheckedIn ? (
+  //   //     <button
+  //   //       onClick={() => handleCheckIn(refetch)}
+  //   //       disabled={cILoading}
+  //   //       className="px-6 py-2 rounded-xl bg-[#4A90D9] text-white text-sm font-bold shadow-md hover:bg-[#3A80C9] transition-colors flex items-center gap-2"
+  //   //     >
+  //   //       {cILoading && <Loader2 className="w-4 h-4 animate-spin" />}
+  //   //       Check In
+  //   //     </button>
+  //   //   ) : (
+  //   //     <button
+  //   //       onClick={() => handleCheckOut(refetch)}
+  //   //       disabled={cOLoading}
+  //   //       className="px-6 py-2 rounded-xl bg-[#FF6B4A] text-white text-sm font-bold shadow-md hover:bg-[#EF5B3A] transition-colors flex items-center gap-2"
+  //   //     >
+  //   //       {cOLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+  //   //       Check Out
+  //   //     </button>
+  //   //   )}
+  //   // </div>
+  // );
 }
 
 
