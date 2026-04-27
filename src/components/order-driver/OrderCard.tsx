@@ -20,13 +20,17 @@ export function OrderCard({
   showAddress = true,
   showTime = true,
 }: OrderCardProps) {
-  const currentStatus = order.statusLogs?.[order.statusLogs.length - 1]?.status || "unknown";
+  const currentStatus =
+    order.statusLogs?.[order.statusLogs.length - 1]?.status || "unknown";
   const createdDate = new Date(order.createdAt);
   const customerName = order.customer?.firstName
     ? `${order.customer.firstName} ${order.customer.lastName}`
     : order.customerName || "Unknown";
 
-  const displayAddress = order.deliveryAddress?.address || order.pickupAddress?.address || "No address";
+  const displayAddress =
+    order.deliveryAddress?.address ||
+    order.pickupAddress?.address ||
+    "No address";
 
   return (
     <div
@@ -52,7 +56,9 @@ export function OrderCard({
       {showAddress && (
         <div className="flex items-start gap-2 mb-4">
           <MapPin className="w-4 h-4 text-[#6B6662] mt-0.5 shrink-0" />
-          <p className="text-xs text-[#6B6662] line-clamp-2">{displayAddress}</p>
+          <p className="text-xs text-[#6B6662] line-clamp-2">
+            {displayAddress}
+          </p>
         </div>
       )}
 
@@ -60,7 +66,10 @@ export function OrderCard({
       {showTime && (
         <div className="flex items-center gap-2 mb-4 text-xs text-[#6B6662]">
           <Clock className="w-4 h-4" />
-          <span>{createdDate.toLocaleDateString()} {createdDate.toLocaleTimeString()}</span>
+          <span>
+            {createdDate.toLocaleDateString()}{" "}
+            {createdDate.toLocaleTimeString()}
+          </span>
         </div>
       )}
 

@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CheckCircle, MapPin, Clock, User, Phone, ArrowLeft } from "lucide-react";
+import {
+  CheckCircle,
+  MapPin,
+  Clock,
+  User,
+  Phone,
+  ArrowLeft,
+} from "lucide-react";
 import Link from "next/link";
 import withAuth from "@/hoc/useAuthGuard";
 import { useDriverTasks } from "@/features/order-driver/hooks/useDriverTasks";
@@ -14,13 +21,11 @@ import toast from "react-hot-toast";
 import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 
 function ActiveOrderPage() {
-  const {
-    myTasks,
-    isLoading,
-    handleCompletePickup,
-    handleCompleteDelivery,
-  } = useDriverTasks();
-  const [completingOrderId, setCompletingOrderId] = useState<string | null>(null);
+  const { myTasks, isLoading, handleCompletePickup, handleCompleteDelivery } =
+    useDriverTasks();
+  const [completingOrderId, setCompletingOrderId] = useState<string | null>(
+    null,
+  );
 
   if (isLoading) {
     return <LoadingState message="Memuat pesanan aktif..." />;
@@ -28,7 +33,7 @@ function ActiveOrderPage() {
 
   const activeOrder = myTasks.length > 0 ? myTasks[0] : null;
   const isOnDelivery = activeOrder?.statusLogs?.some(
-    (log) => log.status === "delivering" && !log.finishedAt
+    (log) => log.status === "delivering" && !log.finishedAt,
   );
 
   const handleComplete = async () => {
@@ -108,7 +113,9 @@ function ActiveOrderPage() {
             <span className="text-sm font-semibold">Kembali</span>
           </Link>
           <h1 className="text-lg font-bold text-[#2C2826]">Pesanan Aktif</h1>
-          <p className="text-xs text-[#6B6662]">#{activeOrder.id.slice(0, 8)}</p>
+          <p className="text-xs text-[#6B6662]">
+            #{activeOrder.id.slice(0, 8)}
+          </p>
         </div>
       </div>
 
@@ -172,7 +179,9 @@ function ActiveOrderPage() {
               <User className="w-5 h-5 text-[#4A90D9] mt-0.5" />
               <div>
                 <p className="text-xs text-[#6B6662] font-medium">Pelanggan</p>
-                <p className="text-sm font-bold text-[#2C2826]">{customerName}</p>
+                <p className="text-sm font-bold text-[#2C2826]">
+                  {customerName}
+                </p>
               </div>
             </div>
 
@@ -193,7 +202,9 @@ function ActiveOrderPage() {
             <div className="flex items-start gap-3">
               <Clock className="w-5 h-5 text-[#4A90D9] mt-0.5" />
               <div>
-                <p className="text-xs text-[#6B6662] font-medium">Waktu Pesanan</p>
+                <p className="text-xs text-[#6B6662] font-medium">
+                  Waktu Pesanan
+                </p>
                 <p className="text-sm font-bold text-[#2C2826]">
                   {new Date(activeOrder.createdAt).toLocaleString()}
                 </p>
@@ -217,8 +228,7 @@ function ActiveOrderPage() {
             ) : (
               <>
                 <CheckCircle className="w-5 h-5" />
-                Selesaikan{" "}
-                {isOnDelivery ? "Pengiriman" : "Penjemputan"}
+                Selesaikan {isOnDelivery ? "Pengiriman" : "Penjemputan"}
               </>
             )}
           </button>
