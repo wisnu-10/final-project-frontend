@@ -45,8 +45,8 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
                   <button
                     key={type.value}
                     type="button"
-                    onClick={() => {
-                      formik.setFieldValue("label", type.value);
+                    onClick={ async () => {
+                      await formik.setFieldValue("label", type.value);
                       formik.setFieldTouched("label", true);
                     }}
                     className={`p-3 rounded-xl border-2 transition-all ${
