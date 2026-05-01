@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
 import { Award, Clock, Shield, Sparkles } from "lucide-react";
 import Image from "next/image";
 import heroImage from "../../../../public/laundry-Photoroom.png";
 import Link from "next/link";
 import useAuthStore from "@/stores/useAuthStore";
+import FloatingInfoCard from "@/components/floating-info-cards/FloatingInfoCard";
 
 export default function Hero() {
-
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
   const email = user?.email;
 
   return (
@@ -58,41 +58,34 @@ export default function Hero() {
             />
 
             {/* Floating Info Cards */}
-            <div className="absolute hidden md:block top-8 -left-70 bg-white rounded-2xl shadow-lg p-4 max-w-[160px] animate-bounce">
-              <div className="w-8 h-8 rounded-lg bg-[#2C2826] flex items-center justify-center mb-2">
-                <Award className="w-5 h-5 text-white" />
-              </div>
-              <p className="text-xs font-semibold text-[#2C2826]">
-                Quality and accurate
-              </p>
-              <p className="text-xs text-[#6B6662]">services for you</p>
-            </div>
-
-            <div className="absolute hidden md:block top-8 -right-70 bg-white rounded-2xl shadow-lg p-4 max-w-[160px] animate-bounce">
-              <div className="w-8 h-8 rounded-lg bg-[#2C2826] flex items-center justify-center mb-2">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-              <p className="text-xs font-semibold text-[#2C2826]">24 Hours</p>
-              <p className="text-xs text-[#6B6662]">available to serve</p>
-            </div>
-
-            <div className="absolute hidden md:block bottom-32 -left-70 bg-white rounded-2xl shadow-lg p-4 max-w-[160px] animate-bounce">
-              <div className="w-8 h-8 rounded-lg bg-[#2C2826] flex items-center justify-center mb-2">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <p className="text-xs font-semibold text-[#2C2826]">
-                Clothes will become clean and neat
-              </p>
-            </div>
-
-            <div className="absolute hidden md:block bottom-8 -right-70 bg-white rounded-2xl shadow-lg p-4 max-w-[160px] animate-bounce">
-              <div className="w-8 h-8 rounded-lg bg-[#2C2826] flex items-center justify-center mb-2">
-                <Clock className="w-5 h-5 text-white" />
-              </div>
-              <p className="text-xs font-semibold text-[#2C2826]">
-                Warning helpers for quick reply
-              </p>
-            </div>
+            <FloatingInfoCard
+              icon={Award}
+              title="Quality and accurate"
+              subtitle="services for you"
+              position="top-8 -left-70"
+              animationClass="animate-float"
+            />
+            <FloatingInfoCard
+              icon={Shield}
+              title="24 Hours"
+              subtitle="available to serve"
+              position="top-8 -right-70"
+              animationClass="animate-float-delay-1"
+            />
+            <FloatingInfoCard
+              icon={Sparkles}
+              title="Clothes will become clean and neat"
+              subtitle=""
+              position="bottom-32 -left-70"
+              animationClass="animate-float-delay-2"
+            />
+            <FloatingInfoCard
+              icon={Clock}
+              title="Warning helpers for quick reply"
+              subtitle=""
+              position="bottom-8 -right-70"
+              animationClass="animate-float-delay-3"
+            />
           </div>
         </div>
       </div>

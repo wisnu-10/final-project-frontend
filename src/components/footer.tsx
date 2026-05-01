@@ -4,7 +4,7 @@ import Logo from "../../public/logo-Photoroom.png";
 
 export default function Footer() {
   return (
-    <footer className="py-16 px-8 bg-[#2C2826] text-white">
+    <footer className="py-16 px-8 bg-[#1A1817] text-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           {/* Brand - Lebih compact */}
@@ -26,7 +26,7 @@ export default function Footer() {
             <ul className="space-y-3 text-[13px] text-gray-400">
               <li>
                 <Link
-                  href="/services"
+                  href="/#service"
                   className="hover:text-white transition-colors"
                 >
                   Services
@@ -34,7 +34,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/pricing"
+                  href="/#pricing"
                   className="hover:text-white transition-colors"
                 >
                   Pricing
@@ -42,7 +42,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/about"
+                  href="/#about"
                   className="hover:text-white transition-colors"
                 >
                   About
@@ -55,16 +55,13 @@ export default function Footer() {
             <h3 className="text-sm font-bold mb-5 text-gray-200">Help</h3>
             <ul className="space-y-3 text-[13px] text-gray-400">
               <li>
-                <Link
-                  href="/faq"
-                  className="hover:text-white transition-colors"
-                >
+                <Link href="/" className="hover:text-white transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/#contact"
                   className="hover:text-white transition-colors"
                 >
                   Contact
@@ -72,7 +69,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/#contact"
                   className="hover:text-white transition-colors"
                 >
                   Terms
@@ -121,13 +118,13 @@ export default function Footer() {
           <span>© 2026 DILAUNDRYIN.</span>
           <div className="flex gap-4">
             <Link
-              href="/privacy"
+              href="/#contact"
               className="hover:text-white transition-colors uppercase"
             >
               Privacy
             </Link>
             <Link
-              href="/terms"
+              href="/#contact"
               className="hover:text-white transition-colors uppercase"
             >
               Terms

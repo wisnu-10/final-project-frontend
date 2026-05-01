@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 export default function Price() {
   const router = useRouter();
-  const { email } = useAuthStore();
+  const { user } = useAuthStore();
 
   return (
     <section
@@ -71,7 +71,7 @@ export default function Price() {
             <button
               
               onClick={() =>
-                router.push(email ? "/order-history" : "/auth?tab=register")
+                router.push(user?.email ? "/order-history" : "/auth?tab=register")
               }
               className="w-full py-3 rounded-xl bg-[#FF6B4A] text-white hover:bg-[#FF5533] transition-all shadow-lg font-semibold"
             >

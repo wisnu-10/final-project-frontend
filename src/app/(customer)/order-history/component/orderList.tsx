@@ -91,6 +91,30 @@ export default function OrderList({
     return `${datePart} - ${timePart}`;
   };
 
+  const methodPaymentConfig = (status: string) => {
+    switch (status) {
+      case "qris": {
+        return {
+          label: "QRIS",
+        };
+      }
+      case "bank_transfer": {
+        return {
+          label: "Bank Transfer",
+        };
+      }
+      case "ewallet": {
+        return {
+          label: "E-Wallet",
+        };
+      }
+    }
+  }
+
+  const paymentConfig = methodPaymentConfig(lastPayment?.method)
+
+  console.log(paymentConfig?.label)
+
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
       <div className="flex items-start justify-between mb-4">
@@ -142,6 +166,12 @@ export default function OrderList({
             {!order.totalPrice || order.totalPrice === 0
               ? "-"
               : formatIDR(order.totalPrice)}
+          </span>
+        </div>
+        <div className="flex justify-between text-sm">
+          <span className="text-[#6B6662]">Payment:</span>
+          <span className="font-semibold text-[#2C2826]">
+            {paymentConfig?.label ? paymentConfig?.label : `-`}
           </span>
         </div>
         <div className="pt-4 border-t border-[#E5DDD3]">

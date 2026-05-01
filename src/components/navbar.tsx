@@ -25,7 +25,6 @@ export default function NavBar() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      // 2. Cek apakah kliknya BUKAN di dalem area dropdownRef
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
@@ -34,10 +33,8 @@ export default function NavBar() {
       }
     }
 
-    // 3. Daftarin event klik ke document
     document.addEventListener("mousedown", handleClickOutside);
 
-    // 4. Bersihin event pas komponennya mati (clean-up)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -152,7 +149,6 @@ export default function NavBar() {
                         <FiPackage className="w-4 h-4" /> Pickup Order
                       </button>
 
-                      {/* INI YANG BARU: ORDER HISTORY */}
                       {/* <button
                         onClick={() => router.push("/order-history")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"

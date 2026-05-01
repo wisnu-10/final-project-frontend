@@ -12,11 +12,23 @@ interface InvoicePageProps {
   setShowInvoice: (value: boolean) => void
 }
 
-const InvoicePage = ({order, setShowInvoice}: InvoicePageProps) => {
-
-  const {emailInvoice, isLoading} = useEmailInvoice()
+const InvoicePage = ({ order, setShowInvoice }: InvoicePageProps) => {
+  const { emailInvoice, isLoading } = useEmailInvoice();
 
   const data = order;
+
+  const lastPayment =
+    data?.payments && data.payments.length > 0
+      ? data.payments[data.payments.length - 1]
+      : null;
+
+  const getPaymentLabel = (method: string) => {
+    const m = method?.toLowerCase();
+    if (m === "qris") return "QRIS";
+    if (m === "bank_transfer") return "Bank Transfer";
+    if (m === "ewallet") return "E-Wallet";
+    return "-";
+  };
 
   return (
     <div className=" fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -147,6 +159,16 @@ const InvoicePage = ({order, setShowInvoice}: InvoicePageProps) => {
 
         {/* TOTAL CALCULATION */}
         <div className="mt-8 pt-5 border-t-4 border-[#2C2826]">
+          {/* Tambahan Info Payment Method */}
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">
+              Payment Method
+            </span>
+            <span className="text-xs font-bold text-[#4A4541]">
+              {getPaymentLabel(lastPayment?.method)}
+            </span>
+          </div>
+
           <div className="flex justify-between items-center mt-2">
             <span className="text-base font-black uppercase tracking-tighter text-[#2C2826]">
               Total Amount
@@ -193,21 +215,19 @@ const InvoicePage = ({order, setShowInvoice}: InvoicePageProps) => {
               className="flex-1 px-6 py-3 rounded-xl border-2 bg-[#FF6B4A] text-white hover:bg-[#f94f28] transition-all disabled:opacity-50"
             >
               {isLoading ? (
-                      <div className="flex">
-                        <FiLoader className="w-5 h-5 animate-spin" />
-                        <span>Sending Email...</span>
-                      </div>
-                    ) : (
-                      <span>Send Email</span>
-                    )}
-
-              
+                <div className="flex justify-center items-center gap-2">
+                  <FiLoader className="w-4 h-4 animate-spin" />
+                  <span>Sending Email...</span>
+                </div>
+              ) : (
+                <span>Send Email</span>
+              )}
             </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+};;
 
 export default InvoicePage;
