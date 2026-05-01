@@ -7,7 +7,7 @@ import {
   MapPinned,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PickUpAddressModal from "./pickUpAddressModal";
 import DeliveryAddressModal from "./deliveryAddressModal";
 import { useCreateOrder } from "@/features/order-customer/hooks/useCreateOrder";
@@ -16,6 +16,7 @@ import { useGetAddress } from "@/features/address-customer/hooks/useGetAddress";
 import { AddressCustomerDTO } from "@/types/addressCustomer";
 import ErrorMessage from "@/components/errorMessage";
 import { useScheduleOrder } from "@/features/order-customer/hooks/useScheduleOrder";
+import NoOutletModal from "./noOutletModal";
 
 interface FormRequestPickupDTO {
   setShowRequestForm: (value: boolean) => void;
@@ -30,14 +31,15 @@ export default function RequestPickupForm({
     address: addresses,
     isLoading: isFetching,
     isError,
+    
   } = useGetAddress();
 
-  const { formik, isLoading } = useCreateOrder({
+  const {errorType, formik, isLoading } = useCreateOrder({
     setShowRequestForm,
     getOrder,
   });
 
-  const { formik: scheduleFormik, isLoading: isScheduledLoading } =
+  const {errorType: scheduledErrorType, formik: scheduleFormik, isLoading: isScheduledLoading } =
     useScheduleOrder({
       setShowRequestForm,
       getOrder,
@@ -81,6 +83,20 @@ export default function RequestPickupForm({
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split("T")[0];
   };
+
+  const [noOutlet, setNoOutlet] = useState(false)
+
+  useEffect(() => {
+    if (errorType) {
+      setNoOutlet(true);
+    }
+  }, [errorType]);
+
+  useEffect(() => {
+    if (scheduledErrorType) {
+      setNoOutlet(true);
+    }
+  }, [scheduledErrorType]); 
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -328,6 +344,14 @@ export default function RequestPickupForm({
           handleDelivery={handleDelivery}
           isFetching={isFetching}
           isError={isError}
+        />
+      )}
+
+      {/* No Outlet Modal */}
+      {noOutlet && (
+        <NoOutletModal
+        onClose={setNoOutlet}
+        type={scheduleTomorrow ? scheduledErrorType : errorType}
         />
       )}
     </div>

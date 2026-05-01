@@ -16,6 +16,7 @@ export function useScheduleOrder({
   getOrder,
 }: UseCreateOrderDTO) {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorType, setErrorType] = useState<"radius" | "city" | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -27,7 +28,7 @@ export function useScheduleOrder({
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        console.log(values.scheduleTime)
+        setErrorType(null)
 
         await scheduledOrderApi(values);
 
@@ -38,10 +39,20 @@ export function useScheduleOrder({
         getOrder();
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
+        if (
+          error.response?.data?.message === "Outlet not found in pickup city"
+        ) {
+          setErrorType("city");
+        } else if (
+          error.response?.data?.message ===
+          "The nearest outlet is too far from the address"
+        ) {
+          setErrorType("radius");
+        }
       } finally {
         setIsLoading(false);
       }
     },
   });
-  return { formik, isLoading };
+  return {errorType, formik, isLoading };
 }
