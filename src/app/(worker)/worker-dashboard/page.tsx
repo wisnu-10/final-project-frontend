@@ -1,6 +1,5 @@
-"use client"
+"use client";
 import withEmployeeAuth from "@/hoc/withEmployeeAuth";
-import { useState } from "react";
 import Image from "next/image";
 import Logo from "../../../../public/logo-Photoroom.png";
 import useEmployeeStore from "@/stores/useEmployeeStore";
@@ -8,60 +7,122 @@ import {
   ClipboardList,
   History,
   CalendarCheck,
-  Clock,
-  CheckCircle,
-  Loader2,
-  Box,
+  WashingMachine,
+  Wind,
+  Package,
 } from "lucide-react";
 import AttendancePage from "@/components/attendance/attendancePage";
-import { useWorkerTasks, useWorkerHistory } from "@/features/order-worker/hooks/useWorkerTasks";
 import { useAttendanceStatus, useCheckIn, useCheckOut } from "@/features/attendance/hooks/useAttendance";
 import EmployeeProfileLogout from "@/components/dashboard/EmployeeProfileLogout";
+import { useState, useMemo } from "react";
+import { useWorkerTasks, useWorkerHistory } from "@/features/order-worker/hooks/useWorkerTasks";
+import { AvailableTaskCard } from "@/components/order-worker/AvailableTaskCard";
+import { ProcessingCard } from "@/components/order-worker/ProcessingCard";
+import { VerificationWizard } from "@/components/order-worker/VerificationWizard";
 
-const tabList = [
-  { key: "tasks", label: "Available Tasks", icon: ClipboardList },
+const mainTabs = [
+  { key: "available", label: "Available Tasks", icon: ClipboardList },
   { key: "history", label: "Work History", icon: History },
   { key: "attendance", label: "Attendance", icon: CalendarCheck },
 ] as const;
 
-type TabKey = (typeof tabList)[number]["key"];
+const stationTabs = [
+  { key: "washing", label: "Washing", icon: WashingMachine },
+  { key: "ironing", label: "Ironing", icon: Wind },
+  { key: "packing", label: "Packing", icon: Package },
+] as const;
 
 function WorkerDashboard() {
   const { employee } = useEmployeeStore();
-  const [activeTab, setActiveTab] = useState<TabKey>("attendance");
+  const [activeTab, setActiveTab] = useState<typeof mainTabs[number]["key"]>("available");
+  const [activeStation, setActiveStation] = useState<typeof stationTabs[number]["key"]>("washing");
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const {
+    available,
+    myTasks,
+    isLoading,
+    handleAcceptTask,
+    handleCompleteTask,
+    handleBypassRequest,
+  } = useWorkerTasks();
+
+  const { history, isLoading: isHistoryLoading } = useWorkerHistory();
+
+  // Filter available tasks by selected station
+  const filteredAvailable = useMemo(() => {
+    return available.filter((order) => {
+      const status = order.statusLogs?.[0]?.status;
+      // Map arrived_outlet to washing as it's the first step
+      if (activeStation === "washing") return status === "arrived_outlet" || status === "washing";
+      return status === activeStation;
+    });
+  }, [available, activeStation]);
+
+  // Current active task for the worker that matches the active station
+  const filteredMyTasks = useMemo(() => {
+    return myTasks.filter((order) => {
+      const status = order.statusLogs?.find(log => log.finishedAt === null)?.status;
+      // Map arrived_outlet to washing as it's the first step
+      if (activeStation === "washing") return status === "arrived_outlet" || status === "washing";
+      return status === activeStation;
+    });
+  }, [myTasks, activeStation]);
+
+  const currentTask = filteredMyTasks.length > 0 ? filteredMyTasks[0] : null;
 
   return (
-    <div className="min-h-screen bg-[#FAF6F1]">
-      {/* Top Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] rounded-xl flex items-center justify-center shadow-md">
-              <Image src={Logo} alt="Logo" className="w-7 h-auto" />
+    <div className="min-h-screen bg-[#FAF6F1] pb-20">
+      {/* Header Section */}
+      <div className="bg-white shadow-sm sticky top-0 z-20 pt-4 pb-2">
+        <div className="max-w-3xl mx-auto px-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-[#FF6B4A] rounded-2xl flex items-center justify-center shadow-lg shadow-[#FF6B4A]/20">
+                <Image src={Logo} alt="Logo" className="w-8 h-auto" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-[#2C2826] capitalize">
+                  {activeStation} Station
+                </h1>
+                <p className="text-xs text-[#6B6662] font-medium">Worker Dashboard</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-[#2C2826]">Washing Station</h1>
-              <p className="text-xs text-[#6B6662]">Worker Dashboard</p>
-            </div>
+            <EmployeeProfileLogout color="from-[#FF6B4A] to-[#FF8E72]" />
           </div>
-          <EmployeeProfileLogout />
         </div>
 
-        {/* Tab Navigation */}
-        <div className="max-w-3xl mx-auto px-4 pb-3">
-          <div className="flex gap-2">
-            {tabList.map((tab) => (
+        {/* Main Navigation Tabs */}
+        <div className="max-w-3xl mx-auto px-4 mb-4">
+          <div className="flex bg-[#F3F0EC] p-1.5 rounded-[20px] gap-1">
+            {mainTabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className="flex-1 py-2.5 px-2 rounded-xl text-xs font-semibold transition-all duration-200 flex flex-col items-center gap-1"
-                style={{
-                  background: activeTab === tab.key ? "#4A90D9" : "#F8F8F8",
-                  color: activeTab === tab.key ? "#fff" : "#6B6662",
-                  boxShadow: activeTab === tab.key ? "0 4px 12px rgba(74,144,217,0.2)" : "none",
-                }}
+                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] text-xs font-bold transition-all ${activeTab === tab.key
+                    ? "bg-white text-[#4A90D9] shadow-sm"
+                    : "text-[#6B6662] hover:text-[#4A90D9]"
+                  }`}
               >
-                <tab.icon className="w-4 h-4" />
+                <tab.icon className={`w-4 h-4 ${activeTab === tab.key ? "text-[#4A90D9]" : ""}`} />
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Station Tabs */}
+        <div className="max-w-3xl mx-auto px-4 overflow-x-auto">
+          <div className="flex gap-3 pb-2 min-w-max">
+            {stationTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveStation(tab.key)}
+                className={`flex items-center gap-2 px-8 py-3 rounded-2xl text-xs font-bold transition-all border ${activeStation === tab.key
+                    ? "bg-[#FFF5F2] border-[#FFE5DE] text-[#FF6B4A]"
+                    : "bg-white border-[#E8E2DA] text-[#6B6662] hover:bg-gray-50"
+                  }`}
+              >
                 {tab.label}
               </button>
             ))}
@@ -69,16 +130,104 @@ function WorkerDashboard() {
         </div>
       </div>
 
-      {/* Quick Attendance Action */}
-      <div className="max-w-3xl mx-auto px-4 mt-6">
-        <QuickAttendance />
-      </div>
+      <div className="max-w-3xl mx-auto px-6 py-8">
+        {/* Available Tasks Tab */}
+        {activeTab === "available" && (
+          <div>
+            <h2 className="text-xl font-bold text-[#2C2826] mb-6">Available Tasks</h2>
 
-      {/* Tab Content */}
-      <div className="max-w-3xl mx-auto px-4 py-6">
-        {activeTab === "attendance" && <AttendancePage roleLabel="Worker" />}
-        {activeTab === "tasks" && <AvailableTasksView />}
-        {activeTab === "history" && <WorkHistoryView />}
+            {/* If has active task, show processing view */}
+            {currentTask ? (
+              isVerifying ? (
+                <VerificationWizard
+                  order={currentTask}
+                  onSubmit={(counts) => {
+                    handleCompleteTask(currentTask.id);
+                    setIsVerifying(false);
+                  }}
+                  onBypass={(counts, list) => {
+                    handleBypassRequest(currentTask.id, {
+                      notes: list.join(", "),
+                      expectedQuantity: currentTask.orderItems?.reduce((sum, i) => sum + i.quantity, 0) || 0,
+                      actualQuantity: Object.values(counts).reduce((sum, v) => sum + v, 0),
+                      station: activeStation,
+                    }).then((success) => {
+                      if (success) {
+                        alert("Bypass request sent to admin for approval");
+                        setIsVerifying(false);
+                      }
+                    });
+                  }}
+                  onCancel={() => setIsVerifying(false)}
+                />
+              ) : (
+                <ProcessingCard
+                  order={currentTask}
+                  onComplete={() => setIsVerifying(true)}
+                />
+              )
+            ) : (
+              /* If no active task, show available list */
+              <div className="space-y-4">
+                {isLoading ? (
+                  <div className="flex flex-col items-center justify-center py-20 opacity-50">
+                    <div className="w-10 h-10 border-4 border-[#FF6B4A]/30 border-t-[#FF6B4A] rounded-full animate-spin mb-4" />
+                    <p className="text-sm font-medium text-[#6B6662]">Loading tasks...</p>
+                  </div>
+                ) : filteredAvailable.length > 0 ? (
+                  filteredAvailable.map((order) => (
+                    <AvailableTaskCard
+                      key={order.id}
+                      order={order}
+                      onAccept={handleAcceptTask}
+                      isAccepting={isLoading}
+                    />
+                  ))
+                ) : (
+                  <div className="bg-white rounded-[32px] p-12 text-center border border-dashed border-[#E8E2DA]">
+                    <p className="text-[#6B6662] font-medium">No tasks available in {activeStation}</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* History Tab */}
+        {activeTab === "history" && (
+          <div>
+            <h2 className="text-xl font-bold text-[#2C2826] mb-6">Work History</h2>
+            <div className="space-y-4">
+              {isHistoryLoading ? (
+                <p>Loading history...</p>
+              ) : history.length > 0 ? (
+                history.map((order) => (
+                  <div key={order.id} className="bg-white rounded-[24px] p-6 border border-[#E8E2DA] shadow-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="font-bold text-[#2C2826]">#{order.id.slice(0, 4)}</p>
+                      <span className="bg-[#EEF9F2] text-[#4CAF50] text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                        Completed
+                      </span>
+                    </div>
+                    <p className="text-sm text-[#6B6662]">
+                      {order.customer?.firstName} {order.customer?.lastName}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-[#6B6662] py-20">No history yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Attendance Tab */}
+        {activeTab === "attendance" && (
+          <div className="space-y-6">
+            <QuickAttendance />
+            <AttendancePage roleLabel="Worker" />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -95,29 +244,27 @@ function QuickAttendance() {
   if (isCheckedOut) return null;
 
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E2DA] flex items-center justify-between">
+    <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#E8E2DA] flex items-center justify-between">
       <div>
-        <h3 className="text-sm font-bold text-[#2C2826]">Quick Status</h3>
-        <p className="text-xs text-[#6B6662]">
-          {!isCheckedIn ? "Anda belum check-in" : "Anda sedang bertugas"}
+        <h3 className="text-lg font-bold text-[#2C2826]">Quick Attendance</h3>
+        <p className="text-sm text-[#6B6662]">
+          {!isCheckedIn ? "You haven't checked in yet" : "You are currently on duty"}
         </p>
       </div>
       {!isCheckedIn ? (
         <button
           onClick={() => handleCheckIn(refetch)}
           disabled={cILoading}
-          className="px-6 py-2 rounded-xl bg-[#4A90D9] text-white text-sm font-bold shadow-md hover:bg-[#3A80C9] transition-colors flex items-center gap-2"
+          className="px-8 py-3 rounded-2xl bg-[#4A90D9] text-white text-sm font-bold shadow-lg shadow-[#4A90D9]/20 transition-all active:scale-95"
         >
-          {cILoading && <Loader2 className="w-4 h-4 animate-spin" />}
           Check In
         </button>
       ) : (
         <button
           onClick={() => handleCheckOut(refetch)}
           disabled={cOLoading}
-          className="px-6 py-2 rounded-xl bg-[#FF6B4A] text-white text-sm font-bold shadow-md hover:bg-[#EF5B3A] transition-colors flex items-center gap-2"
+          className="px-8 py-3 rounded-2xl bg-[#FF6B4A] text-white text-sm font-bold shadow-lg shadow-[#FF6B4A]/20 transition-all active:scale-95"
         >
-          {cOLoading && <Loader2 className="w-4 h-4 animate-spin" />}
           Check Out
         </button>
       )}
@@ -125,117 +272,4 @@ function QuickAttendance() {
   );
 }
 
-function AvailableTasksView() {
-  const { available, myOrders, isLoading, handleAcceptTask, handleCompleteTask } = useWorkerTasks();
-
-  if (isLoading) return <LoadingState />;
-
-  return (
-    <div className="flex flex-col gap-6">
-      {/* Assigned Tasks */}
-      {myOrders.length > 0 && (
-        <section>
-          <h3 className="text-base font-bold text-[#2C2826] mb-3 px-1">Tugas Anda</h3>
-          <div className="flex flex-col gap-3">
-            {myOrders.map((task: any) => (
-              <div key={task.orderId} className="bg-white rounded-2xl p-5 shadow-sm border border-[#4A90D9]">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-blue-50 text-blue-700 uppercase">
-                    Station: {task.currentStation}
-                  </span>
-                  <span className="text-xs text-[#6B6662] font-medium">#{task.orderId.slice(0, 8)}</span>
-                </div>
-                <h4 className="font-bold text-[#2C2826] mb-4">{task.customerName}</h4>
-                <button
-                  onClick={() => handleCompleteTask(task.orderId)}
-                  className="w-full py-3 rounded-xl bg-[#10b981] text-white text-sm font-bold shadow-sm flex items-center justify-center gap-2"
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  Selesaikan Station
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Available for Pickup */}
-      <section>
-        <h3 className="text-base font-bold text-[#2C2826] mb-3 px-1">Tersedia untuk Dikerjakan</h3>
-        {available.length === 0 ? (
-          <EmptyTasks label="Belum ada tugas tersedia di outlet ini" />
-        ) : (
-          <div className="flex flex-col gap-3">
-            {available.map((task) => (
-              <div key={task.id} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E2DA]">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-green-50 text-green-700 uppercase">
-                    SIAP: {task.statusLogs?.[0]?.status}
-                  </span>
-                  <span className="text-xs text-[#6B6662] font-medium">#{task.id.slice(0, 8)}</span>
-                </div>
-                <h4 className="font-bold text-[#2C2826] mb-4">{task.customer?.firstName} {task.customer?.lastName}</h4>
-                <button
-                  onClick={() => handleAcceptTask(task.id)}
-                  className="w-full py-3 rounded-xl border border-[#4A90D9] text-[#4A90D9] text-sm font-bold hover:bg-[#4A90D9] hover:text-white transition-all"
-                >
-                  Ambil Tugas
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-    </div>
-  );
-}
-
-function WorkHistoryView() {
-  const { history, isLoading } = useWorkerHistory();
-
-  if (isLoading) return <LoadingState />;
-
-  return (
-    <div className="flex flex-col gap-4">
-      <h3 className="text-base font-bold text-[#2C2826] px-1">Riwayat Pekerjaan</h3>
-      {history.length === 0 ? (
-        <EmptyTasks label="Belum ada riwayat pekerjaan" />
-      ) : (
-        <div className="divide-y divide-[#F0EBE6] bg-white rounded-2xl shadow-sm border border-[#E8E2DA] overflow-hidden">
-          {history.map((log) => (
-            <div key={log.id} className="p-4 hover:bg-[#FAFAFA] transition-colors">
-              <div className="flex justify-between items-start mb-1">
-                <h4 className="font-bold text-sm text-[#2C2826]">{log.order?.customer?.firstName} {log.order?.customer?.lastName}</h4>
-                <span className="text-[10px] text-[#6B6662]">{new Date(log.finishedAt).toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] text-[#6B6662]">#{log.orderId.slice(0, 8)}</p>
-                <span className="text-[10px] font-bold text-[#4A90D9] uppercase">{log.status}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function LoadingState() {
-  return (
-    <div className="py-20 flex flex-col items-center justify-center gap-3">
-      <Loader2 className="w-8 h-8 text-[#4A90D9] animate-spin" />
-      <p className="text-sm text-[#6B6662]">Memuat data...</p>
-    </div>
-  );
-}
-
-function EmptyTasks({ label }: { label: string }) {
-  return (
-    <div className="bg-white rounded-2xl p-12 shadow-sm border border-dashed border-[#E8E2DA] text-center">
-      <Box className="w-10 h-10 text-[#CBD5E0] mx-auto mb-3" />
-      <p className="text-sm text-[#6B6662]">{label}</p>
-    </div>
-  );
-}
-
-export default withEmployeeAuth(WorkerDashboard, ["worker"]);
+export default withEmployeeAuth(WorkerDashboard, ["worker"], "/auth-employee");

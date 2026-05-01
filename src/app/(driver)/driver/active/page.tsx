@@ -140,11 +140,10 @@ function ActiveOrderPage() {
               <div key={log.id} className="flex gap-3">
                 <div className="flex flex-col items-center">
                   <div
-                    className={`w-3 h-3 rounded-full ${
-                      log.finishedAt
-                        ? "bg-green-500"
-                        : "bg-blue-500 animate-pulse"
-                    }`}
+                    className={`w-3 h-3 rounded-full ${log.finishedAt
+                      ? "bg-green-500"
+                      : "bg-blue-500 animate-pulse"
+                      }`}
                   />
                   {idx < (activeOrder.statusLogs?.length || 0) - 1 && (
                     <div className="w-0.5 h-8 bg-gray-300 my-1" />
