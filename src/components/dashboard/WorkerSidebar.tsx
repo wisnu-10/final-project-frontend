@@ -47,11 +47,10 @@ export default function WorkerSidebar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${
-                isActive
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium text-sm ${isActive
                   ? "bg-[#ff7143]/10 text-[#ff7143]"
                   : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-              }`}
+                }`}
             >
               <link.icon
                 className={`w-5 h-5 ${isActive ? "text-[#ff7143]" : "text-gray-400"}`}
