@@ -1,6 +1,6 @@
 import { createAddressApi } from "@/features/address-customer/api/createAddress.api";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { createOrderApi } from "../api/createOrder.api";
 import { createOrderSchema } from "../validation/createOrderSchema";
@@ -15,6 +15,7 @@ export function useCreateOrder({
   getOrder,
 }: UseCreateOrderDTO) {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorType, setErrorType] = useState<"radius" | "city" | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -26,6 +27,7 @@ export function useCreateOrder({
     onSubmit: async (values) => {
       try {
         setIsLoading(true);
+        setErrorType(null);
 
         await createOrderApi(values);
 
@@ -36,10 +38,20 @@ export function useCreateOrder({
         getOrder();
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
+        if(error.response?.data?.message === "Outlet not found in pickup city"){
+          setErrorType("city")
+        } else if (
+          error.response?.data?.message ===
+          "The nearest outlet is too far from the address"
+        ) {
+          setErrorType("radius");
+        }
+
       } finally {
         setIsLoading(false);
       }
     },
   });
-  return { formik, isLoading };
+  
+  return {errorType, formik, isLoading };
 }

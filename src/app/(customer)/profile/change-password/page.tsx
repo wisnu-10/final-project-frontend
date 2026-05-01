@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
   const [confirmShow, setConfirmShow] = useState(false);
 
   return (
-    <div className="pt-25 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
+    <div className="pt-40 pb-30 min-h-screen bg-[#FDFCFB] flex flex-col justify-center items-center p-6">
       <div className="absolute top-25 left-8 ">
         <BackLink link="/profile" page="Profile" />
       </div>
@@ -42,8 +42,7 @@ export default function ForgotPasswordPage() {
             Change Passowod
           </h1>
           <p className="text-sm text-[#6B6662] max-w-xs mx-auto">
-            To ensure your account's security, please enter your current
-            password first. Make sure it matches your existing password before
+            Make sure it matches your existing password before
             proceeding to create a new one.
           </p>
         </div>
