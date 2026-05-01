@@ -24,8 +24,6 @@ export default function ResponseComplaint() {
 
   if (error) return <PageError />;
 
-  console.log(data)
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-3xl max-w-md w-full p-8 max-h-[90vh] overflow-y-auto">
@@ -38,7 +36,7 @@ export default function ResponseComplaint() {
             <ShieldCheck className="w-10 h-10 text-green-600" />
           </div>
           <h2 className="text-3xl font-black text-[#2C2826] tracking-tight">
-            Complaint Solved!
+            Review Completed
           </h2>
           <p className="text-sm text-[#6B6662] mt-1 font-medium italic">
             Check the resolution from our team below
@@ -54,9 +52,6 @@ export default function ResponseComplaint() {
             <p className="text-sm font-bold text-[#2C2826]">
               {data?.invoiceNumber}
             </p>
-          </div>
-          <div className="bg-green-600 text-white px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-tighter shadow-md shadow-green-200">
-            {data?.complaints[data.complaints.length - 1]?.status}
           </div>
         </div>
 

@@ -19,7 +19,9 @@ body {
 }
 
 /* Ensure inputs, textareas, and selects always have dark text in the main app to match the light theme design */
-input, textarea, select {
+input,
+textarea,
+select {
   color: #171717;
   background-color: #ffffff;
 }
@@ -28,3 +30,32 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Custom floating animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delay-1 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-float-delay-2 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-float-delay-3 {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
