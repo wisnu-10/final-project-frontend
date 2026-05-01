@@ -32,7 +32,7 @@ import ButtonResponse from "@/components/buttonResponse";
 interface OrderListProps {
   setShowPaymentModal: (show: boolean) => void;
   setSelectedOrder: (order: any | null) => void;
-  order: any; // Sekarang nerima single order object dari parent
+  order: any;
   isLoading?: boolean;
   isError?: boolean;
   getOrder?: (params?: any) => Promise<void>;
@@ -47,11 +47,8 @@ export default function OrderList({
   getOrder,
 }: OrderListProps) {
   const { isLoading: isConfirming, confirmOrder } = useConfirmOrder();
-
   const [showPayment, setShowPayment] = useState(false);
-
   const [showInvoice, setShowInvoice] = useState(false);
-
   const { createPayment, isLoading: isPayment } = useCreatePayment();
 
   const handlePayment = () => {
@@ -59,32 +56,64 @@ export default function OrderList({
   };
 
   if (isError) return <PageError />;
-
   if (isLoading || !order) return <Loading />;
 
-  const statusKey =
-    order.statusLogs?.[order.statusLogs.length - 1]?.status?.toLowerCase() ||
-    "";
-  const config = getStatusConfig(statusKey);
+  const statusLogs = order?.statusLogs || [];
+  const lastStatus =
+    statusLogs.length > 0
+      ? statusLogs[statusLogs.length - 1]?.status?.toLowerCase()
+      : "";
+
+  const complaints = order?.complaints || [];
+  const lastComplaint =
+    complaints.length > 0 ? complaints[complaints.length - 1] : null;
+
+  const payments = order?.payments || [];
+  const lastPayment =
+    payments.length > 0 ? payments[payments.length - 1] : null;
+
+  const config = getStatusConfig(lastStatus);
   const StatusIcon = config.icon;
 
   const formatScheduleDateTime = (dateString: string) => {
+    if (!dateString) return "-";
     const date = new Date(dateString);
-
     const datePart = date.toLocaleDateString("id-ID", {
       day: "numeric",
       month: "short",
       year: "numeric",
     });
-
     const timePart = date.toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     });
-
     return `${datePart} - ${timePart}`;
   };
+
+  const methodPaymentConfig = (status: string) => {
+    switch (status) {
+      case "qris": {
+        return {
+          label: "QRIS",
+        };
+      }
+      case "bank_transfer": {
+        return {
+          label: "Bank Transfer",
+        };
+      }
+      case "ewallet": {
+        return {
+          label: "E-Wallet",
+        };
+      }
+    }
+  }
+
+  const paymentConfig = methodPaymentConfig(lastPayment?.method)
+
+  console.log(paymentConfig?.label)
 
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
@@ -104,7 +133,6 @@ export default function OrderList({
           </div>
         </div>
 
-        {/* ========= Order Detail */}
         <div className="flex flex-col items-end gap-2">
           <div
             className={`flex items-center gap-1 px-3 py-1 rounded-full ${config.bgColor}`}
@@ -120,9 +148,7 @@ export default function OrderList({
           >
             <span>View Details</span>
             <ArrowRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-
-            {/* Garis bawah tipis yang muncul pas di-hover (Modern Look) */}
-            <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#4A90E2] transition-all duration-300 "></span>
+            <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#4A90E2] transition-all duration-300 group-hover:w-full"></span>
           </Link>
         </div>
       </div>
@@ -142,23 +168,29 @@ export default function OrderList({
               : formatIDR(order.totalPrice)}
           </span>
         </div>
+        <div className="flex justify-between text-sm">
+          <span className="text-[#6B6662]">Payment:</span>
+          <span className="font-semibold text-[#2C2826]">
+            {paymentConfig?.label ? paymentConfig?.label : `-`}
+          </span>
+        </div>
         <div className="pt-4 border-t border-[#E5DDD3]">
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div>
               <p className="text-[#6B6662] mb-1">Pickup:</p>
               <p className="text-[#2C2826] font-medium">
-                {order?.pickupAddress.address},{" "}
-                {order?.pickupAddress.cityName
-                  .toLowerCase()
+                {order?.pickupAddress?.address},{" "}
+                {order?.pickupAddress?.cityName
+                  ?.toLowerCase()
                   .replace(/\b\w/g, (c: any) => c.toUpperCase())}
               </p>
             </div>
             <div>
               <p className="text-[#6B6662] mb-1">Delivery:</p>
               <p className="text-[#2C2826] font-medium">
-                {order?.deliveryAddress.address},{" "}
-                {order?.deliveryAddress.cityName
-                  .toLowerCase()
+                {order?.deliveryAddress?.address},{" "}
+                {order?.deliveryAddress?.cityName
+                  ?.toLowerCase()
                   .replace(/\b\w/g, (c: any) => c.toUpperCase())}
               </p>
             </div>
@@ -167,42 +199,36 @@ export default function OrderList({
       </div>
 
       {/* --- ACTION SECTION --- */}
-      {order?.statusLogs[order?.statusLogs.length - 1]?.status ===
-        "scheduled" && (
+
+      {lastStatus === "scheduled" && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Laundry will be pickup
           at {formatScheduleDateTime(order?.scheduleTime)}
         </div>
       )}
 
-      {(order?.statusLogs[order?.statusLogs.length - 1]?.status ===
-        "waiting_pickup" ||
-        order?.statusLogs[order?.statusLogs.length - 1]?.status ===
-          "on_the_way_to_outlet") && (
+      {(lastStatus === "waiting_pickup" ||
+        lastStatus === "on_the_way_to_outlet") && (
         <div className="w-full px-4 py-3 rounded-xl bg-gray-100 text-[#6B6662] font-semibold flex items-center justify-center gap-2 border border-dashed border-gray-300">
           <Clock className="w-4 h-4 animate-spin-slow" /> Waiting for driver to
           arrive at outlet...
         </div>
       )}
 
-      {order?.statusLogs[order?.statusLogs.length - 1]?.status ===
-        "arrived_outlet" &&
-        !order?.totalPrice && (
-          <div className="w-full px-4 py-3 rounded-xl bg-orange-50 text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 border border-[#FF6B4A]">
-            <Package className="w-4 h-4" /> Awaiting admin price review...
-          </div>
-        )}
+      {lastStatus === "arrived_outlet" && !order?.totalPrice && (
+        <div className="w-full px-4 py-3 rounded-xl bg-orange-50 text-[#FF6B4A] font-semibold flex items-center justify-center gap-2 border border-[#FF6B4A]">
+          <Package className="w-4 h-4" /> Awaiting admin price review...
+        </div>
+      )}
 
-      {order.totalPrice > 0 &&
-        order.payments[order.payments.length - 1]?.status === "pending" &&
-        !["delivering", "completed"].includes(
-          order.statusLogs[order.statusLogs.length - 1].status,
-        ) && (
+      {order?.totalPrice > 0 &&
+        lastPayment?.status === "pending" &&
+        !["delivering", "completed"].includes(lastStatus) && (
           <div>
             <button
               disabled={isPayment}
               onClick={handlePayment}
-              className="w-full px-4 py-3 rounded-xl bg-[#FF6B4A] text-white font-semibold hover:bg-[#FF5533] transition-all shadow-lg flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed shadow-md hover:shadow-lg focus:ring-4 focus:ring-[#FFF0ED] hover:scale-[1.02]"
+              className="w-full px-4 py-3 rounded-xl bg-[#FF6B4A] text-white font-semibold hover:bg-[#FF5533] transition-all shadow-md flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed hover:scale-[1.02]"
             >
               {isPayment ? (
                 <div className="flex gap-2">
@@ -221,43 +247,34 @@ export default function OrderList({
           </div>
         )}
 
-      {order.payments[order.payments.length - 1]?.status === "paid" &&
-        order.statusLogs[order.statusLogs.length - 1].status !== "delivering" &&
-        order.statusLogs[order.statusLogs.length - 1].status !==
-          "completed" && (
+      {lastPayment?.status === "paid" &&
+        !["delivering", "completed"].includes(lastStatus) && (
           <div className="space-y-3">
             <button
               onClick={() => setShowInvoice(true)}
-              className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] duration-300 text-white font-bold hover:shadow-xl transition-all shadow-lg flex items-center justify-center"
+              className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] text-white font-bold transition-all shadow-lg flex items-center justify-center"
             >
-              <span className="w-5 h-5" /> View Invoice
+              View Invoice
             </button>
             <div className="flex items-center justify-center gap-2 text-[10px] mt-3 text-center italic">
-              <Truck className="w-3 h-3 text-blue-600 flex-shrink-0" />
-              <p className=" text-blue-800 leading-relaxed">
+              <Truck className="w-3 h-3 text-blue-600" />
+              <p className="text-blue-800">
                 Your laundry is now in the queue. We'll deliver it soon!
               </p>
             </div>
           </div>
         )}
 
-      {order.statusLogs[order.statusLogs.length - 1]?.status ===
-        "delivering" && (
+      {lastStatus === "delivering" && (
         <div>
           <button
             onClick={() =>
               confirmOrder(order.id, async () => {
-                if (getOrder) {
-                  await getOrder();
-                }
+                if (getOrder) await getOrder();
               })
             }
             disabled={isConfirming}
-            className={`w-full px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all shadow-sm ${
-              isConfirming
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-600 text-white hover:bg-green-700"
-            }`}
+            className={`w-full px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all shadow-sm ${isConfirming ? "bg-gray-400" : "bg-green-600 text-white hover:bg-green-700"}`}
           >
             {isConfirming ? (
               "Processing..."
@@ -267,12 +284,10 @@ export default function OrderList({
               </>
             )}
           </button>
-
           <p className="text-[10px] text-gray-500 mt-3 text-center italic">
             Auto-confirmed in 3 days if no complaint
           </p>
-
-          {!order?.complaints[order.complaints.length - 1]?.adminResponse ? (
+          {!lastComplaint || !lastComplaint.adminResponse ? (
             <ButtonComplaint id={order.id} />
           ) : (
             <ButtonResponse isLoading={isLoading} id={order.id} />
@@ -280,16 +295,15 @@ export default function OrderList({
         </div>
       )}
 
-      {order.statusLogs[order.statusLogs.length - 1].status === "completed" && (
+      {lastStatus === "completed" && (
         <div className="space-y-3">
           <button
             onClick={() => setShowInvoice(true)}
-            className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] duration-300 text-white font-bold hover:shadow-xl transition-all shadow-lg flex items-center justify-center"
+            className="w-full px-4 py-3 rounded-xl bg-[#4A90E2] hover:bg-[#2d84e7] text-white font-bold shadow-lg flex items-center justify-center"
           >
-            <span className="w-5 h-5" /> View Invoice
+            View Invoice
           </button>
-
-          {!order?.complaints[order.complaints.length - 1]?.adminResponse ? (
+          {!lastComplaint || !lastComplaint.adminResponse ? (
             <ButtonComplaint id={order.id} />
           ) : (
             <ButtonResponse isLoading={isLoading} id={order.id} />
@@ -297,14 +311,9 @@ export default function OrderList({
         </div>
       )}
 
-      {showInvoice === true && (
+      {showInvoice && (
         <InvoicePage order={order} setShowInvoice={setShowInvoice} />
       )}
-
-      {/* Payment Modal */}
-      {/* {showPayment && (
-        <PaymentModal order={order} setShowPayment={setShowPayment} />
-      )} */}
     </div>
   );
 }

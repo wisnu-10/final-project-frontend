@@ -26,7 +26,7 @@ export default function CustomerProfile() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click(); // Pas tombol kamera diklik, dia bakal klik input file yang tersembunyi
+    fileInputRef.current?.click(); 
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,17 +60,15 @@ export default function CustomerProfile() {
                 <img
                   src={previewUrl}
                   alt="Preview"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full rounded-full object-cover"
                 />
               ) : profile?.profilePicture ? (
-                
                 <img
                   src={profile.profilePicture}
                   alt="Profile"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                
                 <>
                   {profile?.firstName?.[0]}
                   {profile?.lastName?.[0]}

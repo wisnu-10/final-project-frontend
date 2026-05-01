@@ -25,6 +25,12 @@ export interface Order {
   customer?: {
     firstName: string;
     lastName: string;
+    email?: string;
+    phoneNumber?: string;
+  };
+  outlet?: {
+    name: string;
+    address: string;
   };
   outletId: string;
   currentStation?: string;
