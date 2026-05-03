@@ -24,6 +24,7 @@ export function useFormLoginEmployee() {
         const employee = await loginEmployeeApi(values);
 
         setEmployee({
+          id: employee.id,
           firstName: employee.firstName,
           lastName: employee.lastName || "",
           email: employee.email,

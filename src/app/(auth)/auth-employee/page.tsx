@@ -275,37 +275,6 @@ export default function EmployeeAuthPage() {
               )}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 mt-8">
-            <div className="flex-1 h-px bg-[#E2E8F0]" />
-            <span className="text-xs text-[#94A3B8]">
-              Need help?
-            </span>
-            <div className="flex-1 h-px bg-[#E2E8F0]" />
-          </div>
-
-          {/* Help text */}
-          <p className="text-center text-sm text-[#64748B] mt-4">
-            Forgot your password? Contact your{" "}
-            <span className="text-[#3B82F6] font-medium">
-              outlet administrator
-            </span>{" "}
-            to reset it.
-          </p>
-
-          {/* Customer login link */}
-          <div className="mt-6 p-4 rounded-xl bg-[#F1F5F9] border border-[#E2E8F0] text-center">
-            <p className="text-sm text-[#64748B]">
-              Are you a customer?{" "}
-              <Link
-                href="/auth"
-                className="text-[#FF6B4A] font-semibold hover:text-[#FF5533] transition-colors"
-              >
-                Sign in here →
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>

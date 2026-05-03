@@ -84,7 +84,7 @@ export default function NavBar() {
             <>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 group px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-sm border-2 border-[#FF6B4A] transition-all"
+                className="hidden md:flex items-center gap-2 group px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-sm border-2 border-[#FF6B4A] transition-all"
               >
                 {isLoading ? (
                   <FiLoader className="w-4 h-4 animate-spin" />
@@ -105,7 +105,7 @@ export default function NavBar() {
                   <div className="absolute -inset-0.5 bg-linear-to-r from-[#FF6B4A] to-[#FF8E72] rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
 
                   {/* Avatar Box */}
-                  <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+                  <div className="relative w-10 h-10 rounded-full bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
                     {user.profilePicture ? (
                       <img
                         src={user.profilePicture}
@@ -161,6 +161,18 @@ export default function NavBar() {
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
                       >
                         <FiMapPin className="w-4 h-4" /> My Address
+                      </button>
+
+                      <button
+                        onClick={handleLogout}
+                        className="md:hidden w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors border-t border-gray-100 mt-1"
+                      >
+                        {isLoading ? (
+                          <FiLoader className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <FiLogOut className="w-4 h-4" />
+                        )}
+                        Logout
                       </button>
                     </div>
                   </div>

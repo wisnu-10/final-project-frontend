@@ -40,6 +40,8 @@ export interface Order {
   orderItems?: OrderItem[];
   pickupAddress?: any;
   deliveryAddress?: any;
+  driverPickupId?: string | null;
+  driverDeliveryId?: string | null;
 }
 
 export interface DriverTasksResponse {
