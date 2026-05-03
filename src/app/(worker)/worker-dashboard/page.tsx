@@ -78,7 +78,7 @@ function WorkerDashboard() {
         <div className="max-w-3xl mx-auto px-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-[#FF6B4A] rounded-2xl flex items-center justify-center shadow-lg shadow-[#FF6B4A]/20">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-[#FF6B4A]/20">
                 <Image src={Logo} alt="Logo" className="w-8 h-auto" />
               </div>
               <div>

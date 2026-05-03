@@ -37,5 +37,23 @@ export default function useRegionData(selectedProvinceId?: string | number, sele
     }
   }, [selectedCityId]);
 
-  return { provinces, cities, districts };
+  const fetchCities = async (pId: string | number) => {
+    const res = await getCitiesApi(pId);
+    if (res.success) {
+      setCities(res.data);
+      return res.data;
+    }
+    return [];
+  };
+
+  const fetchDistricts = async (cId: string | number) => {
+    const res = await getDistrictsApi(cId);
+    if (res.success) {
+      setDistricts(res.data);
+      return res.data;
+    }
+    return [];
+  };
+
+  return { provinces, cities, districts, fetchCities, fetchDistricts };
 }

@@ -13,4 +13,6 @@ export const OutletSchema = Yup.object().shape({
    maxServiceDistance: Yup.number().min(0).required("Required"),
   isActive: Yup.boolean().required("Required"),
   pricePerKg: Yup.number().min(0).required("Required"),
+  latitude: Yup.number().required("Required"),
+  longitude: Yup.number().required("Required"),
 });
