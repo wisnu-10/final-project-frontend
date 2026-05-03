@@ -21,7 +21,7 @@ export function OrderCard({
   showTime = true,
 }: OrderCardProps) {
   const currentStatus =
-    order.statusLogs?.[order.statusLogs.length - 1]?.status || "unknown";
+    order.statusLogs?.[0]?.status || "unknown";
   const createdDate = new Date(order.createdAt);
   const customerName = order.customer?.firstName
     ? `${order.customer.firstName} ${order.customer.lastName}`

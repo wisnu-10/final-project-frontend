@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 type EmployeeData = {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;

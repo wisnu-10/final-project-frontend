@@ -11,6 +11,10 @@ import { FiLoader } from "react-icons/fi";
 import BackLink from "@/components/backLink";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useAuthStore from "@/stores/useAuthStore";
+import axiosInstance from "@/utils/axiosInstance";
+import toast from "react-hot-toast";
+import { FiLogOut } from "react-icons/fi";
 
 export default function CustomerProfile() {
   const router = useRouter();
@@ -18,10 +22,26 @@ export default function CustomerProfile() {
 
   const { profile, isLoading, isError, getProfile } = useGetProfile();
 
+  const { clearAuth } = useAuthStore();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   const { formik, isUpdating, isEditMode, setIsEditMode } = useUpdateProfile(
     profile,
     getProfile,
   );
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await axiosInstance.post("/auth/logout");
+      clearAuth();
+      router.push("/auth");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -233,6 +253,22 @@ export default function CustomerProfile() {
             </div>
           </div>
         ) : null}
+
+        <div className="md:hidden mt-4">
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-white border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition-all shadow-sm"
+          >
+            {isLoggingOut ? (
+              <FiLoader className="w-5 h-5 animate-spin" />
+            ) : (
+              <FiLogOut className="w-5 h-5" />
+            )}
+            Logout
+          </button>
+        </div>
       </form>
     </div>
   );

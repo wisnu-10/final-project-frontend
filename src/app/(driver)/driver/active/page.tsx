@@ -19,10 +19,12 @@ import { StatusBadge } from "@/components/order-driver/StatusBadge";
 import { ClipboardList } from "lucide-react";
 import toast from "react-hot-toast";
 import withEmployeeAuth from "@/hoc/withEmployeeAuth";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 
 function ActiveOrderPage() {
   const { myTasks, isLoading, handleCompletePickup, handleCompleteDelivery } =
     useDriverTasks();
+  const { employee } = useEmployeeStore();
   const [completingOrderId, setCompletingOrderId] = useState<string | null>(
     null,
   );
@@ -32,9 +34,8 @@ function ActiveOrderPage() {
   }
 
   const activeOrder = myTasks.length > 0 ? myTasks[0] : null;
-  const isOnDelivery = activeOrder?.statusLogs?.some(
-    (log) => log.status === "delivering" && !log.finishedAt,
-  );
+  // Deteksi apakah ini delivery dengan pengecekan yang lebih aman
+  const isOnDelivery = !!(activeOrder?.driverDeliveryId && employee?.id && activeOrder.driverDeliveryId === employee.id);
 
   const handleComplete = async () => {
     if (!activeOrder) return;

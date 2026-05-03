@@ -101,10 +101,20 @@ export default function OutletAdminOrderDetailPage({
   const canProcess = latestStatus === "arrived_outlet";
   const canAdvance = !!nextStatus;
 
-  const handleAdvanceStatus = () => {
+  const latestLog = order.statusLogs?.[order.statusLogs.length - 1];
+  const hasWorker = !!latestLog?.workerId;
+  const isWorkerStation = ["washing", "ironing", "packing"].includes(latestStatus);
+  const canAssignWorker = !hasWorker && isWorkerStation;
+
+  const handleUpdateStatusAction = () => {
     if (!selectedWorkerId) return;
-    if (!nextStatus) return;
-    handleUpdateStatus(id, { status: nextStatus, workerId: selectedWorkerId });
+    
+    // Jika canAssignWorker, kita kirim status yang sama
+    // Jika tidak, kita kirim nextStatus
+    const targetStatus = canAssignWorker ? latestStatus : nextStatus;
+    if (!targetStatus) return;
+
+    handleUpdateStatus(id, { status: targetStatus, workerId: selectedWorkerId });
     setShowStatusModal(false);
     setSelectedWorkerId("");
   };
@@ -143,7 +153,17 @@ export default function OutletAdminOrderDetailPage({
             Process Order
           </Link>
         )}
-        {canAdvance && (
+        {canAssignWorker && (
+          <button
+            onClick={() => setShowStatusModal(true)}
+            disabled={statusLoading}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm disabled:opacity-50"
+          >
+            <FiUser className="w-4 h-4" />
+            Assign Worker to {statusConfig.label}
+          </button>
+        )}
+        {canAdvance && hasWorker && (
           <button
             onClick={() => setShowStatusModal(true)}
             disabled={statusLoading}
@@ -160,7 +180,9 @@ export default function OutletAdminOrderDetailPage({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5">
             <h3 className="text-lg font-bold text-gray-800">
-              Update Status to &ldquo;{getStatusConfig(nextStatus).label}&rdquo;
+              {canAssignWorker 
+                ? `Assign Worker to "${statusConfig.label}"`
+                : `Update Status to "${getStatusConfig(nextStatus).label}"`}
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -190,7 +212,7 @@ export default function OutletAdminOrderDetailPage({
                 Cancel
               </button>
               <button
-                onClick={handleAdvanceStatus}
+                onClick={handleUpdateStatusAction}
                 disabled={!selectedWorkerId || statusLoading}
                 className="px-4 py-2 bg-[#ff7143] hover:bg-[#e05e32] text-white rounded-xl transition-colors text-sm font-medium disabled:opacity-50"
               >
