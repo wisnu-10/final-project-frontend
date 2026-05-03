@@ -25,6 +25,8 @@ export default function useUpdateOutlet(id: string) {
       maxServiceDistance: 10,
       isActive: true,
       pricePerKg: 0,
+      latitude: -6.200000,
+      longitude: 106.816666,
     },
     validationSchema: OutletSchema,
     onSubmit: async (values) => {
@@ -60,6 +62,8 @@ export default function useUpdateOutlet(id: string) {
               maxServiceDistance: res.data.maxServiceDistance || 10,
               isActive: res.data.isActive ?? true,
               pricePerKg: res.data.pricePerKg || 0,
+              latitude: res.data.latitude || -6.200000,
+              longitude: res.data.longitude || 106.816666,
             });
           }
           setFetching(false);

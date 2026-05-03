@@ -25,6 +25,7 @@ export function useLocationAddress(provinceId: string, cityId: string) {
     );
 
     setCities(res.data);
+    return res.data;
   }, []);
 
   const fetchDistricts = useCallback(async (cId: string) => {
@@ -33,6 +34,7 @@ export function useLocationAddress(provinceId: string, cityId: string) {
     );
 
     setDistricts(res.data);
+    return res.data;
   }, []) 
 
   useEffect(() => {
