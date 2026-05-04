@@ -23,15 +23,6 @@ import useRejectBypassRequest from "@/features/bypass-request/hooks/useRejectByp
 import { getStatusConfig } from "@/utils/orderStatus.utils";
 import { formatIDR } from "@/utils/formatCurrency.utils";
 
-// Status yang bisa di-advance (setelah washing)
-const ADVANCEABLE_STATUSES: Record<string, string> = {
-  washing: "ironing",
-  ironing: "packing",
-  packing: "waiting_payment",
-  waiting_payment: "ready_delivery",
-  ready_delivery: "delivering",
-};
-
 export default function OutletAdminOrderDetailPage({
   params,
 }: {
@@ -97,9 +88,7 @@ export default function OutletAdminOrderDetailPage({
       ? order.statusLogs[order.statusLogs.length - 1]?.status
       : "Processing";
   const statusConfig = getStatusConfig(latestStatus);
-  const nextStatus = ADVANCEABLE_STATUSES[latestStatus];
   const canProcess = latestStatus === "arrived_outlet";
-  const canAdvance = !!nextStatus;
 
   const latestLog = order.statusLogs?.[order.statusLogs.length - 1];
   const hasWorker = !!latestLog?.workerId;
@@ -107,14 +96,9 @@ export default function OutletAdminOrderDetailPage({
   const canAssignWorker = !hasWorker && isWorkerStation;
 
   const handleUpdateStatusAction = () => {
-    if (!selectedWorkerId) return;
-    
-    // Jika canAssignWorker, kita kirim status yang sama
-    // Jika tidak, kita kirim nextStatus
-    const targetStatus = canAssignWorker ? latestStatus : nextStatus;
-    if (!targetStatus) return;
+    if (!selectedWorkerId || !canAssignWorker) return;
 
-    handleUpdateStatus(id, { status: targetStatus, workerId: selectedWorkerId });
+    handleUpdateStatus(id, { status: latestStatus, workerId: selectedWorkerId });
     setShowStatusModal(false);
     setSelectedWorkerId("");
   };
@@ -163,16 +147,7 @@ export default function OutletAdminOrderDetailPage({
             Assign Worker to {statusConfig.label}
           </button>
         )}
-        {canAdvance && hasWorker && (
-          <button
-            onClick={() => setShowStatusModal(true)}
-            disabled={statusLoading}
-            className="bg-[#ff7143] hover:bg-[#e05e32] text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm disabled:opacity-50"
-          >
-            <FiChevronRight className="w-4 h-4" />
-            Advance to {getStatusConfig(nextStatus).label}
-          </button>
-        )}
+
       </div>
 
       {/* Status Advance Modal */}
@@ -180,9 +155,7 @@ export default function OutletAdminOrderDetailPage({
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5">
             <h3 className="text-lg font-bold text-gray-800">
-              {canAssignWorker 
-                ? `Assign Worker to "${statusConfig.label}"`
-                : `Update Status to "${getStatusConfig(nextStatus).label}"`}
+              Assign Worker to "{statusConfig.label}"
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">

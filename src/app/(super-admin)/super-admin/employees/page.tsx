@@ -46,7 +46,6 @@ export default function EmployeesPage() {
                   <tr key={emp.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="p-4">
                       <div className="text-gray-800 font-medium">{`${emp.firstName} ${emp.lastName}`}</div>
-                      <div className="text-xs text-gray-400 font-mono mt-1">{emp.id}</div>
                     </td>
                     <td className="p-4">
                       <div className="text-gray-800">{emp.email}</div>

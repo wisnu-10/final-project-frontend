@@ -50,11 +50,11 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
   const handleLocationChange = async (data: any) => {
     formik.setFieldValue("latitude", data.lat);
     formik.setFieldValue("longitude", data.lng);
-    
+
     if (data.address) {
       formik.setFieldValue("address", data.address);
     }
-
+    
     // Deep Sync Logic: Find IDs for the names provided by the map
     if (data.provinceName) {
       const matchedProvince = provinces.find(p => 
@@ -63,6 +63,14 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
       );
 
       if (matchedProvince) {
+        // Reset children if province changes
+        if (Number(matchedProvince.id) !== formik.values.provinceId) {
+          formik.setFieldValue("cityId", 0);
+          formik.setFieldValue("cityName", "");
+          formik.setFieldValue("districtId", 0);
+          formik.setFieldValue("districtName", "");
+        }
+
         formik.setFieldValue("provinceId", Number(matchedProvince.id));
         formik.setFieldValue("provinceName", matchedProvince.name);
         
@@ -75,6 +83,12 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
           );
 
           if (matchedCity) {
+            // Reset district if city changes
+            if (Number(matchedCity.id) !== formik.values.cityId) {
+              formik.setFieldValue("districtId", 0);
+              formik.setFieldValue("districtName", "");
+            }
+
             formik.setFieldValue("cityId", Number(matchedCity.id));
             formik.setFieldValue("cityName", matchedCity.name);
 
@@ -216,12 +230,7 @@ export default function FormNewAddress({ setShowAddForm, onSuccess }: FormAddres
               name="address"
               value={formik.values.address}
               onChange={formik.handleChange}
-              onBlur={(e) => {
-                formik.handleBlur(e);
-                if (formik.values.address) {
-                  handleSearchLocation(`${formik.values.address}, ${formik.values.districtName || ""}, ${formik.values.cityName || ""}`);
-                }
-              }}
+              onBlur={formik.handleBlur}
               rows={3}
               placeholder="123 Main Street"
               className="text-black w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] focus:border-[#4A90E2] outline-none transition-colors resize-none"
