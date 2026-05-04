@@ -26,7 +26,7 @@ export const ProcessingCard: React.FC<ProcessingCardProps> = ({ order, onComplet
       </div>
 
       <h2 className="text-[28px] font-bold text-[#2C2826] mb-1">
-        Processing #{order.id.slice(0, 4)}
+        Processing #{order.invoiceNumber || order.id.slice(0, 4)}
       </h2>
       <p className="text-[#6B6662] font-medium mb-8">
         {order.customer?.firstName} {order.customer?.lastName}

@@ -20,6 +20,7 @@ import { StatusBadge } from "@/components/order-driver/StatusBadge";
 import toast from "react-hot-toast";
 import withEmployeeAuth from "@/hoc/withEmployeeAuth";
 import axiosInstance from "@/utils/axiosInstance";
+import Swal from "sweetalert2";
 
 function WorkerActivePage() {
   const {
@@ -135,7 +136,18 @@ function WorkerActivePage() {
 
   const handleBypassRequest = async () => {
     if (!bypassNotes.trim()) {
-      toast.error("Catatan bypass harus diisi");
+      Swal.fire({
+        title: "Perhatian!",
+        text: "Catatan bypass harus diisi",
+        icon: "warning",
+        width: '380px',
+        confirmButtonColor: "#4A90D9",
+        customClass: {
+          popup: "rounded-[28px]",
+          confirmButton: "rounded-xl px-10 py-3 text-sm font-bold",
+          title: "text-lg font-bold text-[#2C2826]",
+        },
+      });
       return;
     }
 
@@ -153,13 +165,35 @@ function WorkerActivePage() {
         station: currentStatus,
       });
 
-      toast.success("Bypass request dikirim ke admin");
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Bypass request dikirim ke admin",
+        icon: "success",
+        width: '380px',
+        confirmButtonColor: "#4A90D9",
+        customClass: {
+          popup: "rounded-[28px]",
+          confirmButton: "rounded-xl px-10 py-3 text-sm font-bold",
+          title: "text-lg font-bold text-[#2C2826]",
+        },
+      });
       setShowBypassForm(false);
       setBypassNotes("");
       setBypassPending(true);
       refresh();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Gagal mengirim bypass request");
+      Swal.fire({
+        title: "Gagal!",
+        text: error.response?.data?.message || "Gagal mengirim bypass request",
+        icon: "error",
+        width: '380px',
+        confirmButtonColor: "#4A90D9",
+        customClass: {
+          popup: "rounded-[28px]",
+          confirmButton: "rounded-xl px-10 py-3 text-sm font-bold",
+          title: "text-lg font-bold text-[#2C2826]",
+        },
+      });
     } finally {
       setBypassLoading(false);
     }
@@ -178,7 +212,7 @@ function WorkerActivePage() {
             <span className="text-sm font-semibold">Kembali</span>
           </Link>
           <h1 className="text-lg font-bold text-[#2C2826]">Tugas Aktif</h1>
-          <p className="text-xs text-[#6B6662]">#{activeOrder.id.slice(0, 8)}</p>
+          <p className="text-xs text-[#6B6662]">#{activeOrder.invoiceNumber || activeOrder.id.slice(0, 8)}</p>
         </div>
       </div>
 
@@ -189,7 +223,7 @@ function WorkerActivePage() {
           <div className="flex items-center justify-between mb-3">
             <StatusBadge status={currentStatus} />
             <span className="text-xs text-[#6B6662] font-medium">
-              #{activeOrder.id?.slice(0, 8)}
+              #{activeOrder.invoiceNumber || activeOrder.id?.slice(0, 8)}
             </span>
           </div>
           <div className="flex items-center gap-2 mb-3">
