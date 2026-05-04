@@ -175,12 +175,7 @@ export default function EditOutletPage() {
                 name="address"
                 value={formik.values.address}
                 onChange={formik.handleChange}
-                onBlur={(e) => {
-                  formik.handleBlur(e);
-                  if (formik.values.address) {
-                    handleSearchLocation(`${formik.values.address}, ${formik.values.districtName || ""}, ${formik.values.cityName || ""}`);
-                  }
-                }}
+                onBlur={formik.handleBlur}
                 rows={3}
                 className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#ff7143] outline-none transition-all resize-none"
               />

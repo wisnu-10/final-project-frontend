@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiPlus, FiEdit2, FiTrash2, FiLoader } from "react-icons/fi";
 import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
 import useDeleteOutlet from "@/features/super-admin/outlets/hooks/useDeleteOutlet";
+import useToggleOutletStatus from "@/features/super-admin/outlets/hooks/useToggleOutletStatus";
 import Pagination from "@/components/Pagination";
 
 export default function OutletsPage() {
   const { outlets, loading, fetchOutlets, page, setPage, pagination } = useGetOutlets();
   const { handleDelete } = useDeleteOutlet(() => {
+    fetchOutlets();
+  });
+  const { toggleStatus, isLoading: isTogglingId } = useToggleOutletStatus(() => {
     fetchOutlets();
   });
 
@@ -38,7 +42,7 @@ export default function OutletsPage() {
                   <th className="p-4 font-semibold text-gray-600">Location</th>
                   <th className="p-4 font-semibold text-gray-600 w-32">Coverage</th>
                   <th className="p-4 font-semibold text-gray-600 w-32">Price/kg</th>
-                  <th className="p-4 font-semibold text-gray-600 w-24">Status</th>
+                  <th className="p-4 font-semibold text-gray-600 w-32 text-center">Status</th>
                   <th className="p-4 font-semibold text-gray-600 w-28">Actions</th>
                 </tr>
               </thead>
@@ -47,7 +51,6 @@ export default function OutletsPage() {
                   <tr key={outlet.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="p-4">
                       <div className="text-gray-800 font-medium">{outlet.name}</div>
-                      <div className="text-xs text-gray-400 font-mono mt-1" title="Outlet ID">{outlet.id}</div>
                     </td>
                     <td className="p-4">
                       <div className="text-gray-800 text-sm line-clamp-1" title={outlet.address}>{outlet.address || "-"}</div>
@@ -63,10 +66,29 @@ export default function OutletsPage() {
                         {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(outlet.pricePerKg || 0)}
                       </div>
                     </td>
-                    <td className="p-4">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${outlet.isActive !== false ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-                        {outlet.isActive !== false ? "Active" : "Inactive"}
-                      </span>
+                    <td className="p-4 text-center">
+                      <button
+                        onClick={() => toggleStatus(outlet.id, !!outlet.isActive)}
+                        disabled={isTogglingId === outlet.id}
+                        className={`group relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#ff7143] focus:ring-offset-2 disabled:opacity-50 ${
+                          outlet.isActive ? 'bg-green-500' : 'bg-gray-300'
+                        }`}
+                        title={outlet.isActive ? "Click to deactivate" : "Click to activate"}
+                      >
+                        <span className="sr-only">Toggle status</span>
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ease-in-out shadow-sm ${
+                            outlet.isActive ? 'translate-x-6' : 'translate-x-1'
+                          }`}
+                        >
+                          {isTogglingId === outlet.id && (
+                            <FiLoader className="w-3 h-3 text-[#ff7143] animate-spin absolute inset-0.5" />
+                          )}
+                        </span>
+                      </button>
+                      <div className={`text-[10px] mt-1 font-bold uppercase tracking-wider ${outlet.isActive ? 'text-green-600' : 'text-gray-400'}`}>
+                        {outlet.isActive ? 'Active' : 'Inactive'}
+                      </div>
                     </td>
                     <td className="p-4 flex gap-2">
                       <Link
@@ -99,3 +121,4 @@ export default function OutletsPage() {
     </div>
   );
 }
+
