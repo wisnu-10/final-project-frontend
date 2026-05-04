@@ -21,6 +21,7 @@ export interface OrderStatusLog {
 export interface Order {
   id: string;
   orderId?: string; // Some APIs return orderId instead of id
+  invoiceNumber?: string;
   customerName?: string;
   customer?: {
     firstName: string;
