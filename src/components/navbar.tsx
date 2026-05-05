@@ -68,18 +68,18 @@ export default function NavBar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
-      <div className="max-w-7xl mx-auto px-8 py-2 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-2 flex items-center justify-between">
         {/* Logo */}
 
         <a href="/" className=" flex items-center gap-2 cursor-pointer">
           <div className="rounded-lg flex items-center justify-center">
-            <Image src={Logo} alt="Logo" className="w-10 h-auto" />
+            <Image src={Logo} alt="Logo" className="w-8 md:w-10 h-auto" />
           </div>
-          <span className="text-lg font-bold text-[#2C2826]">DILAUNDRYIN</span>
+          <span className="text-base md:text-lg font-bold text-[#2C2826] tracking-tight">DILAUNDRYIN</span>
         </a>
 
         {/* CTA Button Section */}
-        <div className="relative flex items-center gap-8">
+        <div className="relative flex items-center gap-4 md:gap-8">
           {user?.email ? (
             <>
               <button
@@ -105,7 +105,7 @@ export default function NavBar() {
                   <div className="absolute -inset-0.5 bg-linear-to-r from-[#FF6B4A] to-[#FF8E72] rounded-full blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
 
                   {/* Avatar Box */}
-                  <div className="relative w-10 h-10 rounded-full bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+                  <div className="relative w-9 h-9 md:w-10 md:h-10 rounded-full bg-linear-to-br from-[#FF6B4A] to-[#FF8E72] text-white flex items-center justify-center font-bold border-2 border-white shadow-sm hover:shadow-md transition-all overflow-hidden">
                     {user.profilePicture ? (
                       <img
                         src={user.profilePicture}
@@ -118,7 +118,7 @@ export default function NavBar() {
                   </div>
 
                   {/* Green Dot (Online Status) */}
-                  <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-500 border-2 border-white"></span>
+                  <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-white"></span>
                 </button>
 
                 {/* Dropdown Menu */}
@@ -149,13 +149,6 @@ export default function NavBar() {
                         <FiPackage className="w-4 h-4" /> Pickup Order
                       </button>
 
-                      {/* <button
-                        onClick={() => router.push("/order-history")}
-                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
-                      >
-                        <FiClock className="w-4 h-4" /> Order History
-                      </button> */}
-
                       <button
                         onClick={() => router.push("/address")}
                         className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#FFF5F2] hover:text-[#FF6B4A] flex items-center gap-3 transition-colors"
@@ -180,16 +173,16 @@ export default function NavBar() {
               </div>
             </>
           ) : (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2">
               <button
                 onClick={() => router.push("/auth")}
-                className="px-6 py-2 rounded-full bg-[#FF6B4A] text-white text-sm hover:bg-[#FF5533] transition-all"
+                className="px-4 md:px-6 py-2 rounded-full bg-[#FF6B4A] text-white text-xs md:text-sm hover:bg-[#FF5533] transition-all font-semibold"
               >
                 Login
               </button>
               <button
                 onClick={() => router.push("/auth?tab=register")}
-                className="px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-sm border-2 border-[#FF6B4A] transition-all"
+                className="px-4 md:px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-xs md:text-sm border-2 border-[#FF6B4A] transition-all font-semibold"
               >
                 Register
               </button>
