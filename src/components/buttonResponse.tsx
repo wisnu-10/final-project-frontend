@@ -11,7 +11,6 @@ interface ButtonResponseProps {
 
 export default function ButtonResponse({ id, isLoading }: ButtonResponseProps) {
   const router = useRouter();
-  console.log("UHUYY",id)
 
   return (
     <button

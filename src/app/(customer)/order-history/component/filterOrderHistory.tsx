@@ -89,8 +89,6 @@ export default function FilterOrderHistory({
   const filteredOrders = listOrder?.filter((order: any) => {
     const query = debouncedSearch.toLowerCase();
 
-    console.log(order)
-
     const isMatchSearch =
       !query ||
       order.invoiceNumber?.toLowerCase().includes(query) ||
