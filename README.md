@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Washio Frontend
 
-## Getting Started
+Washio Frontend is a modern, high-performance web application built with Next.js 15, providing an intuitive interface for customers, employees, and administrators of the Washio Laundry Management System.
 
-First, run the development server:
+## 🛠 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework**: Next.js 15 (App Router)
+- **Library**: React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **State Management**: Zustand
+- **Forms & Validation**: Formik & Yup
+- **Maps**: Leaflet JS & React-Leaflet
+- **Charts**: Recharts
+- **Icons**: Lucide React & React Icons
+- **Notifications**: SweetAlert2 & React Hot Toast
+- **HTTP Client**: Axios
+
+## 📂 Project Structure
+
+The project uses the Next.js App Router with Route Groups for role-based navigation:
+
+```text
+src/
+├── app/                # Next.js App Router (File-based routing)
+│   ├── (auth)/         # Authentication pages (Login, Register)
+│   ├── (customer)/     # Customer dashboard and order pages
+│   ├── (driver)/       # Driver task management
+│   ├── (worker)/       # Laundry processing interface
+│   ├── (outlet-admin)/ # Outlet management and reports
+│   └── (super-admin)/  # System-wide administrative controls
+├── components/         # Shared UI components
+├── features/           # Feature-specific logic and components
+├── hoc/                # Higher-Order Components (e.g., Auth protection)
+├── hooks/              # Custom React hooks
+├── stores/             # Zustand state stores
+├── types/              # TypeScript definitions
+└── utils/              # Helper functions and constants
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Environment Variables
+Create a `.env` file in the `frontend` directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_BASE_API_URL="http://localhost:8000"
+NEXT_PUBLIC_MAPBOX_TOKEN="your_mapbox_token" (if applicable)
+```
 
-## Learn More
+### 2. Installation
+```bash
+npm install
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## ✨ Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🗺️ Interactive Maps
+- Real-time geolocation for address selection.
+- Map-based outlet discovery.
+- Reverse geocoding to automatically fill address details.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 📱 Responsive Design
+- Fully optimized for Mobile, Tablet, and Desktop.
+- Role-specific layouts and navigation bars.
 
-## Deploy on Vercel
+### 🔐 Secure Navigation
+- HOC-based route protection to ensure users only access their authorized areas.
+- Persistent authentication state via Zustand and cookies.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📊 Rich Analytics
+- Visualized reports using Recharts for outlet admins.
+- Real-time status tracking for customer orders.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 UI/UX Principles
+- **Modern Aesthetics**: Vibrant gradients, glassmorphism, and clean typography.
+- **Micro-interactions**: Subtle hover effects and loading states for better engagement.
+- **Accessibility**: Semantic HTML and clear navigation hierarchy.
+
+## 🛠 Maintenance & Best Practices
+- **Atomic Components**: Small, reusable UI components.
+- **Custom Hooks**: Encapsulated logic for data fetching and side effects.
+- **Strict Typing**: Full leverage of TypeScript for a bug-free experience.
