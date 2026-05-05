@@ -113,8 +113,6 @@ export default function OrderList({
 
   const paymentConfig = methodPaymentConfig(lastPayment?.method)
 
-  console.log(paymentConfig?.label)
-
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
       <div className="flex items-start justify-between mb-4">
