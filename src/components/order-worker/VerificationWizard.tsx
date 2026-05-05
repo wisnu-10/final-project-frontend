@@ -96,7 +96,7 @@ export const VerificationWizard: React.FC<VerificationWizardProps> = ({
         {order.orderItems?.map((item) => (
           <div key={item.id}>
             <label className="block text-[#6B6662] text-sm font-bold mb-2 ml-1">
-              {item.laundryItem.name} (Expected: {item.quantity})
+              {item.laundryItem.name}
             </label>
             <input
               type="number"
