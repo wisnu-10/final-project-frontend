@@ -34,7 +34,7 @@ export default function Hero() {
 
             <div className="flex gap-4">
               <Link
-                href={email ? "/order-history" : "/login"}
+                href={email ? "/order-history" : "/auth"}
                 className="px-8 py-3 rounded-full bg-[#FF6B4A] text-white hover:bg-[#FF5533] transition-all shadow-lg"
               >
                 Get Started

@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
           <p className="text-sm text-[#6B6662]">
             Remember your password?{" "}
             <Link
-              href="/auth/login"
+              href="/auth"
               className="font-semibold text-[#FF6B4A] hover:text-[#FF5533] hover:underline"
             >
               Login here
