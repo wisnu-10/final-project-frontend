@@ -100,9 +100,9 @@ export default function WorkerOrdersList({
             <div
               className={`block p-4 rounded-xl border-2 transition-all duration-200 ${
                 isCompleted
-                  ? "bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200 hover:border-emerald-300"
+                  ? "bg-linear-to-r from-emerald-50 to-green-50 border-emerald-200 hover:border-emerald-300"
                   : order.hasPendingBypass
-                    ? "bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200 hover:border-orange-300"
+                    ? "bg-linear-to-r from-orange-50 to-yellow-50 border-orange-200 hover:border-orange-300"
                     : "bg-white border-gray-200 hover:border-blue-300"
               } shadow-sm hover:shadow-md cursor-pointer`}
             >
@@ -138,7 +138,7 @@ export default function WorkerOrdersList({
                       {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-gray-400 shrink-0" />
                 </div>
               </div>
             </div>
