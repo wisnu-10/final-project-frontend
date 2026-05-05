@@ -1,3 +1,16 @@
+export type OrderStatusEnum =
+  | "scheduled"
+  | "waiting_pickup"
+  | "on_the_way_to_outlet"
+  | "arrived_outlet"
+  | "washing"
+  | "ironing"
+  | "packing"
+  | "waiting_payment"
+  | "ready_delivery"
+  | "delivering"
+  | "completed";
+
 export interface OrderItem {
   id: string;
   quantity: number;
@@ -11,7 +24,7 @@ export interface OrderItem {
 
 export interface OrderStatusLog {
   id: string;
-  status: string;
+  status: OrderStatusEnum;
   workerId: string | null;
   startedAt: string;
   finishedAt: string | null;
@@ -34,7 +47,7 @@ export interface Order {
     address: string;
   };
   outletId: string;
-  currentStation?: string;
+  currentStation?: OrderStatusEnum;
   createdAt: string;
   updatedAt: string;
   statusLogs?: OrderStatusLog[];
