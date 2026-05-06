@@ -156,7 +156,6 @@ export default function ActivationPage() {
               ctaLoading="Creating account..."
               cta="Create Account"
             />
-
           </form>
         </div>
       </div>
