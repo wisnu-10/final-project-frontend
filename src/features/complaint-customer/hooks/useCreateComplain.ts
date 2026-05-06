@@ -5,13 +5,13 @@ import { createComplainApi } from "../api/createComplaint.api";
 import { useRouter } from "next/navigation";
 import { createComplaintSchema } from "../validation/createComplaintSchema";
 
-export function useCreateComplains(orderId: string) {
+export function useCreateComplains(id: string) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      orderId: orderId,
+      invoiceNumber: id,
       description: "",
     }, validationSchema: createComplaintSchema,
     onSubmit: async (value) => {

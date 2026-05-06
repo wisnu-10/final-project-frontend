@@ -4,6 +4,7 @@ import { Eye, EyeOff, Mail, Lock, User, Phone } from "lucide-react";
 import SocialButton from "./sosialButton";
 import { useFormRegister } from "@/features/auth-customer/register/hooks/useFormRegister";
 import SubmitButton from "@/components/button";
+import { useRouter } from "next/navigation";
 
 const inputStyle = (hasError: boolean) => ({
   backgroundColor: "#ffffff",
@@ -29,7 +30,7 @@ const iconStyle = {
 };
 
 export default function register() {
-  
+  const router = useRouter()
   const {formik, isLoading} = useFormRegister()
 
   return (
@@ -231,6 +232,7 @@ export default function register() {
       <p className="text-center text-sm text-[#6B6662]">
         Already have an account?{" "}
         <button
+          onClick={() => router.push("/auth?tab=login")}
           type="button"
           className="text-[#FF6B4A] font-semibold hover:text-[#FF5533]"
         >

@@ -1,4 +1,4 @@
 export interface CreateComplaintDTO {
-  orderId: string;
+  invoiceNumber: string;
   description: string;
 }

@@ -1,17 +1,13 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  ArrowLeft,
-  CheckCircle,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, Sparkles } from "lucide-react";
 import Logo from "../../../../public/logo-Photoroom.png";
 import Image from "next/image";
-import Login from "./components/loginForm"
-import Register from "./components/registerForm"
-import RightPanelInformation from './components/rightPaneInformation'
+import Login from "./components/loginForm";
+import Register from "./components/registerForm";
+import RightPanelInformation from "./components/rightPaneInformation";
 import BackLink from "@/components/backLink";
 
 function AuthContent() {
@@ -22,6 +18,11 @@ function AuthContent() {
     searchParams.get("tab") === "register" ? "register" : "login";
 
   const [activeTab, setActiveTab] = useState<"login" | "register">(defaultTab);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab") === "register" ? "register" : "login";
+    setActiveTab(tab);
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen flex bg-[#FAF6F1]">
@@ -64,11 +65,13 @@ function AuthContent() {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF6F1]">
-        <div className="inline-block w-8 h-8 border-3 border-[#ff7143] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF6F1]">
+          <div className="inline-block w-8 h-8 border-3 border-[#ff7143] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }
+    >
       <AuthContent />
     </Suspense>
   );

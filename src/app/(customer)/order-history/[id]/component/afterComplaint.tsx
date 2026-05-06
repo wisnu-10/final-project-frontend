@@ -19,7 +19,7 @@ export default function ComplaintSuccessPage() {
         </h1>
 
         <p className="text-[#6B6662] mb-8 leading-relaxed">
-          Thanks for letting us know, Ri. We’ve received your report and our
+          Thanks for letting us know. We’ve received your report and our
           team is checking it out. We’ll get back to you with a resolution
           within 24 hours. Hang tight!
         </p>

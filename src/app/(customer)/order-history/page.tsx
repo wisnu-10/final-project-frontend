@@ -85,7 +85,7 @@ export default function CustomerOrderHistory() {
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-[#2C2826]">My Orders</h2>
-            <p className="text-sm text-[#6B6662]">
+            <p className="text-sm text-[#6B6662] max-w-40 md:max-w-full">
               View and track all your orders
             </p>
           </div>
