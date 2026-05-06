@@ -21,7 +21,7 @@ export default function NavBar() {
   const { user, setAuth, clearAuth } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null); // 1. Bikin Ref-nya
+  const dropdownRef = useRef<HTMLDivElement>(null); 
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -75,7 +75,7 @@ export default function NavBar() {
           <div className="rounded-lg flex items-center justify-center">
             <Image src={Logo} alt="Logo" className="w-8 md:w-10 h-auto" />
           </div>
-          <span className="text-base md:text-lg font-bold text-[#2C2826] tracking-tight">DILAUNDRYIN</span>
+          <span className="hidden md:flex text-base md:text-lg font-bold text-[#2C2826] tracking-tight">DILAUNDRYIN</span>
         </a>
 
         {/* CTA Button Section */}
@@ -176,13 +176,13 @@ export default function NavBar() {
             <div className="flex gap-2">
               <button
                 onClick={() => router.push("/auth")}
-                className="px-4 md:px-6 py-2 rounded-full bg-[#FF6B4A] text-white text-xs md:text-sm hover:bg-[#FF5533] transition-all font-semibold"
+                className="px-4 md:px-6 py-2 rounded-full bg-[#FF6B4A] text-white text-xs md:text-sm hover:bg-[#FF5533] transition-all"
               >
                 Login
               </button>
               <button
                 onClick={() => router.push("/auth?tab=register")}
-                className="px-4 md:px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-xs md:text-sm border-2 border-[#FF6B4A] transition-all font-semibold"
+                className="px-4 md:px-6 py-2 rounded-full hover:bg-[#FF6B4A] hover:text-white text-[#FF6B4A] text-xs md:text-sm border-2 border-[#FF6B4A] transition-all"
               >
                 Register
               </button>
