@@ -12,37 +12,61 @@ export function useLocationAddress(provinceId: string, cityId: string) {
   const [districts, setDistricts] = useState<LocationArea[]>([]);
 
   const fetchProvince = useCallback(async () => {
-    const res = await axios.get(
-      "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json",
-    );
-
-    setProvinces(res.data);
-  }, []) 
+    try {
+      const res = await axios.get(
+        "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json",
+      );
+      setProvinces(res.data);
+    } catch (error) {
+      console.error("Error fetching provinces:", error);
+      setProvinces([]);
+    }
+  }, []);
 
   const fetchCities = useCallback(async (pId: string) => {
-    const res = await axios.get(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${pId}.json`,
-    );
+    if (!pId || pId === "undefined" || pId === "null") {
+      setCities([]);
+      return [];
+    }
 
-    setCities(res.data);
-    return res.data;
+    try {
+      const res = await axios.get(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${pId}.json`,
+      );
+      setCities(res.data);
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setCities([]);
+      return [];
+    }
   }, []);
 
   const fetchDistricts = useCallback(async (cId: string) => {
-    const res = await axios.get(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${cId}.json`,
-    );
+    if (!cId || cId === "undefined" || cId === "null") {
+      setDistricts([]);
+      return [];
+    }
 
-    setDistricts(res.data);
-    return res.data;
-  }, []) 
-
-  useEffect(() => {
-    fetchProvince();
+    try {
+      const res = await axios.get(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${cId}.json`,
+      );
+      setDistricts(res.data);
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching districts:", error);
+      setDistricts([]);
+      return [];
+    }
   }, []);
 
   useEffect(() => {
-    if (provinceId) {
+    fetchProvince();
+  }, [fetchProvince]);
+
+  useEffect(() => {
+    if (provinceId && provinceId !== "undefined" && provinceId !== "null") {
       fetchCities(String(provinceId));
     } else {
       setCities([]);
@@ -50,7 +74,7 @@ export function useLocationAddress(provinceId: string, cityId: string) {
   }, [provinceId, fetchCities]);
 
   useEffect(() => {
-    if (cityId) {
+    if (cityId && cityId !== "undefined" && cityId !== "null") {
       fetchDistricts(String(cityId));
     } else {
       setDistricts([]);

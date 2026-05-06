@@ -78,7 +78,7 @@ export default function NavBar() {
             <div className="rounded-lg flex items-center justify-center">
               <Image src={Logo} alt="Logo" className="w-8 md:w-10 h-auto" />
             </div>
-            <span className="hidden md:flex text-base md:text-lg font-bold text-[#2C2826] tracking-tight">
+            <span className="text-sm md:text-base font-bold text-[#2C2826] tracking-tight">
               DILAUNDRYIN
             </span>
           </a>
@@ -186,7 +186,11 @@ export default function NavBar() {
                   onClick={() => router.push("/auth")}
                   className="px-4 md:px-6 py-2 rounded-full bg-[#FF6B4A] text-white text-xs md:text-sm hover:bg-[#FF5533] transition-all"
                 >
-                  Login
+                  
+                  <span className="md:hidden">Get Started</span>
+
+                  
+                  <span className="hidden md:block">Login</span>
                 </button>
                 <button
                   onClick={() => router.push("/auth?tab=register")}
@@ -254,9 +258,6 @@ export default function NavBar() {
           </div>
         </nav>
       )}
-
-      
-      
     </>
   );
 }
