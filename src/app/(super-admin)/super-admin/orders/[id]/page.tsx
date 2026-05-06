@@ -2,7 +2,13 @@
 
 import { use } from "react";
 import Link from "next/link";
-import { FiArrowLeft, FiUser, FiMapPin, FiPackage, FiClock } from "react-icons/fi";
+import {
+  FiArrowLeft,
+  FiUser,
+  FiMapPin,
+  FiPackage,
+  FiClock,
+} from "react-icons/fi";
 import useGetOrderById from "@/features/order-admin/hooks/useGetOrderById";
 import { getStatusConfig } from "@/utils/orderStatus.utils";
 import { formatIDR } from "@/utils/formatCurrency.utils";
@@ -58,7 +64,9 @@ export default function SuperAdminOrderDetailPage({
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Order Detail</h1>
-          <p className="text-sm text-gray-400 font-mono">{order.id}</p>
+          <p className="text-sm text-gray-400 font-mono">
+            {order.invoiceNumber}
+          </p>
         </div>
         <span
           className={`ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-full ${statusConfig.bgColor} ${statusConfig.textColor}`}
@@ -103,9 +111,7 @@ export default function SuperAdminOrderDetailPage({
           <div className="space-y-3">
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Outlet</p>
-              <p className="font-medium text-gray-800">
-                {order.outlet?.name}
-              </p>
+              <p className="font-medium text-gray-800">{order.outlet?.name}</p>
             </div>
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Price/kg</p>
@@ -116,17 +122,13 @@ export default function SuperAdminOrderDetailPage({
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Weight</p>
               <p className="text-gray-700">
-                {order.totalWeight
-                  ? `${Number(order.totalWeight)} kg`
-                  : "—"}
+                {order.totalWeight ? `${Number(order.totalWeight)} kg` : "—"}
               </p>
             </div>
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Total Price</p>
               <p className="font-bold text-gray-800 text-lg">
-                {order.totalPrice
-                  ? formatIDR(Number(order.totalPrice))
-                  : "—"}
+                {order.totalPrice ? formatIDR(Number(order.totalPrice)) : "—"}
               </p>
             </div>
             <div className="flex justify-between">
@@ -197,10 +199,7 @@ export default function SuperAdminOrderDetailPage({
             {order.statusLogs?.map((log: any, idx: number) => {
               const logConfig = getStatusConfig(log.status);
               return (
-                <div
-                  key={log.id}
-                  className="flex items-start gap-3 relative"
-                >
+                <div key={log.id} className="flex items-start gap-3 relative">
                   <div className="flex flex-col items-center">
                     <div
                       className={`w-3 h-3 rounded-full ${idx === order.statusLogs.length - 1 ? "bg-[#ff7143]" : "bg-gray-300"}`}
@@ -243,9 +242,7 @@ export default function SuperAdminOrderDetailPage({
       {order.orderItems?.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Order Items
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800">Order Items</h2>
           </div>
           <table className="w-full text-left">
             <thead>
@@ -256,9 +253,7 @@ export default function SuperAdminOrderDetailPage({
                 <th className="p-4 font-semibold text-gray-600 text-sm">
                   Type
                 </th>
-                <th className="p-4 font-semibold text-gray-600 text-sm">
-                  Qty
-                </th>
+                <th className="p-4 font-semibold text-gray-600 text-sm">Qty</th>
                 <th className="p-4 font-semibold text-gray-600 text-sm">
                   Subtotal
                 </th>
@@ -286,13 +281,9 @@ export default function SuperAdminOrderDetailPage({
                         : "Per Item"}
                     </span>
                   </td>
-                  <td className="p-4 text-sm text-gray-700">
-                    {item.quantity}
-                  </td>
+                  <td className="p-4 text-sm text-gray-700">{item.quantity}</td>
                   <td className="p-4 text-sm font-medium text-gray-800">
-                    {item.subTotal
-                      ? formatIDR(Number(item.subTotal))
-                      : "—"}
+                    {item.subTotal ? formatIDR(Number(item.subTotal)) : "—"}
                   </td>
                 </tr>
               ))}
@@ -304,14 +295,9 @@ export default function SuperAdminOrderDetailPage({
       {/* Payment */}
       {order.payments?.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Payment
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Payment</h2>
           {order.payments.map((payment: any) => (
-            <div
-              key={payment.id}
-              className="flex items-center justify-between"
-            >
+            <div key={payment.id} className="flex items-center justify-between">
               <div>
                 <span
                   className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${
@@ -331,9 +317,7 @@ export default function SuperAdminOrderDetailPage({
                 )}
               </div>
               <p className="font-bold text-gray-800">
-                {payment.amount
-                  ? formatIDR(Number(payment.amount))
-                  : "—"}
+                {payment.amount ? formatIDR(Number(payment.amount)) : "—"}
               </p>
             </div>
           ))}

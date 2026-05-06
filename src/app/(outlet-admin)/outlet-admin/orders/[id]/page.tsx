@@ -9,7 +9,6 @@ import {
   FiPackage,
   FiClock,
   FiPlay,
-  FiChevronRight,
   FiAlertCircle,
   FiCheckCircle,
   FiXCircle,
@@ -31,22 +30,27 @@ export default function OutletAdminOrderDetailPage({
   const { id } = use(params);
   const { order, loading, fetchOrder } = useGetOrderById(id);
   const { workers } = useGetOutletWorkers();
-  const { handleUpdateStatus, loading: statusLoading } =
-    useUpdateOrderStatus(() => {
+  const { handleUpdateStatus, loading: statusLoading } = useUpdateOrderStatus(
+    () => {
       fetchOrder();
-    });
+    },
+  );
 
   const [selectedWorkerId, setSelectedWorkerId] = useState("");
   const [showStatusModal, setShowStatusModal] = useState(false);
 
   // Bypass request hooks
-  const { bypassRequests, loading: bypassLoading, fetchBypassRequests } =
-    useGetBypassRequests(id);
-  const { handleApprove, loading: approveLoading } =
-    useApproveBypassRequest(() => {
+  const {
+    bypassRequests,
+    loading: bypassLoading,
+    fetchBypassRequests,
+  } = useGetBypassRequests(order?.id);
+  const { handleApprove, loading: approveLoading } = useApproveBypassRequest(
+    () => {
       fetchBypassRequests();
       fetchOrder();
-    });
+    },
+  );
   const { handleReject, loading: rejectLoading } = useRejectBypassRequest(
     () => {
       fetchBypassRequests();
@@ -92,13 +96,18 @@ export default function OutletAdminOrderDetailPage({
 
   const latestLog = order.statusLogs?.[order.statusLogs.length - 1];
   const hasWorker = !!latestLog?.workerId;
-  const isWorkerStation = ["washing", "ironing", "packing"].includes(latestStatus);
+  const isWorkerStation = ["washing", "ironing", "packing"].includes(
+    latestStatus,
+  );
   const canAssignWorker = !hasWorker && isWorkerStation;
 
   const handleUpdateStatusAction = () => {
     if (!selectedWorkerId || !canAssignWorker) return;
 
-    handleUpdateStatus(id, { status: latestStatus, workerId: selectedWorkerId });
+    handleUpdateStatus(id, {
+      status: latestStatus,
+      workerId: selectedWorkerId,
+    });
     setShowStatusModal(false);
     setSelectedWorkerId("");
   };
@@ -116,7 +125,7 @@ export default function OutletAdminOrderDetailPage({
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-gray-800">Order Detail</h1>
           <p className="text-sm text-gray-400 font-mono truncate">
-            {order.id}
+            {order.invoiceNumber}
           </p>
         </div>
         <span
@@ -147,7 +156,6 @@ export default function OutletAdminOrderDetailPage({
             Assign Worker to {statusConfig.label}
           </button>
         )}
-
       </div>
 
       {/* Status Advance Modal */}
@@ -232,9 +240,7 @@ export default function OutletAdminOrderDetailPage({
           <div className="space-y-3">
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Outlet</p>
-              <p className="font-medium text-gray-800">
-                {order.outlet?.name}
-              </p>
+              <p className="font-medium text-gray-800">{order.outlet?.name}</p>
             </div>
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Price/kg</p>
@@ -245,17 +251,13 @@ export default function OutletAdminOrderDetailPage({
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Weight</p>
               <p className="text-gray-700">
-                {order.totalWeight
-                  ? `${Number(order.totalWeight)} kg`
-                  : "—"}
+                {order.totalWeight ? `${Number(order.totalWeight)} kg` : "—"}
               </p>
             </div>
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Total Price</p>
               <p className="font-bold text-gray-800 text-lg">
-                {order.totalPrice
-                  ? formatIDR(Number(order.totalPrice))
-                  : "—"}
+                {order.totalPrice ? formatIDR(Number(order.totalPrice)) : "—"}
               </p>
             </div>
             <div className="flex justify-between">
@@ -327,10 +329,7 @@ export default function OutletAdminOrderDetailPage({
               const logConfig = getStatusConfig(log.status);
               const isLatest = idx === order.statusLogs.length - 1;
               return (
-                <div
-                  key={log.id}
-                  className="flex items-start gap-3 relative"
-                >
+                <div key={log.id} className="flex items-start gap-3 relative">
                   <div className="flex flex-col items-center">
                     <div
                       className={`w-3 h-3 rounded-full ${isLatest ? "bg-[#ff7143]" : "bg-gray-300"}`}
@@ -391,9 +390,7 @@ export default function OutletAdminOrderDetailPage({
       {order.orderItems?.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Order Items
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800">Order Items</h2>
           </div>
           <table className="w-full text-left">
             <thead>
@@ -404,9 +401,7 @@ export default function OutletAdminOrderDetailPage({
                 <th className="p-4 font-semibold text-gray-600 text-sm">
                   Type
                 </th>
-                <th className="p-4 font-semibold text-gray-600 text-sm">
-                  Qty
-                </th>
+                <th className="p-4 font-semibold text-gray-600 text-sm">Qty</th>
                 <th className="p-4 font-semibold text-gray-600 text-sm">
                   Subtotal
                 </th>
@@ -434,13 +429,9 @@ export default function OutletAdminOrderDetailPage({
                         : "Per Item"}
                     </span>
                   </td>
-                  <td className="p-4 text-sm text-gray-700">
-                    {item.quantity}
-                  </td>
+                  <td className="p-4 text-sm text-gray-700">{item.quantity}</td>
                   <td className="p-4 text-sm font-medium text-gray-800">
-                    {item.subTotal
-                      ? formatIDR(Number(item.subTotal))
-                      : "—"}
+                    {item.subTotal ? formatIDR(Number(item.subTotal)) : "—"}
                   </td>
                 </tr>
               ))}
@@ -479,9 +470,15 @@ export default function OutletAdminOrderDetailPage({
                             : "bg-red-100 text-red-700"
                       }`}
                     >
-                      {br.status === "waiting" && <FiClock className="w-3 h-3" />}
-                      {br.status === "approved" && <FiCheckCircle className="w-3 h-3" />}
-                      {br.status === "rejected" && <FiXCircle className="w-3 h-3" />}
+                      {br.status === "waiting" && (
+                        <FiClock className="w-3 h-3" />
+                      )}
+                      {br.status === "approved" && (
+                        <FiCheckCircle className="w-3 h-3" />
+                      )}
+                      {br.status === "rejected" && (
+                        <FiXCircle className="w-3 h-3" />
+                      )}
                       {br.status.charAt(0).toUpperCase() + br.status.slice(1)}
                     </span>
                     <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full capitalize">
@@ -501,16 +498,32 @@ export default function OutletAdminOrderDetailPage({
                 <p className="text-sm text-gray-700 mb-2">{br.notes}</p>
 
                 <div className="flex items-center gap-4 text-xs text-gray-500 mb-2">
-                  <span>Worker: <strong className="text-gray-700">{br.requester?.firstName} {br.requester?.lastName}</strong></span>
-                  <span>Expected: <strong>{br.expectedQuantity}</strong></span>
-                  <span>Actual: <strong className="text-red-600">{br.actualQuantity}</strong></span>
-                  <span className="text-red-600 font-bold">-{br.expectedQuantity - br.actualQuantity} missing</span>
+                  <span>
+                    Worker:{" "}
+                    <strong className="text-gray-700">
+                      {br.requester?.firstName} {br.requester?.lastName}
+                    </strong>
+                  </span>
+                  <span>
+                    Expected: <strong>{br.expectedQuantity}</strong>
+                  </span>
+                  <span>
+                    Actual:{" "}
+                    <strong className="text-red-600">
+                      {br.actualQuantity}
+                    </strong>
+                  </span>
+                  <span className="text-red-600 font-bold">
+                    -{br.expectedQuantity - br.actualQuantity} missing
+                  </span>
                 </div>
 
                 {br.status === "waiting" && (
                   <div className="flex gap-2 mt-3 pt-3 border-t border-gray-200">
                     <button
-                      onClick={() => setConfirmBypass({ id: br.id, type: "reject" })}
+                      onClick={() =>
+                        setConfirmBypass({ id: br.id, type: "reject" })
+                      }
                       disabled={rejectLoading}
                       className="px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 disabled:opacity-50"
                     >
@@ -518,7 +531,9 @@ export default function OutletAdminOrderDetailPage({
                       Reject
                     </button>
                     <button
-                      onClick={() => setConfirmBypass({ id: br.id, type: "approve" })}
+                      onClick={() =>
+                        setConfirmBypass({ id: br.id, type: "approve" })
+                      }
                       disabled={approveLoading}
                       className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50"
                     >
@@ -549,7 +564,9 @@ export default function OutletAdminOrderDetailPage({
                   <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiCheckCircle className="w-7 h-7 text-emerald-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">Approve Bypass?</h3>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    Approve Bypass?
+                  </h3>
                   <p className="text-sm text-gray-500 mt-2">
                     The order will advance to the next station automatically.
                   </p>
@@ -559,7 +576,9 @@ export default function OutletAdminOrderDetailPage({
                   <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <FiXCircle className="w-7 h-7 text-red-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">Reject Bypass?</h3>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    Reject Bypass?
+                  </h3>
                   <p className="text-sm text-gray-500 mt-2">
                     The worker will need to re-check and correct the item data.
                   </p>
@@ -575,7 +594,8 @@ export default function OutletAdminOrderDetailPage({
               </button>
               <button
                 onClick={() => {
-                  if (confirmBypass.type === "approve") handleApprove(confirmBypass.id);
+                  if (confirmBypass.type === "approve")
+                    handleApprove(confirmBypass.id);
                   else handleReject(confirmBypass.id);
                   setConfirmBypass(null);
                 }}
@@ -596,14 +616,9 @@ export default function OutletAdminOrderDetailPage({
       {/* Payment */}
       {order.payments?.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Payment
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Payment</h2>
           {order.payments.map((payment: any) => (
-            <div
-              key={payment.id}
-              className="flex items-center justify-between"
-            >
+            <div key={payment.id} className="flex items-center justify-between">
               <div>
                 <span
                   className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${
@@ -623,9 +638,7 @@ export default function OutletAdminOrderDetailPage({
                 )}
               </div>
               <p className="font-bold text-gray-800">
-                {payment.amount
-                  ? formatIDR(Number(payment.amount))
-                  : "—"}
+                {payment.amount ? formatIDR(Number(payment.amount)) : "—"}
               </p>
             </div>
           ))}

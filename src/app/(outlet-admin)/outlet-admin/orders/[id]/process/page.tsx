@@ -68,9 +68,10 @@ export default function ProcessOrderPage({
 
   const calcEstimatedTotal = () => {
     if (!order || !formik.values.totalWeight) return 0;
-    const currentPricePerKg = Number(order.outlet?.pricePerKg || order.pricePerKg || 0);
-    const weightPrice =
-      Number(formik.values.totalWeight) * currentPricePerKg;
+    const currentPricePerKg = Number(
+      order.outlet?.pricePerKg || order.pricePerKg || 0,
+    );
+    const weightPrice = Number(formik.values.totalWeight) * currentPricePerKg;
     const itemsPrice = formik.values.orderItems.reduce((sum, item) => {
       const laundryItem = laundryItems.find(
         (li: any) => li.id === item.laundryItemId,
@@ -160,7 +161,9 @@ export default function ProcessOrderPage({
               )}
               <p className="text-[10px] text-gray-400 mt-2 italic">
                 Price/kg applicable:{" "}
-                {formatIDR(Number(order.outlet?.pricePerKg || order.pricePerKg || 0))}
+                {formatIDR(
+                  Number(order.outlet?.pricePerKg || order.pricePerKg || 0),
+                )}
               </p>
             </div>
 
@@ -247,12 +250,14 @@ export default function ProcessOrderPage({
                               }
                               placeholder="Select item..."
                               direction="down"
-                              error={!!(
-                                formik.touched.orderItems?.[index]
-                                  ?.laundryItemId &&
-                                (formik.errors.orderItems?.[index] as any)
-                                  ?.laundryItemId
-                              )}
+                              error={
+                                !!(
+                                  formik.touched.orderItems?.[index]
+                                    ?.laundryItemId &&
+                                  (formik.errors.orderItems?.[index] as any)
+                                    ?.laundryItemId
+                                )
+                              }
                             />
                           </div>
                           <div className="w-24">
@@ -301,12 +306,17 @@ export default function ProcessOrderPage({
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
                     Kiloan ({formik.values.totalWeight} kg ×{" "}
-                    {formatIDR(Number(order.outlet?.pricePerKg || order.pricePerKg || 0))})
+                    {formatIDR(
+                      Number(order.outlet?.pricePerKg || order.pricePerKg || 0),
+                    )}
+                    )
                   </span>
                   <span className="text-gray-800 font-medium">
                     {formatIDR(
                       Number(formik.values.totalWeight) *
-                        Number(order.outlet?.pricePerKg || order.pricePerKg || 0),
+                        Number(
+                          order.outlet?.pricePerKg || order.pricePerKg || 0,
+                        ),
                     )}
                   </span>
                 </div>
