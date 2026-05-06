@@ -16,18 +16,13 @@ import useRejectBypassRequest from "@/features/bypass-request/hooks/useRejectByp
 import Pagination from "@/components/Pagination";
 
 export default function BypassRequestsPage() {
-  const {
-    pendingRequests,
-    loading,
-    fetchPending,
-    page,
-    setPage,
-    pagination,
-  } = usePendingBypassRequests();
-  const { handleApprove, loading: approveLoading } =
-    useApproveBypassRequest(() => fetchPending());
-  const { handleReject, loading: rejectLoading } = useRejectBypassRequest(
+  const { pendingRequests, loading, fetchPending, page, setPage, pagination } =
+    usePendingBypassRequests();
+  const { handleApprove, loading: approveLoading } = useApproveBypassRequest(
     () => fetchPending(),
+  );
+  const { handleReject, loading: rejectLoading } = useRejectBypassRequest(() =>
+    fetchPending(),
   );
 
   const [confirmAction, setConfirmAction] = useState<{
@@ -61,9 +56,7 @@ export default function BypassRequestsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Bypass Requests
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Bypass Requests</h1>
           <p className="text-sm text-gray-500 mt-1">
             Review and manage worker bypass requests for item discrepancies
           </p>
@@ -139,7 +132,7 @@ export default function BypassRequestsPage() {
                     </div>
                   </div>
                   <Link
-                    href={`/outlet-admin/orders/${req.orderId}`}
+                    href={`/outlet-admin/orders/${req.order?.invoiceNumber}`}
                     className="text-[#ff7143] hover:text-[#e05e32] text-sm font-medium flex items-center gap-1 transition-colors"
                   >
                     View Order
@@ -269,8 +262,8 @@ export default function BypassRequestsPage() {
                     Reject Bypass Request?
                   </h3>
                   <p className="text-sm text-gray-500 mt-2">
-                    The worker will be notified and must re-check the items
-                    and submit correct data.
+                    The worker will be notified and must re-check the items and
+                    submit correct data.
                   </p>
                 </>
               )}
@@ -291,9 +284,7 @@ export default function BypassRequestsPage() {
                     : "bg-red-500 hover:bg-red-600"
                 }`}
               >
-                {approveLoading || rejectLoading
-                  ? "Processing..."
-                  : "Confirm"}
+                {approveLoading || rejectLoading ? "Processing..." : "Confirm"}
               </button>
             </div>
           </div>

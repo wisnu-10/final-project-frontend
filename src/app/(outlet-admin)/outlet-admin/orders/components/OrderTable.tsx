@@ -48,12 +48,22 @@ export default function OrderTable({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100 text-left">
-              <th className="p-4 font-semibold text-gray-600 text-sm">Customer</th>
-              <th className="p-4 font-semibold text-gray-600 text-sm">Status</th>
-              <th className="p-4 font-semibold text-gray-600 text-sm">Worker</th>
-              <th className="p-4 font-semibold text-gray-600 text-sm">Weight</th>
+              <th className="p-4 font-semibold text-gray-600 text-sm">
+                Customer
+              </th>
+              <th className="p-4 font-semibold text-gray-600 text-sm">
+                Status
+              </th>
+              <th className="p-4 font-semibold text-gray-600 text-sm">
+                Worker
+              </th>
+              <th className="p-4 font-semibold text-gray-600 text-sm">
+                Weight
+              </th>
               <th className="p-4 font-semibold text-gray-600 text-sm">Price</th>
-              <th className="p-4 font-semibold text-gray-600 text-sm text-center">Actions</th>
+              <th className="p-4 font-semibold text-gray-600 text-sm text-center">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -63,35 +73,54 @@ export default function OrderTable({
               const latestWorker = order.statusLogs?.[0]?.worker;
 
               return (
-                <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                <tr
+                  key={order.id}
+                  className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                >
                   <td className="p-4">
                     <div className="text-gray-800 font-bold text-sm">
                       {order.customer?.firstName} {order.customer?.lastName}
                     </div>
-                    <div className="text-[11px] text-gray-400">{order.customer?.email}</div>
+                    <div className="text-[11px] text-gray-400">
+                      {order.customer?.email}
+                    </div>
                   </td>
                   <td className="p-4">
-                    <span className={`inline-flex items-center px-2.5 py-1 text-[10px] font-bold uppercase rounded-full tracking-wide ${statusConfig.bgColor} ${statusConfig.textColor}`}>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-1 text-[10px] font-bold uppercase rounded-full tracking-wide ${statusConfig.bgColor} ${statusConfig.textColor}`}
+                    >
                       {statusConfig.label}
                     </span>
                   </td>
                   <td className="p-4 text-sm text-gray-600">
                     {latestWorker ? (
-                      <span className="font-medium text-gray-700">{latestWorker.firstName} {latestWorker.lastName}</span>
+                      <span className="font-medium text-gray-700">
+                        {latestWorker.firstName} {latestWorker.lastName}
+                      </span>
                     ) : (
                       <span className="text-gray-300">—</span>
                     )}
                   </td>
                   <td className="p-4 text-sm text-gray-600">
-                    {order.totalWeight ? <span className="font-medium">{Number(order.totalWeight)} kg</span> : <span className="text-gray-300">—</span>}
+                    {order.totalWeight ? (
+                      <span className="font-medium">
+                        {Number(order.totalWeight)} kg
+                      </span>
+                    ) : (
+                      <span className="text-gray-300">—</span>
+                    )}
                   </td>
                   <td className="p-4 text-sm font-bold text-gray-800">
-                    {order.totalPrice ? formatIDR(Number(order.totalPrice)) : <span className="text-gray-300">—</span>}
+                    {order.totalPrice ? (
+                      formatIDR(Number(order.totalPrice))
+                    ) : (
+                      <span className="text-gray-300">—</span>
+                    )}
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-2">
                       <Link
-                        href={`/outlet-admin/orders/${order.id}`}
+                        href={`/outlet-admin/orders/${order.invoiceNumber}`}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
                         title="View Details"
                       >
@@ -99,7 +128,7 @@ export default function OrderTable({
                       </Link>
                       {latestStatus === "arrived_outlet" && (
                         <Link
-                          href={`/outlet-admin/orders/${order.id}/process`}
+                          href={`/outlet-admin/orders/${order.invoiceNumber}/process`}
                           className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all"
                           title="Process Order"
                         >
