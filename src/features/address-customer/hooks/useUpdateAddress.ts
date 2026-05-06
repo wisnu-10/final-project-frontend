@@ -13,7 +13,10 @@ export function useUpdateAddress(value: AddressCustomerDTO) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { provinces, cities, districts, fetchCities, fetchDistricts } =
-    useLocationAddress(String(value.provinceId), String(value.cityId));
+    useLocationAddress(
+      value.provinceId ? String(value.provinceId) : "",
+      value.cityId ? String(value.cityId) : "",
+    );
 
   const formik = useFormik({
     enableReinitialize: true,

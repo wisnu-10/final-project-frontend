@@ -31,5 +31,5 @@ export default function updateAddressPage() {
     return <FormAddressSkeleton />
   }
 
-  return <FormUpdateAddress key={id} initialData={data} />;
+  return <FormUpdateAddress key={id} initialData={data}/>;
 }
