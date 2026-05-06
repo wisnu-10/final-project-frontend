@@ -178,6 +178,7 @@ export default function CustomerAddresses() {
       <FormUpdateAddress
       initialData={selectedAddress}
       onClose={setShowUpdateForm}
+      getAddress= {getAddress}
       />
       }
     </div>

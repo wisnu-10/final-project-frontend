@@ -20,11 +20,13 @@ const MapPicker = dynamic(() => import("@/components/MapPicker"), {
 interface FormAddressProps {
   initialData: AddressCustomerDTO;
   onClose: (value: boolean) => void;
+  getAddress: any
 }
 
 export default function FormUpdateAddress({
   initialData,
   onClose,
+  getAddress
 }: FormAddressProps) {
   const {
     formik,
@@ -34,7 +36,7 @@ export default function FormUpdateAddress({
     districts,
     fetchCities,
     fetchDistricts,
-  } = useUpdateAddress(initialData);
+  } = useUpdateAddress(initialData, onClose, getAddress);
 
   const handleSearchLocation = async (query: string) => {
     try {

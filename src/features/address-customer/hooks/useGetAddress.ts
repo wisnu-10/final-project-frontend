@@ -36,5 +36,6 @@ export const useGetAddress = () => {
         getAddress()
     }, [])
 
+    console.log(address)
     return {address, isLoading, isError, getAddress}
 }

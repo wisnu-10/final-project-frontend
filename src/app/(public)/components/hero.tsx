@@ -28,7 +28,7 @@ export default function Hero() {
 
             <p className="text-sm sm:text-base text-[#6B6662] leading-relaxed text-center">
               Experience premium laundry service delivered to your doorstep.
-              <br />
+              <br className="hidden md:flex"/>
               Quality care for your clothes, convenience for your life.
             </p>
 
