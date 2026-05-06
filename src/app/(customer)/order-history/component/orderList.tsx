@@ -109,9 +109,9 @@ export default function OrderList({
         };
       }
     }
-  }
+  };
 
-  const paymentConfig = methodPaymentConfig(lastPayment?.method)
+  const paymentConfig = methodPaymentConfig(lastPayment?.method);
 
   return (
     <div className="relative bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all border-2 border-transparent hover:border-[#4A90E2] mb-4">
@@ -141,7 +141,7 @@ export default function OrderList({
             </span>
           </div>
           <Link
-            href={`/order-history/${order.id}`}
+            href={`/order-history/${order.invoiceNumber}`}
             className="group flex items-center gap-2 px-0 py-1 text-[11px] font-semibold text-[#6B6662] hover:text-[#4A90E2] transition-colors duration-300 relative"
           >
             <span>View Details</span>
@@ -286,9 +286,9 @@ export default function OrderList({
             Auto-confirmed in 3 days if no complaint
           </p>
           {!lastComplaint || !lastComplaint.adminResponse ? (
-            <ButtonComplaint id={order.id} />
+            <ButtonComplaint id={order.invoiceNumber} />
           ) : (
-            <ButtonResponse isLoading={isLoading} id={order.id} />
+            <ButtonResponse isLoading={isLoading} id={order.invoiceNumber} />
           )}
         </div>
       )}
@@ -302,9 +302,9 @@ export default function OrderList({
             View Invoice
           </button>
           {!lastComplaint || !lastComplaint.adminResponse ? (
-            <ButtonComplaint id={order.id} />
+            <ButtonComplaint id={order.invoiceNumber} />
           ) : (
-            <ButtonResponse isLoading={isLoading} id={order.id} />
+            <ButtonResponse isLoading={isLoading} id={order.invoiceNumber} />
           )}
         </div>
       )}

@@ -1,6 +1,16 @@
-# Washio Frontend
+# diLaundryin
 
-Washio Frontend is a modern, high-performance web application built with Next.js 15, providing an intuitive interface for customers, employees, and administrators of the Washio Laundry Management System.
+![diLaundryin Logo](public/logo-Photoroom.png)
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-teal?style=flat)](https://tailwindcss.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-%23455A64?style=flat)](https://www.prisma.io/)
+[![Shadcn UI](https://img.shields.io/badge/Shadcn%20UI-components-%23000000?style=flat)](https://shadcn.com/)
+
+## Project Overview
+
+diLaundryin is a scalable laundry management platform built for modern service operations. It connects customers, drivers, workers, and administrators through a unified Next.js App Router experience. The application is designed to simplify order flow, improve delivery visibility, and support a multi-role dashboard architecture.
 
 ## 🛠 Tech Stack
 
@@ -82,3 +92,23 @@ npm run dev
 - **Atomic Components**: Small, reusable UI components.
 - **Custom Hooks**: Encapsulated logic for data fetching and side effects.
 - **Strict Typing**: Full leverage of TypeScript for a bug-free experience.
+
+## ⚙️ Challenges & Solutions
+- **Complex state management** for multi-level address selection was handled with isolated Zustand stores, reducing shared state coupling.
+- **Multi-role navigation** was implemented through route groups and permission-aware page rendering to preserve clarity and scalability.
+- **Real-time order updates** were managed with efficient data polling and local state reconciliation to keep the UI responsive without unnecessary re-renders.
+
+## 🤝 Contribution
+Contributions are welcome.
+
+1. Fork this repository.
+2. Create a branch: `git checkout -b feature/your-feature-name`
+3. Install dependencies: `npm install`
+4. Commit your changes: `git commit -m "feat: add new feature"`
+5. Push your branch and open a pull request.
+
+Please keep changes focused, maintain clean component structure, and preserve TypeScript safety.
+
+## License
+
+MIT License

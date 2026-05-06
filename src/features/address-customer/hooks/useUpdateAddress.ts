@@ -7,13 +7,21 @@ import { useRouter } from "next/navigation";
 import { updateAddressApi } from "../api/updateAddress.api";
 import { addressValidationSchema } from "../validation/adressCustomerSchema";
 
-export function useUpdateAddress(value: AddressCustomerDTO) {
+interface UpdateCustomerProps {
+}
+
+export function useUpdateAddress(value: AddressCustomerDTO,
+  onClose: (value:boolean) => void,
+getAddress: any) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const { provinces, cities, districts, fetchCities, fetchDistricts } =
-    useLocationAddress(String(value.provinceId), String(value.cityId));
+    useLocationAddress(
+      value.provinceId ? String(value.provinceId) : "",
+      value.cityId ? String(value.cityId) : "",
+    );
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -45,6 +53,10 @@ export function useUpdateAddress(value: AddressCustomerDTO) {
         toast.success("Address updated");
 
         router.push("/address");
+
+        onClose(false)
+
+        getAddress()
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
       } finally {

@@ -39,6 +39,7 @@ const iconStyle = {
 };
 
 export default function login() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(true);
   const { formik, isLoading } = useFormLogin();
 
@@ -127,9 +128,7 @@ export default function login() {
         </div>
 
         {formik.touched.password && formik.errors.password ? (
-          <ErrorMessage
-          error={formik.errors.password}
-          />
+          <ErrorMessage error={formik.errors.password} />
         ) : null}
       </div>
 
@@ -147,13 +146,12 @@ export default function login() {
       </div>
 
       {/* Social Buttons */}
-      <SocialButton
-      
-      />
+      <SocialButton />
 
       <p className="text-center text-sm text-[#6B6662]">
         Don't have an account?{" "}
         <button
+          onClick={() => router.push("/auth?tab=register")}
           type="button"
           className="text-[#FF6B4A] font-semibold hover:text-[#FF5533]"
         >

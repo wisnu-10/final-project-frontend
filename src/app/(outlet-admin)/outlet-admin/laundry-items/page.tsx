@@ -5,6 +5,8 @@ import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiFilter } from "react-icons/fi";
 import useGetLaundryItems from "@/features/super-admin/laundry-items/hooks/useGetLaundryItems";
 import useDeleteLaundryItem from "@/features/super-admin/laundry-items/hooks/useDeleteLaundryItem";
 import Pagination from "@/components/Pagination";
+import { useRouter } from "next/navigation";
+import { useLaundryItemStore } from "@/stores/useLaundryItemStore";
 import useGetOutletInfo from "@/features/order-admin/hooks/useGetOutletInfo";
 
 export default function OutletAdminLaundryItemsPage() {
@@ -21,9 +23,16 @@ export default function OutletAdminLaundryItemsPage() {
     setPage,
     pagination,
   } = useGetLaundryItems();
+  const router = useRouter();
+  const { setSelectedLaundryItemId } = useLaundryItemStore();
   const { handleDelete } = useDeleteLaundryItem(() => {
     fetchLaundryItems();
   });
+
+  const handleEdit = (id: string) => {
+    setSelectedLaundryItemId(id);
+    router.push("/outlet-admin/laundry-items/edit");
+  };
 
   const formatPrice = (price: string | number, type: string) => {
     const finalPrice = type === "kiloan" ? (outlet?.pricePerKg || 0) : price;
@@ -125,12 +134,12 @@ export default function OutletAdminLaundryItemsPage() {
                       </span>
                     </td>
                     <td className="p-4 flex gap-2">
-                      <Link
-                        href={`/outlet-admin/laundry-items/${item.id}/edit`}
+                      <button
+                        onClick={() => handleEdit(item.id)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <FiEdit2 />
-                      </Link>
+                      </button>
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

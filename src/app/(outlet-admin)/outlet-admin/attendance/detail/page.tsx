@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { useEffect } from "react";
 import {
   FiArrowLeft,
   FiCheckCircle,
@@ -11,7 +11,9 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import useGetEmployeeAttendanceReport from "@/features/attendance/hooks/useGetEmployeeAttendanceReport";
+import { useAttendanceStore } from "@/stores/useAttendanceStore";
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -41,12 +43,15 @@ const statusConfig: Record<
   absent: { label: "Absent", bg: "bg-red-50", text: "text-red-700" },
 };
 
-export default function EmployeeAttendanceDetailPage({
-  params,
-}: {
-  params: Promise<{ employeeId: string }>;
-}) {
-  const { employeeId } = use(params);
+export default function EmployeeAttendanceDetailPage() {
+  const router = useRouter();
+  const selectedEmployeeId = useAttendanceStore((state) => state.selectedEmployeeId);
+
+  useEffect(() => {
+    if (!selectedEmployeeId) {
+      router.replace("/outlet-admin/attendance");
+    }
+  }, [selectedEmployeeId, router]);
 
   const {
     employee,
@@ -62,7 +67,18 @@ export default function EmployeeAttendanceDetailPage({
     setStatus,
     page,
     setPage,
-  } = useGetEmployeeAttendanceReport(employeeId);
+  } = useGetEmployeeAttendanceReport(selectedEmployeeId || "");
+
+  if (!selectedEmployeeId) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-8 h-8 border-3 border-[#ff7143] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-500">Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
   const statCards = [
     {

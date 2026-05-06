@@ -19,9 +19,15 @@ const MapPicker = dynamic(() => import("@/components/MapPicker"), {
 
 interface FormAddressProps {
   initialData: AddressCustomerDTO;
+  onClose: (value: boolean) => void;
+  getAddress: any
 }
 
-export default function FormUpdateAddress({ initialData }: FormAddressProps) {
+export default function FormUpdateAddress({
+  initialData,
+  onClose,
+  getAddress
+}: FormAddressProps) {
   const {
     formik,
     isLoading,
@@ -30,14 +36,14 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
     districts,
     fetchCities,
     fetchDistricts,
-  } = useUpdateAddress(initialData);
+  } = useUpdateAddress(initialData, onClose, getAddress);
 
   const handleSearchLocation = async (query: string) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query + ", Indonesia"
-        )}&limit=1`
+          query + ", Indonesia",
+        )}&limit=1`,
       );
       const data = await response.json();
       if (data && data.length > 0) {
@@ -57,12 +63,15 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
     if (data.address) {
       formik.setFieldValue("address", data.address);
     }
-    
+
     // Deep Sync Logic: Match names from map to local IDs
     if (data.provinceName) {
-      const matchedProvince = provinces.find(p => 
-        normalizeString(data.provinceName).includes(normalizeString(p.name)) || 
-        normalizeString(p.name).includes(normalizeString(data.provinceName))
+      const matchedProvince = provinces.find(
+        (p) =>
+          normalizeString(data.provinceName).includes(
+            normalizeString(p.name),
+          ) ||
+          normalizeString(p.name).includes(normalizeString(data.provinceName)),
       );
 
       if (matchedProvince) {
@@ -76,13 +85,16 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
 
         formik.setFieldValue("provinceId", Number(matchedProvince.id));
         formik.setFieldValue("provinceName", matchedProvince.name);
-        
+
         // Fetch and match City
         const citiesList = await fetchCities(String(matchedProvince.id));
         if (data.cityName && citiesList) {
-          const matchedCity = citiesList.find((c: any) => 
-            normalizeString(data.cityName).includes(normalizeString(c.name)) || 
-            normalizeString(c.name).includes(normalizeString(data.cityName))
+          const matchedCity = citiesList.find(
+            (c: any) =>
+              normalizeString(data.cityName).includes(
+                normalizeString(c.name),
+              ) ||
+              normalizeString(c.name).includes(normalizeString(data.cityName)),
           );
 
           if (matchedCity) {
@@ -98,9 +110,14 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             // Fetch and match District
             const districtsList = await fetchDistricts(String(matchedCity.id));
             if (data.districtName && districtsList) {
-              const matchedDistrict = districtsList.find((d: any) => 
-                normalizeString(data.districtName).includes(normalizeString(d.name)) || 
-                normalizeString(d.name).includes(normalizeString(data.districtName))
+              const matchedDistrict = districtsList.find(
+                (d: any) =>
+                  normalizeString(data.districtName).includes(
+                    normalizeString(d.name),
+                  ) ||
+                  normalizeString(d.name).includes(
+                    normalizeString(data.districtName),
+                  ),
               );
 
               if (matchedDistrict) {
@@ -118,7 +135,10 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
     if (!str) return "";
     return str
       .toLowerCase()
-      .replace(/(kabupaten|kota|kecamatan|kelurahan|desa|provinsi|province|regency|city|district|suburb|village|township)/gi, "")
+      .replace(
+        /(kabupaten|kota|kecamatan|kelurahan|desa|provinsi|province|regency|city|district|suburb|village|township)/gi,
+        "",
+      )
       .trim();
   };
 
@@ -127,12 +147,12 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
       <div className="bg-white rounded-t-3xl md:rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-white border-b border-[#E5DDD3] p-6 rounded-t-3xl z-10 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-[#2C2826]">Update Address</h2>
-          <Link 
-            href="/address"
+          <button
+            onClick={() => onClose(false)}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             ✕
-          </Link>
+          </button>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="p-6 space-y-6">
@@ -243,7 +263,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
           {/* Dropdowns for Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#6B6662] mb-2">Province</label>
+              <label className="block text-sm font-medium text-[#6B6662] mb-2">
+                Province
+              </label>
               <select
                 name="provinceId"
                 value={formik.values.provinceId || ""}
@@ -269,7 +291,11 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
                 }}
                 className="text-black w-full px-4 py-3 rounded-xl border-2 border-[#E5DDD3] focus:border-[#4A90E2] outline-none bg-white transition-colors"
               >
-                <option value="">Select Province</option>
+                <option value="">
+                  {provinces.length === 0
+                    ? "Loading provinces..."
+                    : "Select Province"}
+                </option>
                 {provinces.map((p) => (
                   <option key={p.id} value={p.id} className="capitalize">
                     {p.name.charAt(0).toUpperCase() +
@@ -283,7 +309,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#6B6662] mb-2">City</label>
+              <label className="block text-sm font-medium text-[#6B6662] mb-2">
+                City
+              </label>
               <select
                 name="cityId"
                 value={formik.values.cityId || ""}
@@ -304,7 +332,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
                     formik.setFieldValue("districtName", "");
 
                     // Forward Geocoding
-                    handleSearchLocation(`${citiesData.name}, ${formik.values.provinceName}`);
+                    handleSearchLocation(
+                      `${citiesData.name}, ${formik.values.provinceName}`,
+                    );
                   }
                 }}
                 disabled={!formik.values.provinceId}
@@ -324,7 +354,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#6B6662] mb-2">District</label>
+              <label className="block text-sm font-medium text-[#6B6662] mb-2">
+                District
+              </label>
               <select
                 name="districtId"
                 value={formik.values.districtId || ""}
@@ -342,7 +374,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
                     formik.setFieldValue("districtName", districtData.name);
 
                     // Forward Geocoding
-                    handleSearchLocation(`${districtData.name}, ${formik.values.cityName}, ${formik.values.provinceName}`);
+                    handleSearchLocation(
+                      `${districtData.name}, ${formik.values.cityName}, ${formik.values.provinceName}`,
+                    );
                   }
                 }}
                 disabled={!formik.values.cityId}
@@ -362,7 +396,9 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#6B6662] mb-2">Postal Code</label>
+              <label className="block text-sm font-medium text-[#6B6662] mb-2">
+                Postal Code
+              </label>
               <input
                 type="text"
                 name="postalCode"
@@ -398,7 +434,7 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
             <label className="block text-sm font-semibold text-[#2C2826]">
               Update Pinpoint Location
             </label>
-            <MapPicker 
+            <MapPicker
               lat={formik.values.latitude}
               lng={formik.values.longitude}
               onLocationChange={handleLocationChange}
@@ -430,12 +466,12 @@ export default function FormUpdateAddress({ initialData }: FormAddressProps) {
           </div>
 
           <div className="flex gap-3 pt-6 border-t border-[#E5DDD3]">
-            <Link
-              href="/address"
-              className="flex-1 px-6 py-3 rounded-xl border-2 border-[#E5DDD3] text-[#6B6662] hover:border-[#4A90E2] transition-all font-semibold text-center"
+            <button
+              onClick={() => onClose(false)}
+              className="flex-1 px-6 py-3 rounded-xl border-2 border-[#E5DDD3] text-[#6B6662] hover:border-[#4A90E2] transition-all text-center"
             >
               Cancel
-            </Link>
+            </button>
             <SubmitButton
               isLoading={isLoading}
               isValid={formik.isValid}

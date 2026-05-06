@@ -6,8 +6,12 @@ import useGetOutlets from "@/features/super-admin/outlets/hooks/useGetOutlets";
 import useDeleteOutlet from "@/features/super-admin/outlets/hooks/useDeleteOutlet";
 import useToggleOutletStatus from "@/features/super-admin/outlets/hooks/useToggleOutletStatus";
 import Pagination from "@/components/Pagination";
+import { useOutletStore } from "@/stores/useOutletStore";
+import { useRouter } from "next/navigation";
 
 export default function OutletsPage() {
+  const router = useRouter();
+  const { setSelectedOutletId } = useOutletStore();
   const { outlets, loading, fetchOutlets, page, setPage, pagination } = useGetOutlets();
   const { handleDelete } = useDeleteOutlet(() => {
     fetchOutlets();
@@ -91,12 +95,15 @@ export default function OutletsPage() {
                       </div>
                     </td>
                     <td className="p-4 flex gap-2">
-                      <Link
-                        href={`/super-admin/outlets/${outlet.id}/edit`}
+                      <button
+                        onClick={() => {
+                          setSelectedOutletId(outlet.id);
+                          router.push("/super-admin/outlets/edit");
+                        }}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <FiEdit2 />
-                      </Link>
+                      </button>
                       <button
                         onClick={() => handleDelete(outlet.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
