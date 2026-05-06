@@ -1,16 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
 import useGetEmployees from "@/features/super-admin/employees/hooks/useGetEmployees";
 import useDeleteEmployee from "@/features/super-admin/employees/hooks/useDeleteEmployee";
 import Pagination from "@/components/Pagination";
+import useEmployeeStore from "@/stores/useEmployeeStore";
 
 export default function EmployeesPage() {
+  const router = useRouter();
+  const setEditingEmployeeId = useEmployeeStore((state) => state.setEditingEmployeeId);
   const { employees, loading, fetchEmployees, page, setPage, pagination } = useGetEmployees();
   const { handleDelete } = useDeleteEmployee(() => {
     fetchEmployees();
   });
+
+  const handleEdit = (id: string) => {
+    setEditingEmployeeId(id);
+    router.push("/super-admin/employees/edit");
+  };
 
   return (
     <div className="space-y-6">
@@ -62,12 +71,12 @@ export default function EmployeesPage() {
                       <div className="text-xs text-gray-500 font-medium">{emp.outletName || (emp.role === 'super_admin' ? 'All Outlets' : '-')}</div>
                     </td>
                     <td className="p-4 flex gap-2">
-                      <Link
-                        href={`/super-admin/employees/${emp.id}/edit`}
+                      <button
+                        onClick={() => handleEdit(emp.id)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       >
                         <FiEdit2 />
-                      </Link>
+                      </button>
                       <button
                         onClick={() => handleDelete(emp.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

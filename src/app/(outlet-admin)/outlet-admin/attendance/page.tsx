@@ -1,8 +1,9 @@
 "use client";
 
 import { FiUsers, FiCheckCircle, FiClock, FiXCircle, FiSearch, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import useGetAttendanceReport from "@/features/attendance/hooks/useGetAttendanceReport";
+import { useAttendanceStore } from "@/stores/useAttendanceStore";
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -29,6 +30,9 @@ const statusConfig: Record<string, { label: string; bg: string; text: string }> 
 };
 
 export default function OutletAdminAttendancePage() {
+  const router = useRouter();
+  const setEmployee = useAttendanceStore((state) => state.setEmployee);
+
   const {
     employees,
     summary,
@@ -306,12 +310,15 @@ export default function OutletAdminAttendancePage() {
                               : "-"}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <Link
-                            href={`/outlet-admin/attendance/${emp.id}`}
+                          <button
+                            onClick={() => {
+                              setEmployee(emp.id, `${emp.firstName} ${emp.lastName}`);
+                              router.push("/outlet-admin/attendance/detail");
+                            }}
                             className="inline-flex px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#ff7143]/10 text-[#ff7143] hover:bg-[#ff7143]/20 transition-colors"
                           >
                             View Detail
-                          </Link>
+                          </button>
                         </td>
                       </tr>
                     );

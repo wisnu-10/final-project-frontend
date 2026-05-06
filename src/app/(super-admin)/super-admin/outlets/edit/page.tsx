@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import useUpdateOutlet from "@/features/super-admin/outlets/hooks/useUpdateOutlet";
 import useRegionData from "@/features/super-admin/outlets/hooks/useRegionData";
+import { useOutletStore } from "@/stores/useOutletStore";
 import dynamic from "next/dynamic";
 
 const MapPicker = dynamic(() => import("@/components/MapPicker"), {
@@ -17,8 +19,16 @@ const MapPicker = dynamic(() => import("@/components/MapPicker"), {
 });
 
 export default function EditOutletPage() {
-  const params = useParams();
-  const { formik, isLoading, fetching } = useUpdateOutlet(params.id as string);
+  const router = useRouter();
+  const { selectedOutletId } = useOutletStore();
+  
+  useEffect(() => {
+    if (!selectedOutletId) {
+      router.replace("/super-admin/outlets");
+    }
+  }, [selectedOutletId, router]);
+
+  const { formik, isLoading, fetching } = useUpdateOutlet(selectedOutletId as string);
   const { provinces, cities, districts, fetchCities, fetchDistricts } = useRegionData(formik.values.provinceId, formik.values.cityId);
 
   const handleSearchLocation = async (query: string) => {
@@ -75,7 +85,7 @@ export default function EditOutletPage() {
             if (data.districtName && districtsList) {
               const matchedDistrict = (districtsList as any[]).find(d => 
                 normalizeString(data.districtName).includes(normalizeString(d.name)) || 
-                normalizeString(d.name).includes(normalizeString(data.districtName))
+                normalizeString(d.name).includes(normalizeString(data.cityName))
               );
 
               if (matchedDistrict) {
@@ -96,6 +106,8 @@ export default function EditOutletPage() {
       .replace(/(kabupaten|kota|kecamatan|kelurahan|desa|provinsi|province|regency|city|district|suburb|village|township)/gi, "")
       .trim();
   };
+
+  if (!selectedOutletId) return null;
 
   if (fetching) return (
     <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
@@ -319,4 +331,3 @@ export default function EditOutletPage() {
     </div>
   );
 }
-
