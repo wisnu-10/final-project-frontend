@@ -18,7 +18,7 @@ export const AvailableTaskCard: React.FC<AvailableTaskCardProps> = ({
   return (
     <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#E8E2DA] mb-4">
       <div className="flex justify-between items-start mb-2">
-        <h3 className="text-xl font-bold text-[#2C2826]">#{order.id.slice(0, 4)}</h3>
+        <h3 className="text-xl font-bold text-[#2C2826]">#{order.invoiceNumber || order.id.slice(0, 4)}</h3>
         <span className="bg-[#EEF4FB] text-[#4A90D9] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
           T{order.id.slice(-3).toUpperCase()}
         </span>

@@ -17,6 +17,7 @@ import BackLink from "@/components/backLink";
 
 export default function CustomerAddresses() {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false)
 
   const { address, isLoading, isError, getAddress } = useGetAddress();
 
@@ -124,12 +125,12 @@ export default function CustomerAddresses() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Link
-                        href={`/address/${item.id}`}
+                      <button
+                        onClick={() => setShowUpdateForm(true)}
                         className="w-8 h-8 rounded-lg bg-[#FFF5F2] hover:bg-[#FFE5DD] flex items-center justify-center transition-all"
                       >
                         <Edit2 className="w-4 h-4 text-[#FF6B4A]" />
-                      </Link>
+                      </button>
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="w-8 h-8 rounded-lg bg-[#FEF2F2] hover:bg-[#FEE2E2] flex items-center justify-center transition-all"
@@ -161,6 +162,8 @@ export default function CustomerAddresses() {
           onSuccess={getAddress}
         />
       )}
+
+      {showUpdateForm }
     </div>
   );
 }

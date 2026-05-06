@@ -19,6 +19,7 @@ import { useWorkerTasks, useWorkerHistory } from "@/features/order-worker/hooks/
 import { AvailableTaskCard } from "@/components/order-worker/AvailableTaskCard";
 import { ProcessingCard } from "@/components/order-worker/ProcessingCard";
 import { VerificationWizard } from "@/components/order-worker/VerificationWizard";
+import Swal from "sweetalert2";
 
 const mainTabs = [
   { key: "available", label: "Available Tasks", icon: ClipboardList },
@@ -100,8 +101,8 @@ function WorkerDashboard() {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] text-xs font-bold transition-all ${activeTab === tab.key
-                    ? "bg-white text-[#4A90D9] shadow-sm"
-                    : "text-[#6B6662] hover:text-[#4A90D9]"
+                  ? "bg-white text-[#4A90D9] shadow-sm"
+                  : "text-[#6B6662] hover:text-[#4A90D9]"
                   }`}
               >
                 <tab.icon className={`w-4 h-4 ${activeTab === tab.key ? "text-[#4A90D9]" : ""}`} />
@@ -112,15 +113,15 @@ function WorkerDashboard() {
         </div>
 
         {/* Station Tabs */}
-        <div className="max-w-3xl mx-auto px-4 overflow-x-auto">
-          <div className="flex gap-3 pb-2 min-w-max">
+        <div className="max-w-3xl mx-auto px-4 mb-8">
+          <div className="flex bg-[#F3F0EC] p-1.5 rounded-[20px] gap-1">
             {stationTabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => setActiveStation(tab.key)}
-                className={`flex items-center gap-2 px-8 py-3 rounded-2xl text-xs font-bold transition-all border ${activeStation === tab.key
-                    ? "bg-[#FFF5F2] border-[#FFE5DE] text-[#FF6B4A]"
-                    : "bg-white border-[#E8E2DA] text-[#6B6662] hover:bg-gray-50"
+                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] text-xs font-bold transition-all ${activeStation === tab.key
+                  ? "bg-white text-[#FF6B4A] shadow-sm"
+                  : "text-[#6B6662] hover:text-[#FF6B4A]"
                   }`}
               >
                 {tab.label}
@@ -153,7 +154,18 @@ function WorkerDashboard() {
                       station: activeStation,
                     }).then((success) => {
                       if (success) {
-                        alert("Bypass request sent to admin for approval");
+                        Swal.fire({
+                          title: "Berhasil!",
+                          text: "Bypass request sent to admin for approval",
+                          icon: "success",
+                          width: '380px',
+                          confirmButtonColor: "#4A90D9",
+                          customClass: {
+                            popup: "rounded-[28px]",
+                            confirmButton: "rounded-xl px-10 py-3 text-sm font-bold",
+                            title: "text-lg font-bold text-[#2C2826]",
+                          },
+                        });
                         setIsVerifying(false);
                       }
                     });
@@ -204,7 +216,7 @@ function WorkerDashboard() {
                 history.map((order) => (
                   <div key={order.id} className="bg-white rounded-[24px] p-6 border border-[#E8E2DA] shadow-sm">
                     <div className="flex justify-between items-center mb-2">
-                      <p className="font-bold text-[#2C2826]">#{order.id.slice(0, 4)}</p>
+                      <p className="font-bold text-[#2C2826]">#{order.invoiceNumber || order.id.slice(0, 4)}</p>
                       <span className="bg-[#EEF9F2] text-[#4CAF50] text-[10px] font-bold px-3 py-1 rounded-full uppercase">
                         Completed
                       </span>
