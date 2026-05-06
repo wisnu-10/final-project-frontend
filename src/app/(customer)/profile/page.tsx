@@ -254,21 +254,7 @@ export default function CustomerProfile() {
           </div>
         ) : null}
 
-        <div className="md:hidden mt-4">
-          <button
-            type="button"
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-2xl bg-white border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition-all shadow-sm"
-          >
-            {isLoggingOut ? (
-              <FiLoader className="w-5 h-5 animate-spin" />
-            ) : (
-              <FiLogOut className="w-5 h-5" />
-            )}
-            Logout
-          </button>
-        </div>
+        
       </form>
     </div>
   );

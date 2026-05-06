@@ -14,10 +14,11 @@ import { useUpdateAddress } from "@/features/address-customer/hooks/useUpdateAdd
 import { useGetIdAddress } from "@/features/address-customer/hooks/useGetIdAddress";
 import { showConfirmDelete } from "@/utils/swal.utils";
 import BackLink from "@/components/backLink";
+import FormAddressSkeleton from "@/components/formAddressSkeleton";
 
 export default function CustomerAddresses() {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [showUpdateForm, setShowUpdateForm] = useState(false)
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const { address, isLoading, isError, getAddress } = useGetAddress();
 
@@ -38,7 +39,6 @@ export default function CustomerAddresses() {
 
   if (isError) {
     if (address === null || address?.length === 0) {
-      // Biarin lolos ke bawah
     } else {
       return <PageError />;
     }
@@ -75,7 +75,9 @@ export default function CustomerAddresses() {
 
       {!address || address.length === 0 ? (
         <div className="w-full max-w-2xl px-4 py-10 rounded-2xl text-center">
-          <p className="text-gray-500">No addresses found. Please add a new address.</p>
+          <p className="text-gray-500">
+            No addresses found. Please add a new address.
+          </p>
         </div>
       ) : null}
 
@@ -113,11 +115,11 @@ export default function CustomerAddresses() {
                             {item.recipientPhoneNumber}
                           </p>
 
-                          <p className="text-sm text-[#6B6662] leading-relaxed">
+                          <p className="text-sm text-[#6B6662] ">
                             {item.address}
                           </p>
 
-                          <p className="text-xs text-[#8E8A86] uppercase tracking-wide">
+                          <p className="text-xs text-[#8E8A86] uppercase ">
                             {item.districtName}, {item.cityName},{" "}
                             {item.provinceName}, {item.postalCode}
                           </p>
@@ -163,7 +165,7 @@ export default function CustomerAddresses() {
         />
       )}
 
-      {showUpdateForm }
+      {showUpdateForm}
     </div>
   );
 }
