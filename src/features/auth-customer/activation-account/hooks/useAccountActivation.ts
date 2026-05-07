@@ -20,13 +20,11 @@ export function useAccountActivation() {
     },
     validationSchema: authActivationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true);
-
       if (values.password !== values.confirmPassword) {
         toast.error("Password must match");
         return;
       }
-
+      setIsLoading(true);
       try {
         await accountActivationApi(values, slug);
 
