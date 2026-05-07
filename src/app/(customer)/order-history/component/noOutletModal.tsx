@@ -17,7 +17,7 @@ export default function NoOutletModal({ onClose, type }: NoOutletModalProps) {
     radius: {
       icon: <MapPinOff className="w-12 h-12 text-[#FF6B4A]" />,
       title: "Oops! Out of Range",
-      desc: "It looks like your address is outside our 5 km service area from our nearest outlet.",
+      desc: "It looks like your address is outside our service area from our nearest outlet.",
     },
     city: {
       icon: <Building2 className="w-12 h-12 text-[#FF6B4A]" />,

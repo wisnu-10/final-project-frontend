@@ -199,7 +199,7 @@ export default function register() {
       </div>
 
       {/* Terms */}
-      <div className="flex items-start gap-2">
+      {/* <div className="flex items-start gap-2">
         <input type="checkbox" className="mt-1 w-4 h-4 accent-[#FF6B4A]" />
 
         <label className="text-xs text-[#6B6662]">
@@ -212,7 +212,7 @@ export default function register() {
             Privacy Policy
           </a>
         </label>
-      </div>
+      </div> */}
 
       <SubmitButton
         isLoading={isLoading}
