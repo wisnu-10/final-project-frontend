@@ -2,6 +2,7 @@
 
 import { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import {
   FiArrowLeft,
@@ -13,6 +14,7 @@ import {
 } from "react-icons/fi";
 import useGetOrderById from "@/features/order-admin/hooks/useGetOrderById";
 import useProcessOrder from "@/features/order-admin/hooks/useProcessOrder";
+import useUpdateOrder from "@/features/order-admin/hooks/useUpdateOrder";
 import useGetOutletWorkers from "@/features/order-admin/hooks/useGetOutletWorkers";
 import { getLaundryItemsApi } from "@/features/order-admin/api/getLaundryItems.api";
 import { processOrderSchema } from "@/features/order-admin/validation/orderSchema";
@@ -26,8 +28,12 @@ export default function ProcessOrderPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const searchParams = useSearchParams();
+  const isEdit = searchParams.get("edit") === "true";
+
   const { order, loading: orderLoading } = useGetOrderById(id);
   const { handleProcess, loading: processLoading } = useProcessOrder();
+  const { handleUpdate, loading: updateLoading } = useUpdateOrder();
   const { workers } = useGetOutletWorkers();
 
   const [laundryItems, setLaundryItems] = useState<any[]>([]);
@@ -58,20 +64,46 @@ export default function ProcessOrderPage({
       const validItems = values.orderItems.filter(
         (item) => item.laundryItemId && item.quantity > 0,
       );
-      handleProcess(id, {
+      const payload = {
         totalWeight: Number(values.totalWeight),
         orderItems: validItems,
         workerId: values.workerId,
-      });
+      };
+
+      if (isEdit) {
+        handleUpdate(id, payload);
+      } else {
+        handleProcess(id, payload);
+      }
     },
   });
 
+  useEffect(() => {
+    if (isEdit && order && laundryItems.length > 0) {
+      const washingLog = order.statusLogs?.find(
+        (log: any) => log.status === "washing",
+      );
+      formik.setValues({
+        totalWeight: order.totalWeight ? String(Number(order.totalWeight)) : "",
+        workerId: washingLog?.workerId || "",
+        orderItems:
+          order.orderItems?.length > 0
+            ? order.orderItems.map((item: any) => ({
+                laundryItemId: item.laundryItemId,
+                quantity: item.quantity,
+              }))
+            : [{ laundryItemId: "", quantity: 1 }],
+      });
+    }
+  }, [isEdit, order, laundryItems.length]);
+
   const calcEstimatedTotal = () => {
-    if (!order || !formik.values.totalWeight) return 0;
+    if (!order) return 0;
     const currentPricePerKg = Number(
       order.outlet?.pricePerKg || order.pricePerKg || 0,
     );
-    const weightPrice = Number(formik.values.totalWeight) * currentPricePerKg;
+    const weightPrice =
+      Number(formik.values.totalWeight || 0) * currentPricePerKg;
     const itemsPrice = formik.values.orderItems.reduce((sum, item) => {
       const laundryItem = laundryItems.find(
         (li: any) => li.id === item.laundryItemId,
@@ -81,7 +113,7 @@ export default function ProcessOrderPage({
       }
       return sum;
     }, 0);
-    return weightPrice + itemsPrice;
+    return Math.round(weightPrice + itemsPrice);
   };
 
   if (orderLoading) {
@@ -121,7 +153,9 @@ export default function ProcessOrderPage({
           <FiArrowLeft className="w-5 h-5 text-gray-600" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Process Order</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            {isEdit ? "Edit Order Details" : "Process Order"}
+          </h1>
           <p className="text-sm text-gray-400">
             Customer: {order.customer?.firstName} {order.customer?.lastName}
           </p>
@@ -141,7 +175,7 @@ export default function ProcessOrderPage({
                   type="number"
                   name="totalWeight"
                   step="0.1"
-                  min="0.1"
+                  min="0"
                   value={formik.values.totalWeight}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -302,7 +336,7 @@ export default function ProcessOrderPage({
               </h3>
             </div>
             <div className="space-y-2 mb-6">
-              {formik.values.totalWeight && (
+              {Number(formik.values.totalWeight) > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
                     Kiloan ({formik.values.totalWeight} kg ×{" "}
@@ -347,12 +381,22 @@ export default function ProcessOrderPage({
               </div>
             </div>
 
+            {formik.submitCount > 0 && (formik.errors as any).atLeastOne && (
+              <p className="text-red-500 text-xs text-center mb-4 font-medium bg-red-50 p-2 rounded-lg border border-red-100">
+                {(formik.errors as any).atLeastOne}
+              </p>
+            )}
+
             <button
               type="submit"
-              disabled={processLoading}
+              disabled={processLoading || updateLoading}
               className="w-full bg-[#ff7143] hover:bg-[#e05e32] text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
             >
-              {processLoading ? "Processing..." : "Complete & Start Washing"}
+              {processLoading || updateLoading
+                ? "Saving..."
+                : isEdit
+                  ? "Update Order Details"
+                  : "Complete & Start Washing"}
             </button>
           </div>
         </form>

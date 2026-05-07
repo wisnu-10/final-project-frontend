@@ -12,6 +12,7 @@ import {
   FiAlertCircle,
   FiCheckCircle,
   FiXCircle,
+  FiEdit2,
 } from "react-icons/fi";
 import useGetOrderById from "@/features/order-admin/hooks/useGetOrderById";
 import useGetOutletWorkers from "@/features/order-admin/hooks/useGetOutletWorkers";
@@ -146,6 +147,15 @@ export default function OutletAdminOrderDetailPage({
             Process Order
           </Link>
         )}
+        {latestStatus === "washing" && (
+          <Link
+            href={`/outlet-admin/orders/${id}/process?edit=true`}
+            className="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 transition-colors font-medium shadow-sm"
+          >
+            <FiEdit2 className="w-4 h-4" />
+            Edit Details
+          </Link>
+        )}
         {canAssignWorker && (
           <button
             onClick={() => setShowStatusModal(true)}
@@ -242,18 +252,24 @@ export default function OutletAdminOrderDetailPage({
               <p className="text-sm text-gray-500">Outlet</p>
               <p className="font-medium text-gray-800">{order.outlet?.name}</p>
             </div>
-            <div className="flex justify-between">
-              <p className="text-sm text-gray-500">Price/kg</p>
-              <p className="text-gray-700">
-                {formatIDR(Number(order.pricePerKg))}
-              </p>
-            </div>
-            <div className="flex justify-between">
-              <p className="text-sm text-gray-500">Weight</p>
-              <p className="text-gray-700">
-                {order.totalWeight ? `${Number(order.totalWeight)} kg` : "—"}
-              </p>
-            </div>
+            {Number(order.totalWeight) > 0 && (
+              <>
+                <div className="flex justify-between">
+                  <p className="text-sm text-gray-500">Price/kg</p>
+                  <p className="text-gray-700">
+                    {formatIDR(Number(order.pricePerKg))}
+                  </p>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-sm text-gray-500">Weight</p>
+                  <p className="text-gray-700">
+                    {order.totalWeight
+                      ? `${Number(order.totalWeight)} kg`
+                      : "—"}
+                  </p>
+                </div>
+              </>
+            )}
             <div className="flex justify-between">
               <p className="text-sm text-gray-500">Total Price</p>
               <p className="font-bold text-gray-800 text-lg">
