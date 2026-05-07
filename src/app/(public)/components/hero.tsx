@@ -20,9 +20,9 @@ export default function Hero() {
         <div className="relative flex flex-col gap- items-center">
           {/* Left Content */}
           <div className="space-y-5 flex flex-col items-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#2C2826] leading-tight text-center">
-              Delivering excellence
-              <br />
+            <h1 className="text-4xl md:text-5xl lg:text-6xl text-[#2C2826] leading-tight text-center font-base">
+              Delivering excellence {""}
+              <br className="hidden md:block"/>
               every step ahead
             </h1>
 

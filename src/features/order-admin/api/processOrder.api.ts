@@ -16,3 +16,11 @@ export const processOrderApi = async (
   );
   return response.data;
 };
+
+export const updateOrderApi = async (
+  orderId: string,
+  data: ProcessOrderPayload,
+) => {
+  const response = await axiosInstance.put(`/order-admin/${orderId}`, data);
+  return response.data;
+};
